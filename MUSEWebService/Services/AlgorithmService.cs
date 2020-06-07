@@ -21,7 +21,7 @@ namespace MUSEWebService.Services
 
         public async Task<ContinuedFractionResponse> GetContinuedFractionExpansion(ContinuedFractionRequest rqst)
         {
-            if (string.IsNullOrWhiteSpace(CONTINUEDFRACTIONEXEPATH)) { throw new NotImplementedException(); }
+            if (string.IsNullOrWhiteSpace(CONTINUEDFRACTIONEXEPATH) || !File.Exists(CONTINUEDFRACTIONEXEPATH)) { throw new NotImplementedException(); }
             if(rqst.Number == 0 || rqst.Count == 0) { return null; }
 
             string filename = string.Format("{0}.json", Guid.NewGuid().ToString()); //cant use a static filename when the server is processing multiple requests
