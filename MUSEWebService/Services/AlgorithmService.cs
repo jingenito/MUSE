@@ -22,7 +22,7 @@ namespace MUSEWebService.Services
         public async Task<ContinuedFractionResponse> GetContinuedFractionExpansion(ContinuedFractionRequest rqst)
         {
             if (string.IsNullOrWhiteSpace(CONTINUEDFRACTIONEXEPATH) || !File.Exists(CONTINUEDFRACTIONEXEPATH)) { throw new NotImplementedException(); }
-            if(rqst.Number == 0 || rqst.Count == 0) { return null; }
+            if (rqst.Number == 0 || rqst.Count == 0) { return new ContinuedFractionResponse() { ServerResponse = "Missing or invalid inputs." }; }
 
             string filename = string.Format("{0}.json", Guid.NewGuid().ToString()); //cant use a static filename when the server is processing multiple requests
             var info = new ProcessStartInfo(CONTINUEDFRACTIONEXEPATH);
@@ -30,19 +30,41 @@ namespace MUSEWebService.Services
             info.Arguments = string.Format("{0} {1} {2}", rqst.Number, rqst.Count, filename);
             var p = Process.Start(info);
             p.WaitForExit();
-            
-            using(var sr = new StreamReader(filename))
+
+            ContinuedFractionResponse resp = null;
+            if (File.Exists(filename))
             {
-                var jsonString = await sr.ReadToEndAsync();
+                //the c++ program wont output anything if there were problems
+                using (var sr = new StreamReader(filename))
+                {
+                    var jsonString = await sr.ReadToEndAsync();
+                    try
+                    {
+                        resp = JsonConvert.DeserializeObject<ContinuedFractionResponse>(jsonString);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        resp = new ContinuedFractionResponse() { ServerResponse = ex.Message };
+                    }
+                }
+
+                //delete the file now to save room when processing multiple requests
                 try
                 {
-                    return JsonConvert.DeserializeObject<ContinuedFractionResponse>(jsonString);
-
-                }catch(Exception ex)
+                    File.Delete(filename);
+                }
+                catch(Exception ex)
                 {
-                    return new ContinuedFractionResponse() { ServerResponse = ex.Message };
+
                 }
             }
+            else
+            {
+                resp = new ContinuedFractionResponse() { ServerResponse = "There was an issue processing the request." };
+            }
+
+            return resp;
         }
     }
 }

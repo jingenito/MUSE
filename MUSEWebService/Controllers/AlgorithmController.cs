@@ -28,7 +28,7 @@ namespace MUSEWebService.Controllers
             var contFracResp = await _algorithmService.GetContinuedFractionExpansion(rqst);
 
             if(contFracResp == null)
-                return BadRequest(new { message = "Missing or illegal values." });
+                return BadRequest(new { message = "Bad Request." });
 
             return Ok(contFracResp);
         }
