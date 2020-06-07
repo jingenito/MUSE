@@ -4,7 +4,7 @@
 <ul>
   <li><a href='https://github.com/jingenito/MUSE/tree/master/MUSEApp'>MUSEApp</a></li>
   <li><a href='https://github.com/jingenito/MUSE/tree/master/MUSECommonLibrary'>MUSECommonLibrary</a></li>
-  <li><a href=''>MUSEWebService</a></li>
+  <li><a href='https://github.com/jingenito/MUSE/tree/master/MUSEWebService'>MUSEWebService</a></li>
 </ul>
 
 <p>
