@@ -23,7 +23,14 @@ namespace MUSECommonLibrary
                 uBuilder.Port = GlobalVariables.Port;
             }
 
-            uBuilder.Path = "api/" + api.Description();
+            var sBuilder = new StringBuilder();
+            if (!string.IsNullOrWhiteSpace(GlobalVariables.AppPath))
+            {
+                sBuilder.AppendFormat("{0}/", GlobalVariables.AppPath);
+            }
+            sBuilder.AppendFormat("api/{0}", api.Description());
+
+            uBuilder.Path = sBuilder.ToString();
             return uBuilder.Uri;
         }
 
