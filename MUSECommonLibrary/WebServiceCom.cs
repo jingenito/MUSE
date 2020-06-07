@@ -28,7 +28,7 @@ namespace MUSECommonLibrary
             {
                 sBuilder.AppendFormat("{0}/", GlobalVariables.AppPath);
             }
-            sBuilder.AppendFormat("api/{0}", api.Description());
+            sBuilder.AppendFormat("api/{0}/", api.Description());
 
             uBuilder.Path = sBuilder.ToString();
             return uBuilder.Uri;
