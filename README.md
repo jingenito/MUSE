@@ -2,7 +2,7 @@
 
 <h3>Projects:</h3>
 <ul>
-  <li><a href=''>MUSEApp</a></li>
+  <li><a href='https://github.com/jingenito/MUSE/tree/master/MUSEApp'>MUSEApp</a></li>
   <li><a href=''>MUSECommonLibrary</a></li>
   <li><a href=''>MUSEWebService</a></li>
 </ul>
