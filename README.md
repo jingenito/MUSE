@@ -4,6 +4,7 @@
 
 <h3>Projects:</h3>
 <ul>
+  <li><a href='https://github.com/jingenito/MUSE/tree/master/CPP'>CPP</a></li>
   <li><a href='https://github.com/jingenito/MUSE/tree/master/MUSEApp'>MUSEApp</a></li>
   <li><a href='https://github.com/jingenito/MUSE/tree/master/MUSECommonLibrary'>MUSECommonLibrary</a></li>
   <li><a href='https://github.com/jingenito/MUSE/tree/master/MUSEWebService'>MUSEWebService</a></li>
