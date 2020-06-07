@@ -91,11 +91,11 @@ namespace MUSECommonLibrary
             return response;
         }
 
-        public async Task<ContinuedFractionResponse> POSTContinuedFractionRequest(double num, int count)
+        public static async Task<ContinuedFractionResponse> POSTContinuedFractionRequest(double num, int count)
         {
             return await POSTContinuedFractionRequest(new ContinuedFractionRequest() { Number = num, Count = count });
         }
-        public async Task<ContinuedFractionResponse> POSTContinuedFractionRequest(ContinuedFractionRequest rqst)
+        public static async Task<ContinuedFractionResponse> POSTContinuedFractionRequest(ContinuedFractionRequest rqst)
         {
             var jsonRqstString = JsonConvert.SerializeObject(rqst);
             var jsonRespString = await SubmitRequestToWebService(APIType.Algorithms, "", WebMethod.POST, ContentType.JSON, jsonRqstString);
