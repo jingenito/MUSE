@@ -42,14 +42,17 @@ int main(int argc, char** argv)
 	unsigned count = 0;
 	string filename = "";
 
+	//for now im commenting out the couts, will most likely eventually be moving code to seperate files...
+	//one for normal use, and the other to be used by the web service which will have no couts to slow down the performance
+
 	if (argc < 4) {
-		cout << "Not enough arguments were given... See instructions below" << endl;
+		/*cout << "Not enough arguments were given... See instructions below" << endl;
 		cout << "1) Number to approximate" << endl;
 		cout << "2) Amount of iterations" << endl;
 		cout << "3) Name of the output file (must be JSON)" << endl << endl;
 		cout << "Stored constants:" << endl;
 		cout << "1) pi" << endl;
-		cout << "2) e" << endl;
+		cout << "2) e" << endl;*/
 		return 0;
 	}
 
@@ -64,14 +67,14 @@ int main(int argc, char** argv)
 		num = stof(temp_num);
 	}
 	if (num == 0.0) {
-		cout << "Number was not parsed correctly or 0 was entered." << endl;
-		cout << "Check capitalization if entering a stored value and try again." << endl;
+		/*cout << "Number was not parsed correctly or 0 was entered." << endl;
+		cout << "Check capitalization if entering a stored value and try again." << endl;*/
 		return 0;
 	}
 
 	count = atoi(*(argv + 2)); //rememver this is a char array pointer, not a string
 	if (count > MAXCOUNT) {
-		cout << "Count cannot exceed " << MAXCOUNT << endl;
+		/*cout << "Count cannot exceed " << MAXCOUNT << endl;*/
 		return 0;
 	}
 
@@ -83,15 +86,15 @@ int main(int argc, char** argv)
 	}*/
 
 	long* qs = continuedFractionExpansion(num, count);
-	printArray(qs, count);
-	printConvergences(qs, count);
+	/*printArray(qs, count);
+	printConvergences(qs, count);*/
 
-	cout << "Writing array to " << filename << endl;
+	/*cout << "Writing array to " << filename << endl;*/
 	json j = convertQSequenceToJSON(qs, count);
 	ofstream out(filename);
 	out << j << endl;
 
-	cout << "Finished." << endl;
+	/*cout << "Finished." << endl;*/
 	return 0;
 }
 
