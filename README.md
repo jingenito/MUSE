@@ -1,4 +1,6 @@
 <h1>MUSE</h1>
+<h3>Institution: TCNJ</h3>
+<h3>Term: Summer 2020</h3>
 
 <h3>Projects:</h3>
 <ul>
