@@ -63,7 +63,7 @@ namespace MUSECommonLibrary
             {
                 var edata = Encoding.ASCII.GetBytes(data);
                 request.ContentLength = edata.Length;
-                using (var stm = await request.GetRequestStreamAsync())
+                using (var stm = await request.GetRequestStreamAsync().ConfigureAwait(false))
                 {
                     await stm.WriteAsync(edata, 0, edata.Length);
                 }
@@ -72,18 +72,18 @@ namespace MUSECommonLibrary
             var response = "";
             try
             {
-                using(var rsp = await request.GetResponseAsync())
+                using(var theWebTask = request.GetResponseAsync())
                 {
-                    using(var rspStream = rsp.GetResponseStream())
+                    using(var theWebResp = await theWebTask.ConfigureAwait(false))
                     {
-                        using(var sReader = new StreamReader(rspStream))
+                        using (var sReader = new StreamReader(theWebResp.GetResponseStream()))
                         {
-                            response = await sReader.ReadToEndAsync();
+                            response = await sReader.ReadToEndAsync().ConfigureAwait(false);
                         }
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -102,7 +102,8 @@ namespace MUSECommonLibrary
             try
             {
                 return JsonConvert.DeserializeObject<ContinuedFractionResponse>(jsonRespString);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return null;
             }
