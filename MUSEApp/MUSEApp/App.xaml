@@ -6,6 +6,23 @@
              mc:Ignorable="d"
              x:Class="MUSEApp.App">
     <Application.Resources>
+        <ResourceDictionary>
+            <Color x:Key="PrimaryBackColor">#FF252526</Color>
+            <Color x:Key="SecondaryBackColor">#FF3E3E40</Color>
+            <Color x:Key="TertiaryBackColor">#FF007ACC</Color>
+            <Color x:Key="PrimaryForeColor">#FFF1F1F1</Color>
 
+            <Style x:Key="ActionButton" TargetType="Button">
+                <Setter Property="TextColor" Value="{StaticResource PrimaryForeColor}"/>
+                <Setter Property="CornerRadius" Value="7"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource TertiaryBackColor}"/>
+            </Style>
+
+            <Style x:Key="Textbox" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="7"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource SecondaryBackColor}"/>
+                <Setter Property="Padding" Value="0"/>
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -8,14 +8,25 @@ using Xamarin.Forms;
 
 namespace MUSEApp
 {
-    // Learn more about making custom code visible in the Xamarin.Forms previewer
-    // by visiting https://aka.ms/xamarinforms-previewer
     [DesignTimeVisible(false)]
     public partial class MainPage : ContentPage
     {
         public MainPage()
         {
             InitializeComponent();
+        }
+
+        private async void buttShowConstants_Clicked(object sender, EventArgs e)
+        {
+            var s = new StringBuilder();
+            s.AppendLine("pi");
+            s.AppendLine("e");
+            await DisplayAlert("All constants are case sensitive", s.ToString(), "Ok");
+        }
+
+        private void buttSubmit_Clicked(object sender, EventArgs e)
+        {
+
         }
     }
 }

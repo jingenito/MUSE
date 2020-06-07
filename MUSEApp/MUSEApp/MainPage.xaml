@@ -4,13 +4,58 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="MUSEApp.MainPage">
+             x:Class="MUSEApp.MainPage" 
+             Title="Continued Fraction Expansion" 
+             BackgroundColor="{StaticResource PrimaryBackColor}">
 
-    <StackLayout>
-        <!-- Place new controls here -->
-        <Label Text="Welcome to Xamarin.Forms!" 
-           HorizontalOptions="Center"
-           VerticalOptions="CenterAndExpand" />
-    </StackLayout>
+    <FlexLayout Direction="Column"
+                JustifyContent="SpaceEvenly"
+                AlignItems="Center">
+
+        <Frame Style="{StaticResource Textbox}" 
+               WidthRequest="350" 
+               Margin="5">
+            <Entry Placeholder="Enter a number"
+                   FontSize="Large"
+                   TextColor="{StaticResource PrimaryForeColor}"
+                   PlaceholderColor="{StaticResource PrimaryForeColor}"
+                   x:Name="txtNumber"/>
+        </Frame>
+
+        <Button Text="Show Constants"
+                Style="{StaticResource ActionButton}"
+                WidthRequest="200"
+                x:Name="buttShowConstants" 
+                Clicked="buttShowConstants_Clicked"/>
+
+        <Frame Style="{StaticResource Textbox}" 
+               WidthRequest="350" 
+               Margin="5">
+            <Entry Placeholder="Iterations"
+                   FontSize="Large"
+                   TextColor="{StaticResource PrimaryForeColor}"
+                   PlaceholderColor="{StaticResource PrimaryForeColor}"
+                   Keyboard="Numeric"
+                   x:Name="txtIterations"/>
+        </Frame>
+        
+        <Button Text="Submit" 
+                Style="{StaticResource ActionButton}" 
+                WidthRequest="200" 
+                x:Name="buttSubmit" 
+                Clicked="buttSubmit_Clicked" />
+
+        <Frame Style="{StaticResource Textbox}" 
+               WidthRequest="350" 
+               HeightRequest="200"
+               Margin="5">
+            <Editor FontSize="Large"
+                   TextColor="{StaticResource PrimaryForeColor}"
+                   PlaceholderColor="{StaticResource PrimaryForeColor}"
+                   IsReadOnly="True"
+                   x:Name="txtOutput"/>
+        </Frame>
+
+    </FlexLayout>
 
 </ContentPage>
