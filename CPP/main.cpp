@@ -119,9 +119,11 @@ double tryParseMathFromArgs(string s) {
 		if (m == "log" && num > 0) {
 			dist = pos1 - und - 1;
 			temp_num = s.substr(und + 1, dist);
-			size_t ind = stoi(temp_num);
-			if (ind > 0) {
-				return log(num) / log(ind);
+			if (is_number(temp_num)) {
+				size_t ind = stoi(temp_num);
+				if (ind > 0) {
+					return log(num) / log(ind);
+				}
 			}
 		}
 	}
