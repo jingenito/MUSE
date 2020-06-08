@@ -98,7 +98,7 @@ namespace MUSECommonLibrary
         public static async Task<ContinuedFractionResponse> POSTContinuedFractionRequest(ContinuedFractionRequest rqst)
         {
             var jsonRqstString = JsonConvert.SerializeObject(rqst);
-            var jsonRespString = await SubmitRequestToWebService(APIType.Algorithms, "", WebMethod.POST, ContentType.JSON, jsonRqstString);
+            var jsonRespString = await SubmitRequestToWebService(APIType.Algorithms, "ContinuedFraction", WebMethod.POST, ContentType.JSON, jsonRqstString);
             try
             {
                 return JsonConvert.DeserializeObject<ContinuedFractionResponse>(jsonRespString);
