@@ -21,6 +21,8 @@ int main(int argc, char** argv)
 		cout << "1) Number to approximate" << endl;
 		cout << "2) Amount of iterations" << endl;
 		cout << "3) Name of the output file (must be JSON)" << endl << endl;
+		cout << "Modes (optional):" << endl;
+		cout << "1) /s - Server Mode" << endl << endl;
 		cout << "Stored constants:" << endl;
 		cout << "1) pi" << endl;
 		cout << "2) e" << endl << endl;
@@ -45,7 +47,12 @@ int main(int argc, char** argv)
 		return 0;
 	}
 
-	count = atoi(*(argv + 2)); //rememver this is a char array pointer, not a string
+	temp_num = *(argv + 2);
+	if (!is_number(temp_num)) {
+		cout << "Count is not a number." << endl;
+		return 0;
+	}
+	count = stoi(temp_num);
 	if (count > MAXCOUNT) {
 		cout << "Count cannot exceed " << MAXCOUNT << endl;
 		return 0;
