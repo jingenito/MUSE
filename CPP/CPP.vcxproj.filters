@@ -21,10 +21,16 @@
     <ClCompile Include="algorithms.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ContinuedFraction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RationalNumber.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CPPHeader.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

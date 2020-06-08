@@ -1,28 +1,4 @@
-#include <iostream>
-#include <string>
-#include <fstream>
-
-#include <Eigen/Dense>
-#include <nlohmann/json.hpp>
-
-#include "RationalNumber.h"
-
-using namespace std;
-
-using Eigen::MatrixXd;
-using json = nlohmann::json;
-
-const int MAXCOUNT = 100;
-const double pi = 3.14159265358979323846;
-const double e = 2.7182818284590452353602874713527;
-const double phi = 1.61803398874989484820458683436;
-
-extern long* continuedFractionExpansion(double, unsigned&, unsigned&);
-
-void printArray(long*, unsigned);
-void printConvergences(long*, unsigned);
-RationalNumber findConvergence(long*, int);
-json convertQSequenceToJSON(long*, unsigned, unsigned);
+#include "CPPHeader.h"
 
 int main(int argc, char** argv)
 {
@@ -39,9 +15,6 @@ int main(int argc, char** argv)
 	string filename = "";
 
 	bool server_mode = false; //optimization for server use
-
-	//for now im commenting out the couts, will most likely eventually be moving code to seperate files...
-	//one for normal use, and the other to be used by the web service which will have no couts to slow down the performance
 
 	if (argc < 4) {
 		cout << "Not enough arguments were given... See instructions below" << endl;
@@ -65,6 +38,8 @@ int main(int argc, char** argv)
 		num = phi;
 	}
 	else {
+
+
 		num = stof(temp_num);
 	}
 	if (num == 0.0) {
@@ -83,7 +58,7 @@ int main(int argc, char** argv)
 
 	if (argc >= 5) {
 		string m = *(argv + 4);
-		server_mode = m == "/s" || "/S";
+		server_mode = m == "/s" || m == "/S";
 	}
 
 	unsigned op_count = 0;
@@ -101,31 +76,6 @@ int main(int argc, char** argv)
 
 	cout << "Finished." << endl;
 	return 0;
-}
-
-void printArray(long* arr, unsigned count) {
-	cout << "Array:" << endl;
-	for (unsigned i = 0; i < count; ++i) {
-		cout << *(arr + i) << endl;
-	}
-}
-
-void printConvergences(long* qs, unsigned count) {
-	cout << "Convergences:" << endl;
-	for (unsigned i = 0; i < count; ++i) {
-		cout << i + 1 << ") " << findConvergence(qs, i) << endl;
-	}
-}
-
-RationalNumber findConvergence(long* qs, int stop_index) {
-	if (stop_index < 0) { return RationalNumber(0, 0); /*this is treated as NaN*/ }
-	RationalNumber r(*(qs + stop_index));
-	if (stop_index == 0) { return r; }
-	for (int i = stop_index; i > 0; --i) {
-		r.Reciprocal();
-		r = r + RationalNumber(*(qs + (i - 1)));
-	}
-	return r;
 }
 
 json convertQSequenceToJSON(long* qs, unsigned count, unsigned op_count) {
