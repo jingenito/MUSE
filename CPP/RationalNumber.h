@@ -10,7 +10,7 @@ extern unsigned greatestCommonDivisor(unsigned, unsigned);
 
 class RationalNumber {
 private:
-	long _numerator, _divisor;
+	long long _numerator, _divisor;
 
 public:
 	RationalNumber() {
@@ -18,12 +18,12 @@ public:
 		this->_divisor = 0;
 	}
 
-	RationalNumber(long n) {
+	RationalNumber(long long n) {
 		this->_numerator = n;
 		this->_divisor = 1;
 	}
 
-	RationalNumber(long n, long d) {
+	RationalNumber(long long n, long long d) {
 		this->_numerator = n;
 		this->_divisor = d;
 	}
@@ -33,11 +33,11 @@ public:
 		this->_divisor = r._divisor;
 	}
 
-	long GetNumerator() { return _numerator; }
-	void SetNumerator(long num) { _numerator = num; }
+	long long GetNumerator() { return _numerator; }
+	void SetNumerator(long long num) { _numerator = num; }
 
-	long GetDivisor() { return _divisor; }
-	void SetDivisor(long num) { _divisor = num; }
+	long long GetDivisor() { return _divisor; }
+	void SetDivisor(long long num) { _divisor = num; }
 
 	//Returns the value, but will default to 0.0 if NaN so check inputs carefully.
 	double GetValue() {
@@ -58,7 +58,7 @@ public:
 
 	//Changes the current instance to it's reciprocal.
 	void Reciprocal() {
-		long temp = this->_numerator;
+		long long temp = this->_numerator;
 		this->_numerator = this->_divisor;
 		this->_divisor = temp;
 	}

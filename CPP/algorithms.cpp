@@ -1,11 +1,11 @@
 #include <iostream>
 #include <cmath> 
 
-bool isInt(double x) { return long(x) == x; }
+bool isInt(double x) { return long long(x) == x; }
 
-long* continuedFractionExpansion(double gamma, unsigned& count) {
-	unsigned op_count = 0;
-	long* arr = new long[count]; //needs to be a signed int because q_i can be negative
+long* continuedFractionExpansion(double gamma, unsigned& count, unsigned& op_count) {
+	op_count = 0; //clear the op count
+	long* arr = new long [count]; //needs to be a signed int because q_i can be negative
 	arr[0] = floor(gamma);
 	double gamma_n1 = 0;
 	for (unsigned i = 1; i < count; ++i) {
@@ -13,13 +13,11 @@ long* continuedFractionExpansion(double gamma, unsigned& count) {
 		arr[i] = floor(gamma_n1);
 		op_count += 2;
 		if (isInt(gamma_n1) && gamma_n1 == arr[i]) {
-			std::cout << "Operation Count: " << op_count << std::endl;
 			count = i - 1; //terminated early so update the count with the last q
 			return arr;
 		}
 		gamma = gamma_n1;
 	}
-	std::cout << "Operation Count: " << op_count << std::endl;
 	return arr;
 }
 
