@@ -18,6 +18,8 @@ namespace MUSEWebService
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            GlobalVariables.CPP_AppPath = configuration.GetValue<string>("CPP_AppPath"); //this key should always be present otherwise not configured properly
         }
 
         public IConfiguration Configuration { get; }

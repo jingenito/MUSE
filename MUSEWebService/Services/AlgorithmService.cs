@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 using MUSECommonLibrary;
@@ -17,17 +18,15 @@ namespace MUSEWebService.Services
 
     public class AlgorithmService : IAlgorithmService
     {
-        private const string CONTINUEDFRACTIONEXEPATH = "";
-
         public async Task<ContinuedFractionResponse> GetContinuedFractionExpansion(ContinuedFractionRequest rqst)
         {
-            if (string.IsNullOrWhiteSpace(CONTINUEDFRACTIONEXEPATH) || !File.Exists(CONTINUEDFRACTIONEXEPATH)) { throw new NotImplementedException(); }
+            if (string.IsNullOrWhiteSpace(GlobalVariables.CPP_AppPath) || !File.Exists(GlobalVariables.CPP_AppPath)) { throw new NotImplementedException(); }
             if (rqst.Number == 0 || rqst.Count == 0) { return new ContinuedFractionResponse() { ServerResponse = "Missing or invalid inputs." }; }
 
             string filename = string.Format("{0}.json", Guid.NewGuid().ToString()); //cant use a static filename when the server is processing multiple requests
-            var info = new ProcessStartInfo(CONTINUEDFRACTIONEXEPATH);
+            var info = new ProcessStartInfo(GlobalVariables.CPP_AppPath);
             info.CreateNoWindow = true;
-            info.Arguments = string.Format("{0} {1} {2}", rqst.Number, rqst.Count, filename);
+            info.Arguments = string.Format("{0} {1} {2} /s", rqst.Number, rqst.Count, filename);
             var p = Process.Start(info);
             p.WaitForExit();
 
