@@ -15,18 +15,14 @@ using json = nlohmann::json;
 const int MAXCOUNT = 100;
 const double pi = 3.14159265358979323846;
 const double e = 2.7182818284590452353602874713527;
+const double phi = 1.61803398874989484820458683436;
 
-extern long* continuedFractionExpansion(double, unsigned&);
+extern long* continuedFractionExpansion(double, unsigned&, unsigned&);
 
 void printArray(long*, unsigned);
 void printConvergences(long*, unsigned);
 RationalNumber findConvergence(long*, int);
-json convertQSequenceToJSON(long*, unsigned);
-
-inline bool file_exists(const string& name) {
-	struct stat buffer;
-	return (stat(name.c_str(), &buffer) == 0);
-}
+json convertQSequenceToJSON(long*, unsigned, unsigned);
 
 int main(int argc, char** argv)
 {
@@ -42,17 +38,19 @@ int main(int argc, char** argv)
 	unsigned count = 0;
 	string filename = "";
 
+	bool server_mode = false; //optimization for server use
+
 	//for now im commenting out the couts, will most likely eventually be moving code to seperate files...
 	//one for normal use, and the other to be used by the web service which will have no couts to slow down the performance
 
 	if (argc < 4) {
-		/*cout << "Not enough arguments were given... See instructions below" << endl;
+		cout << "Not enough arguments were given... See instructions below" << endl;
 		cout << "1) Number to approximate" << endl;
 		cout << "2) Amount of iterations" << endl;
 		cout << "3) Name of the output file (must be JSON)" << endl << endl;
 		cout << "Stored constants:" << endl;
 		cout << "1) pi" << endl;
-		cout << "2) e" << endl;*/
+		cout << "2) e" << endl;
 		return 0;
 	}
 
@@ -63,38 +61,45 @@ int main(int argc, char** argv)
 	else if (temp_num == "e") {
 		num = e;
 	}
+	else if (temp_num == "phi") {
+		num = phi;
+	}
 	else {
 		num = stof(temp_num);
 	}
 	if (num == 0.0) {
-		/*cout << "Number was not parsed correctly or 0 was entered." << endl;
-		cout << "Check capitalization if entering a stored value and try again." << endl;*/
+		cout << "Number was not parsed correctly or 0 was entered." << endl;
+		cout << "Check capitalization if entering a stored value and try again." << endl;
 		return 0;
 	}
 
 	count = atoi(*(argv + 2)); //rememver this is a char array pointer, not a string
 	if (count > MAXCOUNT) {
-		/*cout << "Count cannot exceed " << MAXCOUNT << endl;*/
+		cout << "Count cannot exceed " << MAXCOUNT << endl;
 		return 0;
 	}
 
 	filename = *(argv + 3);
-	/*if (!file_exists(filename)) {
-		cout << "File not found." << endl;
-		cout << "Make sure the extension is included in the filename provided." << endl;
-		return 0;
-	}*/
 
-	long* qs = continuedFractionExpansion(num, count);
-	/*printArray(qs, count);
-	printConvergences(qs, count);*/
+	if (argc >= 5) {
+		string m = *(argv + 4);
+		server_mode = m == "/s" || "/S";
+	}
 
-	/*cout << "Writing array to " << filename << endl;*/
-	json j = convertQSequenceToJSON(qs, count);
+	unsigned op_count = 0;
+	long* qs = continuedFractionExpansion(num, count, op_count);
+	if (!server_mode) {
+		cout << "Operation Count: " << op_count << endl;
+		printArray(qs, count);
+		printConvergences(qs, count);
+	}
+
+	cout << "Writing array to " << filename << endl;
+	json j = convertQSequenceToJSON(qs, count, op_count);
 	ofstream out(filename);
 	out << j << endl;
 
-	/*cout << "Finished." << endl;*/
+	cout << "Finished." << endl;
 	return 0;
 }
 
@@ -123,14 +128,21 @@ RationalNumber findConvergence(long* qs, int stop_index) {
 	return r;
 }
 
-json convertQSequenceToJSON(long* qs, unsigned count) {
+json convertQSequenceToJSON(long* qs, unsigned count, unsigned op_count) {
 	long arr[MAXCOUNT] = { 0 };
 	for (unsigned i = 0; i < count; ++i) {
-		arr[i] = *(qs + i);
+		long temp = *(qs + i);
+		if (temp > 0) {
+			arr[i] = temp;
+		}
+		else {
+			break;
+		}
 	}
 
 	json j;
 	j["qSequence"] = arr;
 	j["Count"] = count;
+	j["OpCount"] = op_count;
 	return j;
 }

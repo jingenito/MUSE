@@ -10,6 +10,7 @@ namespace MUSECommonLibrary
     {
         public IEnumerable<int> qSequence { get; set; }
         public int Count { get; set; }
+        public int OpCount { get; set; }
         public string ServerResponse { get; set; }
     }
 }
