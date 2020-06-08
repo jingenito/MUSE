@@ -98,7 +98,7 @@ double tryParseMathFromArgs(string s) {
 
 	string temp_num = s.substr(pos1 + 1, dist); //extract the number from the parenthesis
 	double num = tryParseNumFromArgs(temp_num);
-	if (num == 0.0) {
+	if (num == 0.0 && is_number(temp_num)) {
 		num = stod(temp_num);
 	}
 
