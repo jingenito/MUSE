@@ -6,7 +6,7 @@
 #define RATIONALNUMBER_H
 
 //definition can be found in algorithms.cpp
-extern unsigned greatestCommonDivisor(unsigned, unsigned);
+extern size_t greatestCommonDivisor(size_t, size_t);
 
 class RationalNumber {
 private:
@@ -51,7 +51,7 @@ public:
 	void Simplify() {
 		//this method should not be called on any of the operator overloads so the user
 		//has complete control over efficiency
-		unsigned gcd = greatestCommonDivisor(abs(this->_numerator), abs(this->_divisor));
+		size_t gcd = greatestCommonDivisor(abs(this->_numerator), abs(this->_divisor));
 		this->_numerator = this->_numerator / gcd;
 		this->_divisor = this->_divisor / gcd;
 	}

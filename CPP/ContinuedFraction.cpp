@@ -5,12 +5,12 @@ using namespace std;
 
 bool isInt(double x) { return long (x) == x; }
 
-long* continuedFractionExpansion(double gamma, unsigned& count, unsigned& op_count) {
+long* continuedFractionExpansion(double gamma, size_t& count, size_t& op_count) {
 	op_count = 0; //clear the op count
 	long* arr = new long[count]; //needs to be a signed int because q_i can be negative
 	arr[0] = (long)floor(gamma);
 	double gamma_n1 = 0;
-	for (unsigned i = 1; i < count; ++i) {
+	for (size_t i = 1; i < count; ++i) {
 		gamma_n1 = 1 / (gamma - arr[i - 1]);
 		arr[i] = (long)floor(gamma_n1);
 		op_count += 2;
@@ -23,17 +23,18 @@ long* continuedFractionExpansion(double gamma, unsigned& count, unsigned& op_cou
 	return arr;
 }
 
-void printArray(long* arr, unsigned count) {
+void printArray(long* arr, size_t count) {
 	cout << "Array:" << endl;
-	for (unsigned i = 0; i < count; ++i) {
+	for (size_t i = 0; i < count; ++i) {
 		cout << *(arr + i) << endl;
 	}
 }
 
-RationalNumber findConvergence(long* qs, int stop_index) {
+RationalNumber findConvergence(long* qs, size_t stop_index) {
 	if (stop_index < 0) { return RationalNumber(0, 0); /*this is treated as NaN*/ }
 	RationalNumber r(*(qs + stop_index));
 	if (stop_index == 0) { return r; }
+	//needs to be int because size_t can't be negative - so would be an infinite loop
 	for (int i = stop_index; i > 0; --i) {
 		r.Reciprocal();
 		r = r + RationalNumber(*(qs + (i - 1)));
@@ -41,9 +42,9 @@ RationalNumber findConvergence(long* qs, int stop_index) {
 	return r;
 }
 
-void printConvergences(long* qs, unsigned count) {
+void printConvergences(long* qs, size_t count) {
 	cout << "Convergences:" << endl;
-	for (unsigned i = 0; i < count; ++i) {
+	for (size_t i = 0; i < count; ++i) {
 		cout << i + 1 << ") " << findConvergence(qs, i) << endl;
 	}
 }
