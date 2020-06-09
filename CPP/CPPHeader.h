@@ -1,8 +1,5 @@
 #pragma once
 
-#ifndef CPPHEADER_H
-#define CPPHEADER_H
-
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -36,6 +33,4 @@ inline bool is_number(const string& s)
 }
 
 json convertQSequenceToJSON(long*, size_t, size_t);
-
-#endif /*CPPHEADER_H*/
 

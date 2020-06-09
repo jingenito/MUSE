@@ -2,9 +2,6 @@
 
 #include <iostream>
 
-#ifndef RATIONALNUMBER_H
-#define RATIONALNUMBER_H
-
 //definition can be found in algorithms.cpp
 extern size_t greatestCommonDivisor(size_t, size_t);
 
@@ -194,5 +191,3 @@ public:
 		return lhs / (double)blah;
 	}
 };
-
-#endif /*RATIONALNUMBER_H*/
