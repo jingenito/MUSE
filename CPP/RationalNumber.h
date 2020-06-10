@@ -30,22 +30,22 @@ public:
 		this->_divisor = r._divisor;
 	}
 
-	long GetNumerator() { return _numerator; }
-	void SetNumerator(long num) { _numerator = num; }
+	inline long GetNumerator() { return _numerator; }
+	inline void SetNumerator(long num) { _numerator = num; }
 
-	long GetDivisor() { return _divisor; }
-	void SetDivisor(long num) { _divisor = num; }
+	inline long GetDivisor() { return _divisor; }
+	inline void SetDivisor(long num) { _divisor = num; }
 
 	//Returns the value, but will default to 0.0 if NaN so check inputs carefully.
-	double GetValue() {
+	inline double GetValue() {
 		if (!this->isRealNumber()) { return 0.0; }
 		return static_cast<double>(this->_numerator) / this->_divisor;
 	}
 
-	bool isRealNumber() { return _divisor != 0; }
+	inline bool isRealNumber() { return _divisor != 0; }
 
 	//Simplifies the current instance completely.
-	void Simplify() {
+	inline void Simplify() {
 		//this method should not be called on any of the operator overloads so the user
 		//has complete control over efficiency
 		size_t gcd = greatestCommonDivisor(abs(this->_numerator), abs(this->_divisor));
@@ -54,70 +54,58 @@ public:
 	}
 
 	//Changes the current instance to it's reciprocal.
-	void Reciprocal() {
+	inline void Reciprocal() {
 		long temp = this->_numerator;
 		this->_numerator = this->_divisor;
 		this->_divisor = temp;
 	}
 
-	inline
-		RationalNumber operator/(const RationalNumber& n) {
+	inline RationalNumber operator/(const RationalNumber& n) {
 		RationalNumber r(this->_numerator * n._divisor, this->_divisor * n._numerator);
 		return r;
 	}
-	inline
-		RationalNumber operator/(const long& n) {
+	inline RationalNumber operator/(const long& n) {
 		RationalNumber r(this->_numerator, this->_divisor * n);
 		return r;
 	}
-	inline
-		double operator/(const double& rhs) {
+	inline double operator/(const double& rhs) {
 		if (rhs == 0) { return 0.0; }
 		return this->GetValue() / rhs;
 	}
 
-	inline
-		RationalNumber operator*(const RationalNumber& n) {
+	inline RationalNumber operator*(const RationalNumber& n) {
 		RationalNumber r(this->_numerator * n._numerator, this->_divisor * n._divisor);
 		return r;
 	}
-	inline
-		RationalNumber operator*(const long& n) {
+	inline RationalNumber operator*(const long& n) {
 		RationalNumber r(this->_numerator * n, this->_divisor);
 		return r;
 	}
-	inline
-		double operator*(const double& rhs) {
+	inline double operator*(const double& rhs) {
 		return this->GetValue() * rhs;
 	}
 
-	inline
-		RationalNumber operator-(const RationalNumber& n) {
+	inline RationalNumber operator-(const RationalNumber& n) {
 		RationalNumber r((this->_numerator * n._divisor) - (this->_divisor * n._numerator), this->_divisor * n._divisor);
 		return r;
 	}
-	inline
-		RationalNumber operator-(const long& n) {
+	inline RationalNumber operator-(const long& n) {
 		RationalNumber r(this->_numerator - (this->_divisor * n), this->_divisor);
 		return r;
 	}
-	inline
-		double operator-(const double& rhs) {
+	inline double operator-(const double& rhs) {
 		return this->GetValue() - rhs;
 	}
 
-	inline
-		RationalNumber operator+(const RationalNumber& n) {
+	inline RationalNumber operator+(const RationalNumber& n) {
 		RationalNumber r((this->_numerator * n._divisor) + (this->_divisor * n._numerator), this->_divisor * n._divisor);
 		return r;
 	}
-	inline
-		RationalNumber operator+(const long& n) {
+	inline RationalNumber operator+(const long& n) {
 		RationalNumber r(this->_numerator + (this->_divisor * n), this->_divisor);
 		return r;
 	}
-	inline
-		double operator+(const double& rhs) {
+	inline double operator+(const double& rhs) {
 		return this->GetValue() + rhs;
 	}
 
@@ -150,42 +138,34 @@ public:
 
 	inline operator double() { return this->GetValue(); }
 
-	inline
-		friend RationalNumber operator+(const long& n, const RationalNumber& r) {
+	inline friend RationalNumber operator+(const long& n, const RationalNumber& r) {
 		return RationalNumber(n) + r;
 	}
-	inline
-		friend double operator+(const double& lhs, const RationalNumber& rhs) {
+	inline friend double operator+(const double& lhs, const RationalNumber& rhs) {
 		RationalNumber blah = rhs;
 		return blah + lhs;
 	}
 
-	inline
-		friend RationalNumber operator-(const long& n, const RationalNumber& r) {
+	inline friend RationalNumber operator-(const long& n, const RationalNumber& r) {
 		return RationalNumber(n) - r;
 	}
-	inline
-		friend double operator-(const double& lhs, const RationalNumber& rhs) {
+	inline friend double operator-(const double& lhs, const RationalNumber& rhs) {
 		RationalNumber blah = rhs;
 		return lhs - (double)blah;
 	}
 
-	inline
-		friend RationalNumber operator*(const long& n, const RationalNumber& r) {
+	inline friend RationalNumber operator*(const long& n, const RationalNumber& r) {
 		return RationalNumber(n) * r;
 	}
-	inline
-		friend double operator*(const double& lhs, const RationalNumber& rhs) {
+	inline friend double operator*(const double& lhs, const RationalNumber& rhs) {
 		RationalNumber blah = rhs;
 		return blah * lhs;
 	}
 
-	inline
-		friend RationalNumber operator/(const long& n, const RationalNumber& r) {
+	inline friend RationalNumber operator/(const long& n, const RationalNumber& r) {
 		return RationalNumber(n) / r;
 	}
-	inline
-		friend double operator/(const double& lhs, const RationalNumber& rhs) {
+	inline friend double operator/(const double& lhs, const RationalNumber& rhs) {
 		RationalNumber blah = rhs;
 		if (!blah.isRealNumber()) { return 0.0; }
 		return lhs / (double)blah;

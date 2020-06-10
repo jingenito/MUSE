@@ -3,7 +3,7 @@
 
 using namespace std;
 
-bool isInt(double x) { return long (x) == x; }
+inline bool isInt(double x) { return long (x) == x; }
 
 long* continuedFractionExpansion(double gamma, size_t& count, size_t& op_count) {
 	op_count = 0; //clear the op count

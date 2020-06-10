@@ -20,7 +20,8 @@ int main(int argc, char** argv)
 		cout << "Not enough arguments were given... See instructions below" << endl;
 		cout << "1) Number to approximate" << endl;
 		cout << "2) Amount of iterations" << endl;
-		cout << "3) Name of the output file (must be JSON)" << endl << endl;
+		cout << "3) Name of the output file (must be JSON)" << endl;
+		cout << "4) Optional Mode" << endl << endl;
 		cout << "Modes (optional):" << endl;
 		cout << "1) /s - Server Mode" << endl << endl;
 		cout << "Stored constants:" << endl;
@@ -33,6 +34,11 @@ int main(int argc, char** argv)
 		return 0;
 	}
 
+	if (argc >= 5) {
+		string m = *(argv + 4);
+		server_mode = m == "/s" || m == "/S";
+	}
+
 	string temp_num = *(argv + 1);
 	num = tryParseNumFromArgs(temp_num);
 	if (num == 0.0) {
@@ -40,11 +46,13 @@ int main(int argc, char** argv)
 		if (num == 0.0 && is_number(temp_num)) {
 			num = stod(temp_num);
 		}
-	}
-	if (num == 0.0) {
-		cout << "Number was not parsed correctly or 0 was entered." << endl;
-		cout << "Check capitalization, and be sure to escape parenthesis with quotes if needed." << endl;
-		return 0;
+		else {
+			if (!server_mode) {
+				cout << "Number was not parsed correctly or 0 was entered." << endl;
+				cout << "Check capitalization, and be sure to escape parenthesis with quotes if needed." << endl;
+			}
+			return 0; 
+		}
 	}
 
 	temp_num = *(argv + 2);
@@ -60,25 +68,19 @@ int main(int argc, char** argv)
 
 	filename = *(argv + 3);
 
-	if (argc >= 5) {
-		string m = *(argv + 4);
-		server_mode = m == "/s" || m == "/S";
-	}
-
 	size_t op_count = 0;
 	long* qs = continuedFractionExpansion(num, count, op_count);
 	if (!server_mode) {
 		cout << "Operation Count: " << op_count << endl;
 		printArray(qs, count);
 		printConvergences(qs, count);
+		cout << "Writing array to " << filename << endl;
 	}
 
-	cout << "Writing array to " << filename << endl;
 	json j = convertQSequenceToJSON(qs, count, op_count);
 	ofstream out(filename);
 	out << j << endl;
 
-	cout << "Finished." << endl;
 	return 0;
 }
 
