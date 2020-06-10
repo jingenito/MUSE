@@ -122,6 +122,82 @@ public:
 		return lhs == (double)blah;
 	}
 
+	inline bool operator>(const RationalNumber& rhs) {
+		size_t gcd = greatestCommonDivisor(abs(this->_divisor), abs(rhs._divisor));
+		return this->_numerator * gcd > rhs._numerator * gcd;
+	}
+	inline friend bool operator>(const RationalNumber& lhs, const int& rhs) {
+		return lhs._numerator > lhs._divisor * rhs;
+	}
+	inline friend bool operator>(const int& lhs, const RationalNumber& rhs) {
+		return lhs * rhs._divisor > rhs._numerator;
+	}
+	inline friend bool operator>(const RationalNumber& lhs, const double& rhs) {
+		RationalNumber blah = lhs;
+		return (double)blah > rhs;
+	}
+	inline friend bool operator>(const double& lhs, const RationalNumber& rhs) {
+		RationalNumber blah = rhs;
+		return lhs > (double)blah;
+	}
+
+	inline bool operator>=(const RationalNumber& rhs) {
+		size_t gcd = greatestCommonDivisor(abs(this->_divisor), abs(rhs._divisor));
+		return this->_numerator * gcd >= rhs._numerator * gcd;
+	}
+	inline friend bool operator>=(const RationalNumber& lhs, const int& rhs) {
+		return lhs._numerator >= lhs._divisor * rhs;
+	}
+	inline friend bool operator>=(const int& lhs, const RationalNumber& rhs) {
+		return lhs * rhs._divisor >= rhs._numerator;
+	}
+	inline friend bool operator>=(const RationalNumber& lhs, const double& rhs) {
+		RationalNumber blah = lhs;
+		return (double)blah >= rhs;
+	}
+	inline friend bool operator>=(const double& lhs, const RationalNumber& rhs) {
+		RationalNumber blah = rhs;
+		return lhs >= (double)blah;
+	}
+
+	inline bool operator<(const RationalNumber& rhs) {
+		size_t gcd = greatestCommonDivisor(abs(this->_divisor), abs(rhs._divisor));
+		return this->_numerator * gcd < rhs._numerator* gcd;
+	}
+	inline friend bool operator<(const RationalNumber& lhs, const int& rhs) {
+		return lhs._numerator < lhs._divisor* rhs;
+	}
+	inline friend bool operator<(const int& lhs, const RationalNumber& rhs) {
+		return lhs * rhs._divisor < rhs._numerator;
+	}
+	inline friend bool operator<(const RationalNumber& lhs, const double& rhs) {
+		RationalNumber blah = lhs;
+		return (double)blah < rhs;
+	}
+	inline friend bool operator<(const double& lhs, const RationalNumber& rhs) {
+		RationalNumber blah = rhs;
+		return lhs < (double)blah;
+	}
+
+	inline bool operator<=(const RationalNumber& rhs) {
+		size_t gcd = greatestCommonDivisor(abs(this->_divisor), abs(rhs._divisor));
+		return this->_numerator * gcd <= rhs._numerator* gcd;
+	}
+	inline friend bool operator<=(const RationalNumber& lhs, const int& rhs) {
+		return lhs._numerator <= lhs._divisor* rhs;
+	}
+	inline friend bool operator<=(const int& lhs, const RationalNumber& rhs) {
+		return lhs * rhs._divisor <= rhs._numerator;
+	}
+	inline friend bool operator<=(const RationalNumber& lhs, const double& rhs) {
+		RationalNumber blah = lhs;
+		return (double)blah <= rhs;
+	}
+	inline friend bool operator<=(const double& lhs, const RationalNumber& rhs) {
+		RationalNumber blah = rhs;
+		return lhs <= (double)blah;
+	}
+
 	inline friend std::ostream& operator<<(std::ostream& os, RationalNumber const& n) {
 		if (n._divisor == 0) { return os << "NaN"; }
 		if (n._divisor == 1) { return os << n._numerator; }
