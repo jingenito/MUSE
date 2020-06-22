@@ -5,14 +5,10 @@
 #include <fstream>
 #include <cmath>
 
-#include <Eigen/Dense>
 #include <nlohmann/json.hpp>
 
 #include "RationalNumber.h"
 
-using namespace std;
-
-using Eigen::MatrixXd;
 using json = nlohmann::json;
 
 const int MAXCOUNT = 100;
@@ -23,10 +19,10 @@ const double phi = 1.61803398874989484820458683436;
 extern long* continuedFractionExpansion(double, size_t&, size_t&);
 extern void printArray(long*, size_t);
 extern void printConvergences(long*, size_t);
-extern double tryParseNumFromArgs(string);
-extern double tryParseMathFromArgs(string);
+extern double tryParseNumFromArgs(std::string);
+extern double tryParseMathFromArgs(std::string);
 
-inline bool is_number(const string& s)
+inline bool is_number(const std::string& s)
 {
     return !s.empty() && find_if(s.begin(),
         s.end(), [](unsigned char c) { return !isdigit(c); }) == s.end();

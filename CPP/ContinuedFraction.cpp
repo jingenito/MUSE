@@ -1,8 +1,6 @@
 #include "RationalNumber.h"
 #include <cmath> 
 
-using namespace std;
-
 inline bool isInt(double x) { return long (x) == x; }
 
 long* continuedFractionExpansion(double gamma, size_t& count, size_t& op_count) {
@@ -24,9 +22,9 @@ long* continuedFractionExpansion(double gamma, size_t& count, size_t& op_count) 
 }
 
 void printArray(long* arr, size_t count) {
-	cout << "Array:" << endl;
+	std::cout << "Array:" << std::endl;
 	for (size_t i = 0; i < count; ++i) {
-		cout << *(arr + i) << endl;
+		std::cout << *(arr + i) << std::endl;
 	}
 }
 
@@ -43,8 +41,8 @@ RationalNumber findConvergence(long* qs, size_t stop_index) {
 }
 
 void printConvergences(long* qs, size_t count) {
-	cout << "Convergences:" << endl;
+	std::cout << "Convergences:" << std::endl;
 	for (size_t i = 0; i < count; ++i) {
-		cout << i + 1 << ") " << findConvergence(qs, i) << endl;
+		std::cout << i + 1 << ") " << findConvergence(qs, i) << std::endl;
 	}
 }
