@@ -46,13 +46,12 @@ int main(int argc, char** argv)
 		if (num == 0.0 && is_number(temp_num)) {
 			num = stod(temp_num);
 		}
-		else {
-			if (!server_mode) {
-				cout << "Number was not parsed correctly or 0 was entered." << endl;
-				cout << "Check capitalization, and be sure to escape parenthesis with quotes if needed." << endl;
-			}
-			return 0; 
-		}
+	}
+
+	if (num == 0) {
+		cout << "Number was not parsed correctly or 0 was entered." << endl;
+		cout << "Check capitalization, and be sure to escape parenthesis with quotes if needed." << endl;
+		return 0;
 	}
 
 	temp_num = *(argv + 2);
