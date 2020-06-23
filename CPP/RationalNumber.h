@@ -1,3 +1,9 @@
+/*
+	Author: Joe Ingenito
+	Date Created: 6/07/2020
+	Description: Provides an implementation of a RationalNumber using two longs for the numerator and divisor.
+*/
+
 #pragma once
 
 #include <iostream>
