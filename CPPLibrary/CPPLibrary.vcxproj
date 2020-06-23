@@ -152,7 +152,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="framework.h" />
+    <ClInclude Include="IncorrectDimensionException.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="QSMatrix.h" />
+    <ClInclude Include="RationalNumber.h" />
+    <ClInclude Include="VectorImports.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />

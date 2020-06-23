@@ -21,6 +21,18 @@
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="IncorrectDimensionException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QSMatrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VectorImports.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RationalNumber.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
