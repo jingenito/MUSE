@@ -7,6 +7,7 @@
 #pragma once
 
 #include <cmath>
+#include <iomanip>
 #include <ostream>
 #include <vector>
 #include "IncorrectDimensionException.h"
@@ -88,7 +89,7 @@ inline std::vector<T> get_magnitude(const std::vector<T>& vec) {
 template <typename T>
 inline std::ostream& operator<<(std::ostream& os, const std::vector<T>& rhs) {
 	for (size_t i = 0; i < rhs.size(); i++) {
-		os << rhs[i] << ", ";
+		os << std::setw(8) << std::setprecision(5) << rhs[i] << " ";
 	}
 
 	return os;
