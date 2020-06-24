@@ -30,7 +30,7 @@
     <ClInclude Include="VectorImports.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RationalNumber.h">
+    <ClInclude Include="CPPLibrary.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
