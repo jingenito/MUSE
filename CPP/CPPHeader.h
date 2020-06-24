@@ -7,6 +7,7 @@
 
 #include <nlohmann/json.hpp>
 
+#include "CPPLibrary.h"
 #include "RationalNumber.h"
 
 using json = nlohmann::json;
