@@ -1,3 +1,11 @@
+/*
+	Author: Joe Ingenito
+	Date Created: 6/24/2020
+	Description: A header file that includes all algorithms implemented by the C++ Math Library.
+	Remarks: Definitions to functions declared with a template argument are provided by this file, definitions that do not require a template 
+	         argument are provided by Algorithms.cpp
+*/
+
 #pragma once
 
 #include <tuple>
@@ -5,23 +13,13 @@
 #include "QSMatrix.h"
 #include "VectorImports.h"
 #include "IncorrectDimensionException.h"
+#include "RationalNumber.h"
+#include <iostream>
 
 namespace CPPMathLibrary {
 
 	//Implements the Euclidean Algorithm for GCD.
-	size_t GreatestCommonDivisor(const size_t& n1, const size_t& n2) {
-		//the algorithm is technically written with absolute values by Euclid... I'm using
-		//size_t for efficiency since the user can input absolute values 
-		if (n1 == 0 || n2 == 0) { return 0; }
-		size_t r0 = fmax(n1, n2);
-		size_t r1 = r0 == n1 ? n2 : n1;
-		while (r1 > 0) {
-			size_t temp = r1;
-			r1 = r0 % r1;
-			r0 = temp;
-		}
-		return r0; //remember it terminates when r1 == 0
-	}
+	size_t GreatestCommonDivisor(const size_t& n1, const size_t& n2);
 
 	// Indeces for the tuple returned by GramSchmidtOrthogonalization
 	enum GSOType { GSO = 0, Mu = 1, Gamma = 2 };
@@ -62,59 +60,10 @@ namespace CPPMathLibrary {
 	}
 
 	// This method should not be called outside of LLL since it has no meaning outside of LLL
-	void _reduce(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<double>& C, const size_t& k, const size_t& l) throw (IncorrectDimensionException*) {
-		if (mu.get_rows() != y.get_rows() || mu.get_cols() != y.get_cols()) { throw new IncorrectDimensionException("Matrices mu and y have different dimensions"); }
-		if (k >= mu.get_rows() || l >= mu.get_cols()) { throw new IncorrectDimensionException("Index out of range"); }
-
-		try {
-			if (abs(mu(k, l)) > 0.5) {
-				double nearestInt = int(round(mu(k, l)));
-
-				y.setRowVector<double>(y.getRowVector<double>(k) - (nearestInt * y.getRowVector<double>(l)), k);
-				C.setRowVector<double>(C.getRowVector<double>(k) - (nearestInt * C.getRowVector<double>(l)), k);
-
-				for (size_t j = 0; j < l; j++) {
-					mu(k, j) = mu(k, j) - (nearestInt * mu(l, j));
-				}
-
-				mu(k, l) = mu(k, l) - nearestInt;
-			}
-		}
-		catch (IncorrectDimensionException* idEx) {
-			throw idEx;
-		}
-	}
+	void _reduce(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<double>& C, const size_t& k, const size_t& l) throw (IncorrectDimensionException*);
 
 	// This method should not be called outside of LLL since it has no meaning outside of LLL
-	void _exchange(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<double>& C, const size_t& k) {
-		if (mu.get_rows() != y.get_rows() || mu.get_cols() != y.get_cols()) { throw new IncorrectDimensionException("Matrices mu and y have different dimensions"); }
-		if (k >= mu.get_rows()) { throw new IncorrectDimensionException("Index out of range"); }
-		size_t rows = mu.get_rows();
-
-		std::vector<double> z = y.getRowVector<double>(k - 1);
-		y.setRowVector(y.getRowVector<double>(k), k - 1);
-		y.setRowVector(z, k);
-
-		z = C.getRowVector<double>(k - 1);
-		C.setRowVector(C.getRowVector<double>(k), k - 1);
-		C.setRowVector(z, k);
-
-		double nu = mu(k, k - 1);
-		double delta = gamma[k] + (nu * nu * gamma[k - 1]);
-		mu(k, k - 1) = nu * gamma[k - 1] / delta;
-		gamma[k] = gamma[k] * gamma[k - 1] / delta;
-		gamma[k - 1] = delta;
-		for (size_t j = 0; j < k - 1; j++) {
-			double t = mu(k - 1, j);
-			mu(k - 1, j) = mu(k, j);
-			mu(k, j) = t;
-		}
-		for (size_t i = k + 1; i < rows; i++) {
-			double xi = mu(i, k);
-			mu(i, k) = mu(i, k - 1) - (nu * mu(i, k));
-			mu(i, k - 1) = (mu(k, k - 1) * mu(i, k)) + xi;
-		}
-	}
+	void _exchange(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<double>& C, const size_t& k);
 
 	// Indeces for the tuple returned by LLL
 	enum LLLType { LLL = 0, C = 1 };
@@ -156,6 +105,21 @@ namespace CPPMathLibrary {
 		catch (IncorrectDimensionException* idEx) {
 			throw idEx;
 		}
+	}
+
+	namespace ContinuedFraction {
+
+		// Check if the input double is an integer
+		inline bool IsInt(double x);
+
+		// Implements the ContinuedFractionExpansion algorithm, returns an array of partial quotients
+		long* ContinuedFractionExpansion(double gamma, size_t& count, size_t& op_count);
+
+		// Return the convergent calculated by the array of partial quotients up to the stop index
+		RationalNumber FindConvergent(long* qs, size_t stop_index);
+
+		// Print all convergents calculated for the entire array of partial quotients
+		void PrintConvergents(long* qs, size_t count);
 	}
 
 }

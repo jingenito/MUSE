@@ -13,5 +13,6 @@
 #include "IncorrectDimensionException.h"
 #include "QSMatrix.h"
 #include "VectorImports.h"
+#include "RationalNumber.h"
 
 #endif //PCH_H
