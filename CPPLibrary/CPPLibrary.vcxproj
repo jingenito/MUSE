@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Algorithms.h" />
     <ClInclude Include="CPPLibrary.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="IncorrectDimensionException.h" />
