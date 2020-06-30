@@ -18,17 +18,8 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="algorithms.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ContinuedFraction.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RationalNumber.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CPPHeader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
