@@ -107,19 +107,16 @@ namespace CPPMathLibrary {
 		}
 	}
 
-	namespace ContinuedFraction {
+	// Check if the input double is an integer
+	inline bool IsInt(double x);
 
-		// Check if the input double is an integer
-		inline bool IsInt(double x);
+	// Implements the ContinuedFractionExpansion algorithm, returns an array of partial quotients
+	long* ContinuedFractionExpansion(double gamma, size_t& count, size_t& op_count);
 
-		// Implements the ContinuedFractionExpansion algorithm, returns an array of partial quotients
-		long* ContinuedFractionExpansion(double gamma, size_t& count, size_t& op_count);
+	// Return the convergent calculated by the array of partial quotients up to the stop index
+	RationalNumber FindConvergent(long* qs, size_t stop_index);
 
-		// Return the convergent calculated by the array of partial quotients up to the stop index
-		RationalNumber FindConvergent(long* qs, size_t stop_index);
-
-		// Print all convergents calculated for the entire array of partial quotients
-		void PrintConvergents(long* qs, size_t count);
-	}
+	// Print all convergents calculated for the entire array of partial quotients
+	void PrintConvergents(long* qs, size_t count);
 
 }

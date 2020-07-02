@@ -9,3 +9,6 @@
 #include "IncorrectDimensionException.h"
 #include "QSMatrix.h"
 #include "VectorImports.h"
+#include "Algorithms.h"
+#include "RationalNumber.h"
+#include "StringParsing.h"

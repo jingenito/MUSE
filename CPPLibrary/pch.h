@@ -10,8 +10,8 @@
 // add headers that you want to pre-compile here
 #include "framework.h"
 
-#include "IncorrectDimensionException.h"
 #include "QSMatrix.h"
+#include "IncorrectDimensionException.h"
 #include "VectorImports.h"
 #include "RationalNumber.h"
 

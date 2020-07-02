@@ -60,7 +60,7 @@ int main(int argc, char** argv)
 	filename = *(argv + 3);
 
 	size_t op_count = 0;
-	long* qs = CPPMathLibrary::ContinuedFraction::ContinuedFractionExpansion(num, count, op_count);
+	long* qs = CPPMathLibrary::ContinuedFractionExpansion(num, count, op_count);
 	if (!server_mode) {
 		std::cout << "Operation Count: " << op_count << std::endl;
 		/*ContinuedFraction::PrintArray(qs, count);
