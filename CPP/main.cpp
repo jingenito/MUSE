@@ -9,6 +9,7 @@ int main(int argc, char** argv)
 	bool server_mode = false; //optimization for server use
 
 	if (argc < 4) {
+		std::cout << std::endl;
 		std::cout << "Not enough arguments were given... See instructions below" << std::endl;
 		std::cout << "1) Number to approximate" << std::endl;
 		std::cout << "2) Amount of iterations" << std::endl;
@@ -22,7 +23,7 @@ int main(int argc, char** argv)
 		std::cout << "Recognized functions (parenthesis may need to be escaped with quotes):" << std::endl;
 		std::cout << "1) sqrt(x)" << std::endl;
 		std::cout << "2) log(x)" << std::endl;
-		std::cout << "3) log_a(b)" << std::endl;
+		std::cout << "3) log_a(b)" << std::endl << std::endl;
 		return 0;
 	}
 

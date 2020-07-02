@@ -9,7 +9,7 @@
 #include <string>
 #include <exception> 
 
-class IncorrectDimensionException : std::exception {
+__declspec(dllexport) class IncorrectDimensionException : std::exception {
 private:
 	std::string _message;
 	std::exception _inner;

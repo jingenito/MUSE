@@ -1,13 +1,13 @@
 #include "pch.h"
 #include "StringParsing.h"
 
-inline bool CPPMathLibrary::IsNumeric(const std::string& s)
+__declspec(dllexport) inline bool CPPMathLibrary::IsNumeric(const std::string& s)
 {
 	return !s.empty() && find_if(s.begin(),
 		s.end(), [](unsigned char c) { return !isdigit(c); }) == s.end();
 }
 
-double CPPMathLibrary::TryParseNumFromArgs(std::string s) {
+__declspec(dllexport) double CPPMathLibrary::TryParseNumFromArgs(std::string s) {
 	if (s == "pi") {
 		return pi;
 	}
@@ -20,7 +20,7 @@ double CPPMathLibrary::TryParseNumFromArgs(std::string s) {
 	return 0.0;
 }
 
-double CPPMathLibrary::TryParseMathFromArgs(std::string s) {
+__declspec(dllexport) double CPPMathLibrary::TryParseMathFromArgs(std::string s) {
 	size_t pos1 = s.find("(");
 	size_t pos2 = s.find(")");
 	if (pos1 == std::string::npos || pos2 == std::string::npos || pos2 < pos1) { return 0.0; }

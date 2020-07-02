@@ -14,7 +14,7 @@
 
 // Vector Addition
 template <typename T>
-inline std::vector<T> operator+(const std::vector<T>& lhs, const std::vector<T>& rhs) throw (IncorrectDimensionException*) {
+__declspec(dllexport) inline std::vector<T> operator+(const std::vector<T>& lhs, const std::vector<T>& rhs) throw (IncorrectDimensionException*) {
 	if (lhs.size() != rhs.size()) { throw new IncorrectDimensionException("Dimension of the left side must equal the dimension of the right side"); }
 	std::vector<T> result(lhs.size(), 0);
 
@@ -27,7 +27,7 @@ inline std::vector<T> operator+(const std::vector<T>& lhs, const std::vector<T>&
 
 // Vector Subtraction
 template <typename T>
-inline std::vector<T> operator-(const std::vector<T>& lhs, const std::vector<T>& rhs) throw (IncorrectDimensionException*) {
+__declspec(dllexport) inline std::vector<T> operator-(const std::vector<T>& lhs, const std::vector<T>& rhs) throw (IncorrectDimensionException*) {
 	if (lhs.size() != rhs.size()) { throw new IncorrectDimensionException("Dimension of the left side must equal the dimension of the right side"); }
 	std::vector<T> result(lhs.size(), 0);
 
@@ -40,7 +40,7 @@ inline std::vector<T> operator-(const std::vector<T>& lhs, const std::vector<T>&
 
 // Vector Dot Product - Using Euclidean Dot Product
 template <typename T>
-inline T operator*(const std::vector<T>& lhs, const std::vector<T>& rhs) throw (IncorrectDimensionException*) {
+__declspec(dllexport) inline T operator*(const std::vector<T>& lhs, const std::vector<T>& rhs) throw (IncorrectDimensionException*) {
 	if (lhs.size() != rhs.size()) { throw new IncorrectDimensionException("Dimension of the left side must equal the dimension of the right side"); }
 	T sum = 0;
 
@@ -53,7 +53,7 @@ inline T operator*(const std::vector<T>& lhs, const std::vector<T>& rhs) throw (
 
 // Scalar Multiplication
 template <typename T>
-inline std::vector<T> operator*(const std::vector<T>& lhs, const T& rhs) {
+__declspec(dllexport) inline std::vector<T> operator*(const std::vector<T>& lhs, const T& rhs) {
 	std::vector<T> result(lhs.size(), 0);
 
 	for (size_t i = 0; i < lhs.size(); i++) {
@@ -64,13 +64,13 @@ inline std::vector<T> operator*(const std::vector<T>& lhs, const T& rhs) {
 }
 
 template <typename T>
-inline std::vector<T> operator*(const T& lhs, const std::vector<T>& rhs) {
+__declspec(dllexport) inline std::vector<T> operator*(const T& lhs, const std::vector<T>& rhs) {
 	return rhs * lhs;
 }
 
 // Project the left vector onto the right vector
 template <typename T>
-inline T operator/(const std::vector<T>& lhs, const std::vector<T>& rhs) throw (IncorrectDimensionException*) {
+__declspec(dllexport) inline T operator/(const std::vector<T>& lhs, const std::vector<T>& rhs) throw (IncorrectDimensionException*) {
 	try {
 		return (lhs * rhs) / (rhs * rhs);
 	}
@@ -81,13 +81,13 @@ inline T operator/(const std::vector<T>& lhs, const std::vector<T>& rhs) throw (
 
 // Magnitude of Vector - Using Euclidean Distance
 template <typename T>
-inline std::vector<T> get_magnitude(const std::vector<T>& vec) {
+__declspec(dllexport) inline std::vector<T> get_magnitude(const std::vector<T>& vec) {
 	return sqrt(vec * vec);
 }
 
 // Print the Vector
 template <typename T>
-inline std::ostream& operator<<(std::ostream& os, const std::vector<T>& rhs) {
+__declspec(dllexport) inline std::ostream& operator<<(std::ostream& os, const std::vector<T>& rhs) {
 	for (size_t i = 0; i < rhs.size(); i++) {
 		os << std::setw(8) << std::setprecision(5) << rhs[i] << " ";
 	}

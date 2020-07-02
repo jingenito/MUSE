@@ -22,11 +22,11 @@ namespace CPPMathLibrary {
 	size_t GreatestCommonDivisor(const size_t& n1, const size_t& n2);
 
 	// Indeces for the tuple returned by GramSchmidtOrthogonalization
-	enum GSOType { GSO = 0, Mu = 1, Gamma = 2 };
+	__declspec(dllexport) enum GSOType { GSO = 0, Mu = 1, Gamma = 2 };
 
 	// Implements the GramSchmidtOrthogonalization for the input matrix, only accepts a square matrix as input. Does not normalize the vectors.
 	template <typename T>
-	std::tuple< QSMatrix<double>, QSMatrix<double>, std::vector<double> > GramSchmidtOrthogonalization(const QSMatrix<T>& matrix) throw (IncorrectDimensionException*) {
+	__declspec(dllexport) std::tuple< QSMatrix<double>, QSMatrix<double>, std::vector<double> > GramSchmidtOrthogonalization(const QSMatrix<T>& matrix) throw (IncorrectDimensionException*) {
 		size_t rows = matrix.get_rows();
 		size_t cols = matrix.get_cols();
 		if (rows != cols) { throw new IncorrectDimensionException("Matrix is not a square matrix"); }
@@ -60,17 +60,17 @@ namespace CPPMathLibrary {
 	}
 
 	// This method should not be called outside of LLL since it has no meaning outside of LLL
-	void _reduce(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<double>& C, const size_t& k, const size_t& l) throw (IncorrectDimensionException*);
+	__declspec(dllexport) void _reduce(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<double>& C, const size_t& k, const size_t& l) throw (IncorrectDimensionException*);
 
 	// This method should not be called outside of LLL since it has no meaning outside of LLL
-	void _exchange(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<double>& C, const size_t& k);
+	__declspec(dllexport) void _exchange(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<double>& C, const size_t& k);
 
 	// Indeces for the tuple returned by LLL
-	enum LLLType { LLL = 0, C = 1 };
+	__declspec(dllexport) enum LLLType { LLL = 0, C = 1 };
 
 	// Implements the LLL algorithm to find an alpha reduced basis. Input matrix must be square.
 	template <typename T>
-	std::tuple< QSMatrix<double>, QSMatrix<double> > ReduceBasis_LLL(const QSMatrix<T>& matrix, const double& alpha) throw (IncorrectDimensionException*) {
+	__declspec(dllexport) std::tuple< QSMatrix<double>, QSMatrix<double> > ReduceBasis_LLL(const QSMatrix<T>& matrix, const double& alpha) throw (IncorrectDimensionException*) {
 		size_t rows = matrix.get_rows();
 		size_t cols = matrix.get_cols();
 		if (rows != cols) { throw new IncorrectDimensionException("Matrix is not a square matrix"); }
@@ -108,15 +108,15 @@ namespace CPPMathLibrary {
 	}
 
 	// Check if the input double is an integer
-	inline bool IsInt(double x);
+	__declspec(dllexport) inline bool IsInt(double x);
 
 	// Implements the ContinuedFractionExpansion algorithm, returns an array of partial quotients
-	long* ContinuedFractionExpansion(double gamma, size_t& count, size_t& op_count);
+	__declspec(dllexport) long* ContinuedFractionExpansion(double gamma, size_t& count, size_t& op_count);
 
 	// Return the convergent calculated by the array of partial quotients up to the stop index
-	RationalNumber FindConvergent(long* qs, size_t stop_index);
+	__declspec(dllexport) RationalNumber FindConvergent(long* qs, size_t stop_index);
 
 	// Print all convergents calculated for the entire array of partial quotients
-	void PrintConvergents(long* qs, size_t count);
+	__declspec(dllexport) void PrintConvergents(long* qs, size_t count);
 
 }

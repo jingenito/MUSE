@@ -15,12 +15,12 @@ namespace CPPMathLibrary {
 	const double phi = 1.61803398874989484820458683436;
 
 	// Returns a boolean indicating whether or not the string contains only numeric characters
-	inline bool IsNumeric(const std::string& s);
+	__declspec(dllexport) inline bool IsNumeric(const std::string& s);
 
 	// Attempts to parse the string into either a number, or a recognized constant.
-	double TryParseNumFromArgs(std::string s);
+	__declspec(dllexport) double TryParseNumFromArgs(std::string s);
 
 	// Attempts to parse the string to perform a recognized math function, or parse the string into a number.
-	double TryParseMathFromArgs(std::string s);
+	__declspec(dllexport) double TryParseMathFromArgs(std::string s);
 
 }

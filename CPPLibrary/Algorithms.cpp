@@ -15,7 +15,7 @@ size_t CPPMathLibrary::GreatestCommonDivisor(const size_t& n1, const size_t& n2)
 	return r0; //remember it terminates when r1 == 0
 }
 
-void CPPMathLibrary::_reduce(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<double>& C, const size_t& k, const size_t& l) throw (IncorrectDimensionException*) {
+__declspec(dllexport) void CPPMathLibrary::_reduce(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<double>& C, const size_t& k, const size_t& l) throw (IncorrectDimensionException*) {
 	if (mu.get_rows() != y.get_rows() || mu.get_cols() != y.get_cols()) { throw new IncorrectDimensionException("Matrices mu and y have different dimensions"); }
 	if (k >= mu.get_rows() || l >= mu.get_cols()) { throw new IncorrectDimensionException("Index out of range"); }
 
@@ -38,7 +38,7 @@ void CPPMathLibrary::_reduce(QSMatrix<double>& y, QSMatrix<double>& mu, std::vec
 	}
 }
 
-void CPPMathLibrary::_exchange(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<double>& C, const size_t& k) {
+__declspec(dllexport) void CPPMathLibrary::_exchange(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<double>& C, const size_t& k) {
 	if (mu.get_rows() != y.get_rows() || mu.get_cols() != y.get_cols()) { throw new IncorrectDimensionException("Matrices mu and y have different dimensions"); }
 	if (k >= mu.get_rows()) { throw new IncorrectDimensionException("Index out of range"); }
 	size_t rows = mu.get_rows();
@@ -68,9 +68,9 @@ void CPPMathLibrary::_exchange(QSMatrix<double>& y, QSMatrix<double>& mu, std::v
 	}
 }
 
-inline bool CPPMathLibrary::IsInt(double x) { return long(x) == x; }
+__declspec(dllexport) inline bool CPPMathLibrary::IsInt(double x) { return long(x) == x; }
 
-long* CPPMathLibrary::ContinuedFractionExpansion(double gamma, size_t& count, size_t& op_count) {
+__declspec(dllexport) long* CPPMathLibrary::ContinuedFractionExpansion(double gamma, size_t& count, size_t& op_count) {
 	op_count = 0; //clear the op count
 	long* arr = new long[count]; //needs to be a signed int because q_i can be negative
 	arr[0] = (long)floor(gamma);
@@ -88,7 +88,7 @@ long* CPPMathLibrary::ContinuedFractionExpansion(double gamma, size_t& count, si
 	return arr;
 }
 
-CPPMathLibrary::RationalNumber CPPMathLibrary::FindConvergent(long* qs, size_t stop_index) {
+__declspec(dllexport) CPPMathLibrary::RationalNumber CPPMathLibrary::FindConvergent(long* qs, size_t stop_index) {
 	if (stop_index < 0) { return RationalNumber(0, 0); /*this is treated as NaN*/ }
 	RationalNumber r(*(qs + stop_index));
 	if (stop_index == 0) { return r; }
@@ -100,7 +100,7 @@ CPPMathLibrary::RationalNumber CPPMathLibrary::FindConvergent(long* qs, size_t s
 	return r;
 }
 
-void CPPMathLibrary::PrintConvergents(long* qs, size_t count) {
+__declspec(dllexport) void CPPMathLibrary::PrintConvergents(long* qs, size_t count) {
 	std::cout << "Convergences:" << std::endl;
 	for (size_t i = 0; i < count; ++i) {
 		std::cout << i + 1 << ") " << FindConvergent(qs, i) << std::endl;
