@@ -9,6 +9,10 @@
 #include "IncorrectDimensionException.h"
 #include "QSMatrix.h"
 #include "VectorImports.h"
-#include "Algorithms.h"
 #include "RationalNumber.h"
+#include "Algorithms.h"
 #include "StringParsing.h"
+
+extern "C" __declspec(dllexport) int CPPMathLibrary_GetGCD(int n1, int n2) {
+	return CPPMathLibrary::GreatestCommonDivisor(n1, n2);
+}
