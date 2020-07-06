@@ -16,7 +16,9 @@ namespace TestAPP
 
         public static int GetGCD(int n1, int n2)
         {
-            return GreatestCommonDivisor(n1, n2);
+            int t1 = (int)Math.Abs(n1);
+            int t2 = (int)Math.Abs(n2);
+            return GreatestCommonDivisor(t1, t2);
         }
     }
 }
