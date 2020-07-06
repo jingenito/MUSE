@@ -8,15 +8,32 @@ void GramSchmidtTest();
 void LLLTest();
 
 int main(int argc, char** argv) {
-
 	std::cout << "CPPLibrary Test Bench" << std::endl << std::endl;
 
-	GramSchmidtTest();
-	std::cout << std::endl;
-	LLLTest();
+	bool _run_gso_test_ = false, _run_lll_test_ = false;
+
+	if (argc > 2) {
+		_run_lll_test_ = argv[1] == "1";
+	}
+	if (argc > 1) {
+		_run_gso_test_ = argv[0] == "1";
+	}
+	if (argc == 1) {
+		std::cout << "No flags have been set... Running all tests..." << std::endl << std::endl;
+		_run_gso_test_ = true;
+		_run_lll_test_ = true;
+	}
+
+	if (_run_gso_test_) {
+		GramSchmidtTest();
+		std::cout << std::endl;
+	}
+	if (_run_lll_test_) {
+		LLLTest();
+		std::cout << std::endl;
+	}
 
 	return 0;
-
 }
 
 void GramSchmidtTest() {
