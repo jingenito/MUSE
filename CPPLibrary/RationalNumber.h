@@ -13,7 +13,7 @@ namespace CPPMathLibrary {
 	// Definition is in Algorithms.cpp
 	extern size_t GreatestCommonDivisor(const size_t&, const size_t&);
 
-	__declspec(dllexport) class RationalNumber {
+	class RationalNumber {
 	private:
 		long _numerator, _divisor;
 
