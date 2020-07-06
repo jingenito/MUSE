@@ -16,6 +16,6 @@
 #include "AlgorithmsLLL.h"
 
 //Managed Code Port
-extern "C" __declspec(dllexport) int CPPMathLibrary_GetGCD(int n1, int n2) {
+extern "C" __declspec(dllexport) int CPPMathLibrary_ManagedPort_GetGCD(int n1, int n2) {
 	return CPPMathLibrary::GreatestCommonDivisor(n1, n2);
 }

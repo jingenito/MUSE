@@ -161,6 +161,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="QSMatrix.h" />
     <ClInclude Include="RationalNumber.h" />
+    <ClInclude Include="SimultaneousDiophantine.h" />
     <ClInclude Include="StringParsing.h" />
     <ClInclude Include="VectorImports.h" />
   </ItemGroup>
@@ -175,6 +176,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SimultaneousDiophantine.cpp" />
     <ClCompile Include="StringParsing.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
