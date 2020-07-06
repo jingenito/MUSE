@@ -42,6 +42,12 @@
     <ClInclude Include="StringParsing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ContinuedFraction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AlgorithmsLLL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -54,6 +60,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StringParsing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ContinuedFraction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AlgorithmsLLL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

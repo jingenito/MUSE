@@ -153,6 +153,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Algorithms.h" />
+    <ClInclude Include="AlgorithmsLLL.h" />
+    <ClInclude Include="ContinuedFraction.h" />
     <ClInclude Include="CPPLibrary.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="IncorrectDimensionException.h" />
@@ -164,6 +166,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Algorithms.cpp" />
+    <ClCompile Include="AlgorithmsLLL.cpp" />
+    <ClCompile Include="ContinuedFraction.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

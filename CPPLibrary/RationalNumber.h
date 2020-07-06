@@ -7,11 +7,9 @@
 #pragma once
 
 #include <iostream>
+#include "Algorithms.h"
 
 namespace CPPMathLibrary {
-
-	// Definition is in Algorithms.cpp
-	extern size_t GreatestCommonDivisor(const size_t&, const size_t&);
 
 	class RationalNumber {
 	private:
