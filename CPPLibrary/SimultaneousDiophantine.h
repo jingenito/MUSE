@@ -13,7 +13,7 @@ namespace CPPMathLibrary {
 
 	namespace SimultaneousDiophantine {
 
-		std::vector<RationalNumber> SameDivisor(const std::vector<RationalNumber>& x, const double& alpha, const double& epsilon);
+		std::vector<RationalNumber> SameDivisor(const std::vector<RationalNumber>& x, const double& alpha, const RationalNumber& epsilon);
 
 	}
 

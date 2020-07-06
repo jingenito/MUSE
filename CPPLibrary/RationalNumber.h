@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include "Algorithms.h"
+#include <cmath>
 
 namespace CPPMathLibrary {
 
@@ -43,7 +44,7 @@ namespace CPPMathLibrary {
 		inline void SetDivisor(long num) { _divisor = num; }
 
 		//Returns the value, but will default to 0.0 if NaN so check inputs carefully.
-		inline double GetValue() {
+		const inline double GetValue() {
 			if (!this->isRealNumber()) { return 0.0; }
 			return static_cast<double>(this->_numerator) / this->_divisor;
 		}
@@ -113,6 +114,11 @@ namespace CPPMathLibrary {
 		}
 		inline double operator+(const double& rhs) {
 			return this->GetValue() + rhs;
+		}
+
+		inline RationalNumber operator^(const int& rhs) {
+			RationalNumber r((long)pow(this->_numerator, rhs), (long)pow(this->_divisor, rhs));
+			return r;
 		}
 
 		inline bool operator==(const RationalNumber& rhs) {
