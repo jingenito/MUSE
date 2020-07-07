@@ -4,6 +4,7 @@
 #include <cmath>
 #include <tuple>
 #include "AlgorithmsLLL.h"
+#include "ContinuedFraction.h"
 
 QSMatrix<long> CPPMathLibrary::SimultaneousDiophantine::SameDivisor(const std::vector<double>& x, const double& alpha, const double& epsilon) throw (IncorrectDimensionException*) {
 	size_t n = x.size();
@@ -39,4 +40,21 @@ QSMatrix<long> CPPMathLibrary::SimultaneousDiophantine::SameDivisor(const std::v
 	}
 
 	return C;
+}
+
+QSMatrix<long> CPPMathLibrary::SimultaneousDiophantine::SameDivisorFromRealVector(const std::vector<double>& x, const double& alpha, const double& epsilon, const size_t convergentCount) throw (IncorrectDimensionException*) {
+	size_t cuntCount, cuntOpCount; //dont care about these - only needed for ContinuedFractionExpansion
+	long* qs; //initializing once 
+	std::vector<double> rats;
+	for (size_t i = 0; i < x.size(); i++) {
+		qs = ContinuedFractionExpansion(x[i], cuntCount, cuntOpCount);
+		RationalNumber r = FindConvergent(qs, convergentCount);
+		rats.push_back((double)r);
+	}
+	try {
+		return SameDivisor(rats, alpha, epsilon);
+	}
+	catch (IncorrectDimensionException* idEx) {
+		throw idEx;
+	}
 }
