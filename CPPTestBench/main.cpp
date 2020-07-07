@@ -12,8 +12,11 @@ void SimultaneousDiophantineTest();
 int main(int argc, char** argv) {
 	std::cout << "CPPLibrary Test Bench" << std::endl << std::endl;
 
-	bool _run_gso_test_ = false, _run_lll_test_ = false;
+	bool _run_gso_test_ = false, _run_lll_test_ = false, _run_simult_dioph_test_ = false;
 
+	if (argc > 3) {
+		_run_simult_dioph_test_ = argv[2] == "1";
+	}
 	if (argc > 2) {
 		_run_lll_test_ = argv[1] == "1";
 	}
@@ -24,6 +27,7 @@ int main(int argc, char** argv) {
 		std::cout << "No flags have been set... Running all tests..." << std::endl << std::endl;
 		_run_gso_test_ = true;
 		_run_lll_test_ = true;
+		_run_simult_dioph_test_ = true;
 	}
 
 	if (_run_gso_test_) {
@@ -32,6 +36,10 @@ int main(int argc, char** argv) {
 	}
 	if (_run_lll_test_) {
 		LLLTest();
+		std::cout << std::endl;
+	}
+	if (_run_simult_dioph_test_) {
+		SimultaneousDiophantineTest();
 		std::cout << std::endl;
 	}
 
@@ -57,14 +65,24 @@ void GramSchmidtTest() {
 	std::cout << "Starting GSO Test..." << std::endl;
 	std::cout << "Matrix X:" << std::endl << X << std::endl;
 
-	start = clock();
-	auto result = GramSchmidtOrthogonalization<double>(X);
-	end = clock();
-	duration = ((double)end - (double)start) / CLOCKS_PER_SEC;
+	QSMatrix<double> Y(3, 3, 0);
+	QSMatrix<double> Mu(3, 3, 0);
+	std::vector<double> gamma(3);
 
-	QSMatrix<double> Y = std::get<GSOType::GSO>(result);
-	QSMatrix<double> Mu = std::get<GSOType::Mu>(result);
-	std::vector<double> gamma = std::get<GSOType::Gamma>(result);
+	try {
+		start = clock();
+		auto result = GramSchmidtOrthogonalization<double>(X);
+		end = clock();
+		duration = ((double)end - (double)start) / CLOCKS_PER_SEC;
+
+		Y = std::get<GSOType::GSO>(result);
+		Mu = std::get<GSOType::Mu>(result);
+		gamma = std::get<GSOType::Gamma>(result);
+	}
+	catch (IncorrectDimensionException* idEx) {
+		std::cout << idEx->getMessage() << std::endl;
+		return;
+	}
 
 	std::cout << "Finished... Execution Time " << duration << " seconds" << std::endl << std::endl;
 	std::cout << "Y:" << std::endl << Y << std::endl;
@@ -100,13 +118,22 @@ void LLLTest() {
 	std::cout << "Starting LLL Test..." << std::endl << "Alpha = 0.75" << std::endl;
 	std::cout << "Matrix X:" << std::endl << X << std::endl;
 
-	start = clock();
-	auto result = ReduceBasis_LLL<double>(X, 0.75);
-	end = clock();
-	duration = ((double)end - (double)start) / CLOCKS_PER_SEC;
+	QSMatrix<double> Y(4, 4, 0);
+	QSMatrix<long> C(4, 4, 0);
 
-	QSMatrix<double> Y = std::get<LLLType::LLL>(result);
-	QSMatrix<long> C = std::get<LLLType::C>(result);
+	try {
+		start = clock();
+		auto result = ReduceBasis_LLL<double>(X, 0.75);
+		end = clock();
+		duration = ((double)end - (double)start) / CLOCKS_PER_SEC;
+
+		Y = std::get<LLLType::LLL>(result);
+		C = std::get<LLLType::C>(result);
+	}
+	catch (IncorrectDimensionException* idEx) {
+		std::cout << idEx->getMessage() << std::endl;
+		return;
+	}
 
 	std::cout << "Finished... Execution Time " << duration << " seconds" << std::endl << std::endl;
 	std::cout << "Y:" << std::endl << Y << std::endl;
@@ -129,20 +156,26 @@ void SimultaneousDiophantineTest() {
 	std::cout << "Starting Simultaneous Diophantine Test..." << std::endl << std::endl;
 	std::cout << "Initial Vector:" << std::endl << preValues << std::endl << std::endl;
 
-	double epsilon = 1;
-	double alpha = 0.75;
-	for (size_t i = 0; i < 3; i++) {
-		epsilon /= 10;
+	try {
+		double epsilon = 1;
+		double alpha = 0.75;
+		for (size_t i = 0; i < 3; i++) {
+			epsilon /= 10;
 
-		std::cout << "Epsilon: " << epsilon << " Alpha: " << alpha << std::endl << std::endl;
+			std::cout << "Epsilon: " << epsilon << " Alpha: " << alpha << std::endl << std::endl;
 
-		start = clock();
-		QSMatrix<long> C = SimultaneousDiophantine::SameDivisor(preValues, 0.75, epsilon);
-		end = clock();
-		duration = ((double)end - (double)start) / CLOCKS_PER_SEC;
+			start = clock();
+			QSMatrix<long> C = SimultaneousDiophantine::SameDivisor(preValues, alpha, epsilon);
+			end = clock();
+			duration = ((double)end - (double)start) / CLOCKS_PER_SEC;
 
-		std::cout << "Execution Time " << duration << " seconds" << std::endl << std::endl;
-		std::cout << "C:" << std::endl << C << std::endl << std::endl;
+			std::cout << "Execution Time " << duration << " seconds" << std::endl << std::endl;
+			std::cout << "C:" << std::endl << C << std::endl << std::endl;
+		}
+	}
+	catch (IncorrectDimensionException* idEx) {
+		std::cout << idEx->getMessage() << std::endl;
+		return;
 	}
 
 	std::cout << "Finished Simultaneous Diophantine Test." << std::endl;
