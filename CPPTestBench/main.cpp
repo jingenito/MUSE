@@ -104,7 +104,7 @@ void LLLTest() {
 	duration = ((double)end - (double)start) / CLOCKS_PER_SEC;
 
 	QSMatrix<double> Y = std::get<LLLType::LLL>(result);
-	QSMatrix<double> C = std::get<LLLType::C>(result);
+	QSMatrix<long> C = std::get<LLLType::C>(result);
 
 	std::cout << "Finished... Execution Time " << duration << " seconds" << std::endl << std::endl;
 	std::cout << "Y:" << std::endl << Y << std::endl;

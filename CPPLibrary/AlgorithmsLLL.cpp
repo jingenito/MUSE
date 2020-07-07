@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "AlgorithmsLLL.h"
 
-__declspec(dllexport) void CPPMathLibrary::_reduce(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<double>& C, const size_t& k, const size_t& l) throw (IncorrectDimensionException*) {
+__declspec(dllexport) void CPPMathLibrary::_reduce(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<long>& C, const size_t& k, const size_t& l) throw (IncorrectDimensionException*) {
 	if (mu.get_rows() != y.get_rows() || mu.get_cols() != y.get_cols()) { throw new IncorrectDimensionException("Matrices mu and y have different dimensions"); }
 	if (k >= mu.get_rows() || l >= mu.get_cols()) { throw new IncorrectDimensionException("Index out of range"); }
 
@@ -10,7 +10,7 @@ __declspec(dllexport) void CPPMathLibrary::_reduce(QSMatrix<double>& y, QSMatrix
 			double nearestInt = int(round(mu(k, l)));
 
 			y.setRowVector<double>(y.getRowVector<double>(k) - (nearestInt * y.getRowVector<double>(l)), k);
-			C.setRowVector<double>(C.getRowVector<double>(k) - (nearestInt * C.getRowVector<double>(l)), k);
+			C.setRowVector<long>(C.getRowVector<long>(k) - ((long)nearestInt * C.getRowVector<long>(l)), k);
 
 			for (size_t j = 0; j < l; j++) {
 				mu(k, j) = mu(k, j) - (nearestInt * mu(l, j));
@@ -24,7 +24,7 @@ __declspec(dllexport) void CPPMathLibrary::_reduce(QSMatrix<double>& y, QSMatrix
 	}
 }
 
-__declspec(dllexport) void CPPMathLibrary::_exchange(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<double>& C, const size_t& k) {
+__declspec(dllexport) void CPPMathLibrary::_exchange(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<long>& C, const size_t& k) {
 	if (mu.get_rows() != y.get_rows() || mu.get_cols() != y.get_cols()) { throw new IncorrectDimensionException("Matrices mu and y have different dimensions"); }
 	if (k >= mu.get_rows()) { throw new IncorrectDimensionException("Index out of range"); }
 	size_t rows = mu.get_rows();
@@ -33,9 +33,9 @@ __declspec(dllexport) void CPPMathLibrary::_exchange(QSMatrix<double>& y, QSMatr
 	y.setRowVector(y.getRowVector<double>(k), k - 1);
 	y.setRowVector(z, k);
 
-	z = C.getRowVector<double>(k - 1);
-	C.setRowVector(C.getRowVector<double>(k), k - 1);
-	C.setRowVector(z, k);
+	std::vector<long> t = C.getRowVector<long>(k - 1);
+	C.setRowVector(C.getRowVector<long>(k), k - 1);
+	C.setRowVector(t, k);
 
 	double nu = mu(k, k - 1);
 	double delta = gamma[k] + (nu * nu * gamma[k - 1]);
