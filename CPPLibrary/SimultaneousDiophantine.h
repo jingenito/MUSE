@@ -7,13 +7,12 @@
 #pragma once
 
 #include <vector>
-#include "RationalNumber.h"
 
 namespace CPPMathLibrary {
 
 	namespace SimultaneousDiophantine {
 
-		std::vector<RationalNumber> SameDivisor(const std::vector<RationalNumber>& x, const double& alpha, const RationalNumber& epsilon);
+		QSMatrix<long> SameDivisor(const std::vector<double>& x, const double& alpha, const double& epsilon);
 
 	}
 
