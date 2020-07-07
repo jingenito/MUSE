@@ -14,6 +14,7 @@
 #include "StringParsing.h"
 #include "ContinuedFraction.h"
 #include "AlgorithmsLLL.h"
+#include "SimultaneousDiophantine.h"
 
 //Managed Code Port
 extern "C" __declspec(dllexport) int CPPMathLibrary_ManagedPort_GetGCD(int n1, int n2) {

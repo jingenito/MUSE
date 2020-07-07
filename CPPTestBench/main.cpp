@@ -3,9 +3,11 @@
 #include <tuple>
 #include <vector>
 #include <ctime>
+#include <cmath>
 
 void GramSchmidtTest();
 void LLLTest();
+void SimultaneousDiophantineTest();
 
 int main(int argc, char** argv) {
 	std::cout << "CPPLibrary Test Bench" << std::endl << std::endl;
@@ -111,4 +113,37 @@ void LLLTest() {
 	std::cout << "C:" << std::endl << C << std::endl;
 
 	std::cout << "Finished LLL Test." << std::endl;
+}
+
+void SimultaneousDiophantineTest() {
+	clock_t start, end;
+	double duration;
+	using namespace CPPMathLibrary;
+
+	std::vector<double> preValues;
+	preValues.push_back((double)239 / 169);
+	preValues.push_back((double)265 / 153);
+	preValues.push_back((double)682 / 305);
+	preValues.push_back((double)590 / 223);
+
+	std::cout << "Starting Simultaneous Diophantine Test..." << std::endl << std::endl;
+	std::cout << "Initial Vector:" << std::endl << preValues << std::endl << std::endl;
+
+	double epsilon = 1;
+	double alpha = 0.75;
+	for (size_t i = 0; i < 3; i++) {
+		epsilon /= 10;
+
+		std::cout << "Epsilon: " << epsilon << " Alpha: " << alpha << std::endl << std::endl;
+
+		start = clock();
+		QSMatrix<long> C = SimultaneousDiophantine::SameDivisor(preValues, 0.75, epsilon);
+		end = clock();
+		duration = ((double)end - (double)start) / CLOCKS_PER_SEC;
+
+		std::cout << "Execution Time " << duration << " seconds" << std::endl << std::endl;
+		std::cout << "C:" << std::endl << C << std::endl << std::endl;
+	}
+
+	std::cout << "Finished Simultaneous Diophantine Test." << std::endl;
 }
