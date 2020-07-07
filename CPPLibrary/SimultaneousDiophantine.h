@@ -7,12 +7,13 @@
 #pragma once
 
 #include <vector>
+#include "IncorrectDimensionException.h"
 
 namespace CPPMathLibrary {
 
 	namespace SimultaneousDiophantine {
 
-		QSMatrix<long> SameDivisor(const std::vector<double>& x, const double& alpha, const double& epsilon);
+		__declspec(dllexport) QSMatrix<long> SameDivisor(const std::vector<double>& x, const double& alpha, const double& epsilon) throw (IncorrectDimensionException*);
 
 	}
 

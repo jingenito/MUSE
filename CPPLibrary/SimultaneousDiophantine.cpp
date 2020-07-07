@@ -5,7 +5,7 @@
 #include <tuple>
 #include "AlgorithmsLLL.h"
 
-QSMatrix<long> CPPMathLibrary::SimultaneousDiophantine::SameDivisor(const std::vector<double>& x, const double& alpha, const double& epsilon) {
+QSMatrix<long> CPPMathLibrary::SimultaneousDiophantine::SameDivisor(const std::vector<double>& x, const double& alpha, const double& epsilon) throw (IncorrectDimensionException*) {
 	size_t n = x.size();
 	size_t n1 = n + 1;
 
@@ -35,7 +35,7 @@ QSMatrix<long> CPPMathLibrary::SimultaneousDiophantine::SameDivisor(const std::v
 		C = std::get<LLLType::C>(result);
 	}
 	catch (IncorrectDimensionException* idEx) {
-
+		throw idEx;
 	}
 
 	return C;
