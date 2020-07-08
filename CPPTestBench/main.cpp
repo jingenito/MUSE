@@ -8,12 +8,16 @@
 void GramSchmidtTest();
 void LLLTest();
 void SimultaneousDiophantineTest();
+void SimultaneousDiophantineFromRealsTest();
 
 int main(int argc, char** argv) {
 	std::cout << "CPPLibrary Test Bench" << std::endl << std::endl;
 
-	bool _run_gso_test_ = false, _run_lll_test_ = false, _run_simult_dioph_test_ = false;
+	bool _run_gso_test_ = false, _run_lll_test_ = false, _run_simult_dioph_test_ = false, _run_simult_dioph_reals_test_ = false;
 
+	if (argc > 4) {
+		_run_simult_dioph_reals_test_ = argv[3] == "1";
+	}
 	if (argc > 3) {
 		_run_simult_dioph_test_ = argv[2] == "1";
 	}
@@ -28,6 +32,7 @@ int main(int argc, char** argv) {
 		_run_gso_test_ = true;
 		_run_lll_test_ = true;
 		_run_simult_dioph_test_ = true;
+		_run_simult_dioph_reals_test_ = true;
 	}
 
 	if (_run_gso_test_) {
@@ -40,6 +45,10 @@ int main(int argc, char** argv) {
 	}
 	if (_run_simult_dioph_test_) {
 		SimultaneousDiophantineTest();
+		std::cout << std::endl;
+	}
+	if (_run_simult_dioph_reals_test_) {
+		SimultaneousDiophantineFromRealsTest();
 		std::cout << std::endl;
 	}
 
@@ -166,6 +175,46 @@ void SimultaneousDiophantineTest() {
 
 			start = clock();
 			QSMatrix<long> C = SimultaneousDiophantine::SameDivisor(preValues, alpha, epsilon);
+			end = clock();
+			duration = ((double)end - (double)start) / CLOCKS_PER_SEC;
+
+			std::cout << "Execution Time " << duration << " seconds" << std::endl << std::endl;
+			std::cout << "C:" << std::endl << C << std::endl << std::endl;
+		}
+	}
+	catch (IncorrectDimensionException* idEx) {
+		std::cout << idEx->getMessage() << std::endl;
+		return;
+	}
+
+	std::cout << "Finished Simultaneous Diophantine Test." << std::endl;
+}
+
+void SimultaneousDiophantineFromRealsTest() {
+	clock_t start, end;
+	double duration;
+	using namespace CPPMathLibrary;
+
+	std::vector<double> preValues;
+	preValues.push_back(sqrt(2));
+	preValues.push_back(sqrt(3));
+	preValues.push_back(sqrt(5));
+	preValues.push_back(sqrt(7));
+
+	std::cout << "Starting Simultaneous Diophantine From Real Vector Test..." << std::endl << std::endl;
+	std::cout << "Initial Vector:" << std::endl << preValues << std::endl << std::endl;
+
+	try {
+		double epsilon = 1;
+		double alpha = 0.75;
+		size_t pqCount = 5;
+		for (size_t i = 0; i < 3; i++) {
+			epsilon /= 10;
+
+			std::cout << "Epsilon: " << epsilon << " Alpha: " << alpha << " Partial Quotient Count: " << pqCount << std::endl << std::endl;
+
+			start = clock();
+			QSMatrix<long> C = SimultaneousDiophantine::SameDivisorFromRealVector(preValues, alpha, epsilon, pqCount);
 			end = clock();
 			duration = ((double)end - (double)start) / CLOCKS_PER_SEC;
 
