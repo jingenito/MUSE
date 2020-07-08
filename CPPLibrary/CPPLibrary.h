@@ -31,6 +31,11 @@ extern "C" __declspec(dllexport) int* CPPMathLibrary_ManagedPort_ContinuedFracti
 	return CPPMathLibrary::ContinuedFractionExpansion(gamma, theCount, opcount);
 }
 
+extern "C" __declspec(dllexport) int CPPMathLibrary_ManagedPort_PrintConvergents(int* qs, int count) {
+	CPPMathLibrary::PrintConvergents(qs, (size_t)count);
+	return 0;
+}
+
 extern "C" __declspec(dllexport) int CPPMathLibrary_ManagedPort_ReleaseMemory(int* pArray)
 {
 	delete[] pArray;

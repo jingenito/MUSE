@@ -13,8 +13,7 @@ namespace TestAPP
             Console.WriteLine("Partial Quotients:");
             int count = 10;
             int[] result = CPPMathLibTest.ContinuedFraction(num, ref count);
-            for (int i = 0; i < count; i++)
-                Console.WriteLine(result[i]);
+            CPPMathLibTest.PrintConvergents(result, count);
             Console.WriteLine("Finished");
             Console.ReadLine();
         }

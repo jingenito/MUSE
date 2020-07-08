@@ -31,5 +31,13 @@ namespace TestAPP
             ReleaseMemory(qs);
             return result;
         }
+
+        [DllImport(CPPDLLPath, EntryPoint = "CPPMathLibrary_ManagedPort_PrintConvergents", CallingConvention = CallingConvention.Cdecl)]
+        private extern static int _printConvergents(int[] qs, int count);
+
+        public static void PrintConvergents(int[] qs, int count)
+        {
+            _printConvergents(qs, count);
+        }
     }
 }
