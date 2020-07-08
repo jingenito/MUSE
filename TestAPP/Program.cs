@@ -7,32 +7,15 @@ namespace TestAPP
     {
         static void Main(string[] args)
         {
-            while (true)
-            {
-                int n1, n2;
+            double num = Math.Sqrt(2);
 
-                Console.WriteLine("Enter a number: ");
-                var t1 = Console.ReadLine();
-                if (!int.TryParse(t1, out n1))
-                {
-                    Console.WriteLine("Invalid number");
-                    Console.ReadLine();
-                    return;
-                }
-
-                Console.WriteLine("Enter another number: ");
-                var t2 = Console.ReadLine();
-                if (!int.TryParse(t2, out n2))
-                {
-                    Console.WriteLine("Invalid number");
-                    Console.ReadLine();
-                    return;
-                }
-
-                var gcd = CPPMathLibTest.GetGCD(n1, n2);
-                Console.WriteLine(string.Format("The GCD of {0} and {1} is {2}", n1, n2, gcd));
-                Console.ReadLine();
-            }
+            Console.WriteLine("Approximating sqrt(2)");
+            Console.WriteLine("Partial Quotients:");
+            int[] result = CPPMathLibTest.ContinuedFraction(num, 10);
+            for (int i = 0; i < result.Length; i++)
+                Console.WriteLine(result[i]);
+            Console.WriteLine("Finished");
+            Console.ReadLine();
         }
     }
 }
