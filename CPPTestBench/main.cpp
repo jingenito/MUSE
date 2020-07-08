@@ -5,6 +5,7 @@
 #include <ctime>
 #include <cmath>
 
+void ContinuedFractionTest();
 void GramSchmidtTest();
 void LLLTest();
 void SimultaneousDiophantineTest();
@@ -13,19 +14,22 @@ void SimultaneousDiophantineFromRealsTest();
 int main(int argc, char** argv) {
 	std::cout << "CPPLibrary Test Bench" << std::endl << std::endl;
 
-	bool _run_gso_test_ = false, _run_lll_test_ = false, _run_simult_dioph_test_ = false, _run_simult_dioph_reals_test_ = false;
+	bool _run_cont_frac_test_ = false, _run_gso_test_ = false, _run_lll_test_ = false, _run_simult_dioph_test_ = false, _run_simult_dioph_reals_test_ = false;
 
+	if (argc > 5) {
+		_run_simult_dioph_reals_test_ = argv[5] == "1";
+	}
 	if (argc > 4) {
-		_run_simult_dioph_reals_test_ = argv[3] == "1";
+		_run_simult_dioph_test_ = argv[4] == "1";
 	}
 	if (argc > 3) {
-		_run_simult_dioph_test_ = argv[2] == "1";
+		_run_lll_test_ = argv[3] == "1";
 	}
 	if (argc > 2) {
-		_run_lll_test_ = argv[1] == "1";
+		_run_gso_test_ = argv[2] == "1";
 	}
 	if (argc > 1) {
-		_run_gso_test_ = argv[0] == "1";
+		_run_cont_frac_test_ = argv[1] == "1";
 	}
 	if (argc == 1) {
 		std::cout << "No flags have been set... Running all tests..." << std::endl << std::endl;
@@ -33,8 +37,13 @@ int main(int argc, char** argv) {
 		_run_lll_test_ = true;
 		_run_simult_dioph_test_ = true;
 		_run_simult_dioph_reals_test_ = true;
+		_run_cont_frac_test_ = true;
 	}
 
+	if (_run_cont_frac_test_) {
+		ContinuedFractionTest();
+		std::cout << std::endl;
+	}
 	if (_run_gso_test_) {
 		GramSchmidtTest();
 		std::cout << std::endl;
@@ -53,6 +62,25 @@ int main(int argc, char** argv) {
 	}
 
 	return 0;
+}
+
+void ContinuedFractionTest() {
+	clock_t start, end;
+	double duration;
+	double gamma = sqrt(2);
+	size_t count = 10, opcount = 0;
+	using namespace CPPMathLibrary;
+
+	std::cout << "Starting Continued Fraction Test..." << std::endl;
+	std::cout << "Gamma: " << gamma << std::endl;
+
+	start = clock();
+	int* qs = ContinuedFractionExpansion(gamma, count, opcount);
+	end = clock();
+	duration = ((double)end - (double)start) / CLOCKS_PER_SEC;
+	std::cout << "Finished... Execution Time " << duration << " seconds" << std::endl << std::endl;
+	PrintConvergents(qs, count);
+	std::cout << "Finished Continued Fraction Test." << std::endl;
 }
 
 void GramSchmidtTest() {
@@ -227,5 +255,5 @@ void SimultaneousDiophantineFromRealsTest() {
 		return;
 	}
 
-	std::cout << "Finished Simultaneous Diophantine Test." << std::endl;
+	std::cout << "Finished Simultaneous Diophantine From Real Vector Test." << std::endl;
 }
