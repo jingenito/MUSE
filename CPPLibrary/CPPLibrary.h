@@ -32,11 +32,11 @@ QSMatrix<T> ConvertArrToQSMatrix(T** arr, size_t n) {
 template<typename T>
 T** ConvertQSMatrixToArr(QSMatrix<T> matrix) {
 	size_t n = matrix.get_rows();
-	T** arr = new T*[n];
+	T** arr = new T * [n];
 	for (size_t i = 0; i < n; i++) {
+		arr[i] = new T[n];
 		for (size_t j = 0; j < n; j++) {
-			arr[i] = new T[n];
-			
+			arr[i][j] = matrix(i, j);
 		}
 	}
 	return arr;
