@@ -16,6 +16,32 @@
 #include "AlgorithmsLLL.h"
 #include "SimultaneousDiophantine.h"
 
+// private helper functions
+
+template<typename T>
+QSMatrix<T> ConvertArrToQSMatrix(T** arr, size_t n) {
+	QSMatrix<T> matrix(n, n, 0);
+	for (size_t i = 0; i < n; i++) {
+		for (size_t j = 0; j < n; j++) {
+			matrix(i, j) = *(*(arr + i) + j);
+		}
+	}
+	return matrix;
+}
+
+template<typename T>
+T** ConvertQSMatrixToArr(QSMatrix<T> matrix) {
+	size_t n = matrix.get_rows();
+	T** arr = new T*[n];
+	for (size_t i = 0; i < n; i++) {
+		for (size_t j = 0; j < n; j++) {
+			arr[i] = new T[n];
+			
+		}
+	}
+	return arr;
+}
+
 // Managed Code Ports
 
 extern "C" __declspec(dllexport) int CPPMathLibrary_ManagedPort_GetGCD(int n1, int n2) {
@@ -40,4 +66,14 @@ extern "C" __declspec(dllexport) int CPPMathLibrary_ManagedPort_ReleaseMemory(in
 {
 	delete[] pArray;
 	return 0;
+}
+
+extern "C" __declspec(dllexport) double** CPPMathLibrary_ManagedPort_GramSchmidt(double** arr, int n) throw (IncorrectDimensionException*) {
+	if (n < 0)
+		throw new IncorrectDimensionException(); // not including a message because the managed code will just get a generic excetion
+
+	QSMatrix<double> matrix = ConvertArrToQSMatrix(arr, (size_t)n);
+	auto result = CPPMathLibrary::GramSchmidtOrthogonalization(matrix);
+	QSMatrix<double> gso = std::get<CPPMathLibrary::GSOType::GSO>(result);
+	return ConvertQSMatrixToArr(gso);
 }
