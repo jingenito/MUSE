@@ -25,6 +25,7 @@ extern "C" __declspec(dllexport) int CPPMathLibrary_ManagedPort_GetGCD(int n1, i
 extern "C" __declspec(dllexport) int* CPPMathLibrary_ManagedPort_ContinuedFraction(double gamma, int& count) {
 	size_t theCount = (size_t)count;
 	size_t opcount = 0; //not important
+	// do NOT delete qs before returning, it is up to the caller using this API to call CPPMathLibrary_ManagedPort_ReleaseMemory
 	int* qs = CPPMathLibrary::ContinuedFractionExpansion(gamma, theCount, opcount);
 	count = (int)theCount;
 	return CPPMathLibrary::ContinuedFractionExpansion(gamma, theCount, opcount);

@@ -80,6 +80,7 @@ void ContinuedFractionTest() {
 	duration = ((double)end - (double)start) / CLOCKS_PER_SEC;
 	std::cout << "Finished... Execution Time " << duration << " seconds" << std::endl << std::endl;
 	PrintConvergents(qs, count);
+	delete[] qs;
 	std::cout << "Finished Continued Fraction Test." << std::endl;
 }
 
