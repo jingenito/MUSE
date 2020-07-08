@@ -128,7 +128,7 @@ void LLLTest() {
 	std::cout << "Matrix X:" << std::endl << X << std::endl;
 
 	QSMatrix<double> Y(4, 4, 0);
-	QSMatrix<long> C(4, 4, 0);
+	QSMatrix<int> C(4, 4, 0);
 
 	try {
 		start = clock();
@@ -174,7 +174,7 @@ void SimultaneousDiophantineTest() {
 			std::cout << "Epsilon: " << epsilon << " Alpha: " << alpha << std::endl << std::endl;
 
 			start = clock();
-			QSMatrix<long> C = SimultaneousDiophantine::SameDivisor(preValues, alpha, epsilon);
+			QSMatrix<int> C = SimultaneousDiophantine::SameDivisor(preValues, alpha, epsilon);
 			end = clock();
 			duration = ((double)end - (double)start) / CLOCKS_PER_SEC;
 
@@ -214,7 +214,7 @@ void SimultaneousDiophantineFromRealsTest() {
 			std::cout << "Epsilon: " << epsilon << " Alpha: " << alpha << " Partial Quotient Count: " << pqCount << std::endl << std::endl;
 
 			start = clock();
-			QSMatrix<long> C = SimultaneousDiophantine::SameDivisorFromRealVector(preValues, alpha, epsilon, pqCount);
+			QSMatrix<int> C = SimultaneousDiophantine::SameDivisorFromRealVector(preValues, alpha, epsilon, pqCount);
 			end = clock();
 			duration = ((double)end - (double)start) / CLOCKS_PER_SEC;
 

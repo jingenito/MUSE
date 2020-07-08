@@ -16,7 +16,14 @@
 #include "AlgorithmsLLL.h"
 #include "SimultaneousDiophantine.h"
 
-//Managed Code Port
+// Managed Code Ports
+
 extern "C" __declspec(dllexport) int CPPMathLibrary_ManagedPort_GetGCD(int n1, int n2) {
 	return CPPMathLibrary::GreatestCommonDivisor(n1, n2);
+}
+
+extern "C" __declspec(dllexport) int* CPPMathLibrary_ManagedPort_ContinuedFraction(double gamma, int count) {
+	size_t theCount = (size_t)count;
+	size_t opcount = 0; //not important
+	return CPPMathLibrary::ContinuedFractionExpansion(gamma, theCount, opcount);
 }

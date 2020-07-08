@@ -6,7 +6,7 @@
 #include "AlgorithmsLLL.h"
 #include "ContinuedFraction.h"
 
-QSMatrix<long> CPPMathLibrary::SimultaneousDiophantine::SameDivisor(const std::vector<double>& x, const double& alpha, const double& epsilon) throw (IncorrectDimensionException*) {
+QSMatrix<int> CPPMathLibrary::SimultaneousDiophantine::SameDivisor(const std::vector<double>& x, const double& alpha, const double& epsilon) throw (IncorrectDimensionException*) {
 	size_t n = x.size();
 	size_t n1 = n + 1;
 
@@ -29,7 +29,7 @@ QSMatrix<long> CPPMathLibrary::SimultaneousDiophantine::SameDivisor(const std::v
 	}
 
 	QSMatrix<double> Y(n1, n1, 0);
-	QSMatrix<long> C(n1, n1, 0);
+	QSMatrix<int> C(n1, n1, 0);
 	try {
 		auto result = ReduceBasis_LLL<double>(X, alpha);
 		Y = std::get<LLLType::LLL>(result);
@@ -42,9 +42,9 @@ QSMatrix<long> CPPMathLibrary::SimultaneousDiophantine::SameDivisor(const std::v
 	return C;
 }
 
-QSMatrix<long> CPPMathLibrary::SimultaneousDiophantine::SameDivisorFromRealVector(const std::vector<double>& x, const double& alpha, const double& epsilon, const size_t& quotientCount) throw (IncorrectDimensionException*) {
+QSMatrix<int> CPPMathLibrary::SimultaneousDiophantine::SameDivisorFromRealVector(const std::vector<double>& x, const double& alpha, const double& epsilon, const size_t& quotientCount) throw (IncorrectDimensionException*) {
 	size_t cuntCount = 10, cuntOpCount = 0; 
-	long* qs; //initializing once 
+	int* qs; //initializing once 
 	std::vector<double> rats;
 	for (size_t i = 0; i < x.size(); i++) {
 		qs = ContinuedFractionExpansion(x[i], cuntCount, cuntOpCount);

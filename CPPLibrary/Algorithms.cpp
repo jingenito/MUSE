@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Algorithms.h"
 
-__declspec(dllexport) inline bool CPPMathLibrary::IsInt(double x) { return long(x) == x; }
+__declspec(dllexport) inline bool CPPMathLibrary::IsInt(double x) { return int(x) == x; }
 
 __declspec(dllexport) size_t CPPMathLibrary::GreatestCommonDivisor(const size_t& n1, const size_t& n2) {
 	//the algorithm is technically written with absolute values by Euclid... I'm using

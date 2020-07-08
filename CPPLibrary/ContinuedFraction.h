@@ -11,12 +11,12 @@
 namespace CPPMathLibrary {
 
 	// Implements the ContinuedFractionExpansion algorithm, returns an array of partial quotients
-	__declspec(dllexport) long* ContinuedFractionExpansion(double gamma, size_t& count, size_t& op_count);
+	__declspec(dllexport) int* ContinuedFractionExpansion(double gamma, size_t& count, size_t& op_count);
 
 	// Return the convergent calculated by the array of partial quotients up to the stop index
-	__declspec(dllexport) RationalNumber FindConvergent(long* qs, size_t stop_index);
+	__declspec(dllexport) RationalNumber FindConvergent(int* qs, size_t stop_index);
 
 	// Print all convergents calculated for the entire array of partial quotients
-	__declspec(dllexport) void PrintConvergents(long* qs, size_t count);
+	__declspec(dllexport) void PrintConvergents(int* qs, size_t count);
 
 }

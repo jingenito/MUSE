@@ -1,7 +1,7 @@
 /*
 	Author: Joe Ingenito
 	Date Created: 6/07/2020
-	Description: Provides an implementation of a RationalNumber using two longs for the numerator and divisor.
+	Description: Provides an implementation of a RationalNumber using two ints for the numerator and divisor.
 */
 
 #pragma once
@@ -14,7 +14,7 @@ namespace CPPMathLibrary {
 
 	class RationalNumber {
 	private:
-		long _numerator, _divisor;
+		int _numerator, _divisor;
 
 	public:
 		RationalNumber() {
@@ -22,12 +22,12 @@ namespace CPPMathLibrary {
 			this->_divisor = 0;
 		}
 
-		RationalNumber(long n) {
+		RationalNumber(int n) {
 			this->_numerator = n;
 			this->_divisor = 1;
 		}
 
-		RationalNumber(long n, long d) {
+		RationalNumber(int n, int d) {
 			this->_numerator = n;
 			this->_divisor = d;
 		}
@@ -37,11 +37,11 @@ namespace CPPMathLibrary {
 			this->_divisor = r._divisor;
 		}
 
-		inline long GetNumerator() { return _numerator; }
-		inline void SetNumerator(long num) { _numerator = num; }
+		inline int GetNumerator() { return _numerator; }
+		inline void SetNumerator(int num) { _numerator = num; }
 
-		inline long GetDivisor() { return _divisor; }
-		inline void SetDivisor(long num) { _divisor = num; }
+		inline int GetDivisor() { return _divisor; }
+		inline void SetDivisor(int num) { _divisor = num; }
 
 		//Returns the value, but will default to 0.0 if NaN so check inputs carefully.
 		const inline double GetValue() {
@@ -62,7 +62,7 @@ namespace CPPMathLibrary {
 
 		//Changes the current instance to it's reciprocal.
 		inline void Reciprocal() {
-			long temp = this->_numerator;
+			int temp = this->_numerator;
 			this->_numerator = this->_divisor;
 			this->_divisor = temp;
 		}
@@ -71,7 +71,7 @@ namespace CPPMathLibrary {
 			RationalNumber r(this->_numerator * n._divisor, this->_divisor * n._numerator);
 			return r;
 		}
-		inline RationalNumber operator/(const long& n) {
+		inline RationalNumber operator/(const int& n) {
 			RationalNumber r(this->_numerator, this->_divisor * n);
 			return r;
 		}
@@ -84,7 +84,7 @@ namespace CPPMathLibrary {
 			RationalNumber r(this->_numerator * n._numerator, this->_divisor * n._divisor);
 			return r;
 		}
-		inline RationalNumber operator*(const long& n) {
+		inline RationalNumber operator*(const int& n) {
 			RationalNumber r(this->_numerator * n, this->_divisor);
 			return r;
 		}
@@ -96,7 +96,7 @@ namespace CPPMathLibrary {
 			RationalNumber r((this->_numerator * n._divisor) - (this->_divisor * n._numerator), this->_divisor * n._divisor);
 			return r;
 		}
-		inline RationalNumber operator-(const long& n) {
+		inline RationalNumber operator-(const int& n) {
 			RationalNumber r(this->_numerator - (this->_divisor * n), this->_divisor);
 			return r;
 		}
@@ -108,7 +108,7 @@ namespace CPPMathLibrary {
 			RationalNumber r((this->_numerator * n._divisor) + (this->_divisor * n._numerator), this->_divisor * n._divisor);
 			return r;
 		}
-		inline RationalNumber operator+(const long& n) {
+		inline RationalNumber operator+(const int& n) {
 			RationalNumber r(this->_numerator + (this->_divisor * n), this->_divisor);
 			return r;
 		}
@@ -117,7 +117,7 @@ namespace CPPMathLibrary {
 		}
 
 		inline RationalNumber operator^(const int& rhs) {
-			RationalNumber r((long)pow(this->_numerator, rhs), (long)pow(this->_divisor, rhs));
+			RationalNumber r((int)pow(this->_numerator, rhs), (int)pow(this->_divisor, rhs));
 			return r;
 		}
 
@@ -226,7 +226,7 @@ namespace CPPMathLibrary {
 
 		inline operator double() { return this->GetValue(); }
 
-		inline friend RationalNumber operator+(const long& n, const RationalNumber& r) {
+		inline friend RationalNumber operator+(const int& n, const RationalNumber& r) {
 			return RationalNumber(n) + r;
 		}
 		inline friend double operator+(const double& lhs, const RationalNumber& rhs) {
@@ -234,7 +234,7 @@ namespace CPPMathLibrary {
 			return blah + lhs;
 		}
 
-		inline friend RationalNumber operator-(const long& n, const RationalNumber& r) {
+		inline friend RationalNumber operator-(const int& n, const RationalNumber& r) {
 			return RationalNumber(n) - r;
 		}
 		inline friend double operator-(const double& lhs, const RationalNumber& rhs) {
@@ -242,7 +242,7 @@ namespace CPPMathLibrary {
 			return lhs - (double)blah;
 		}
 
-		inline friend RationalNumber operator*(const long& n, const RationalNumber& r) {
+		inline friend RationalNumber operator*(const int& n, const RationalNumber& r) {
 			return RationalNumber(n) * r;
 		}
 		inline friend double operator*(const double& lhs, const RationalNumber& rhs) {
@@ -250,7 +250,7 @@ namespace CPPMathLibrary {
 			return blah * lhs;
 		}
 
-		inline friend RationalNumber operator/(const long& n, const RationalNumber& r) {
+		inline friend RationalNumber operator/(const int& n, const RationalNumber& r) {
 			return RationalNumber(n) / r;
 		}
 		inline friend double operator/(const double& lhs, const RationalNumber& rhs) {
