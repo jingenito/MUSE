@@ -27,3 +27,9 @@ extern "C" __declspec(dllexport) int* CPPMathLibrary_ManagedPort_ContinuedFracti
 	size_t opcount = 0; //not important
 	return CPPMathLibrary::ContinuedFractionExpansion(gamma, theCount, opcount);
 }
+
+extern "C" __declspec(dllexport) int CPPMathLibrary_ManagedPort_ReleaseMemory(int* pArray)
+{
+	delete[] pArray;
+	return 0;
+}
