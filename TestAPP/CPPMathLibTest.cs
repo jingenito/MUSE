@@ -18,19 +18,16 @@ namespace TestAPP
         }
 
         [DllImport(CPPDLLPath, EntryPoint = "CPPMathLibrary_ManagedPort_ContinuedFraction", CallingConvention = CallingConvention.Cdecl)]
-        private extern static IntPtr _continuedFraction(double gamma, int count);
+        private extern static IntPtr _continuedFraction(double gamma, ref int count);
 
         [DllImport(CPPDLLPath, EntryPoint = "CPPMathLibrary_ManagedPort_ReleaseMemory", CallingConvention = CallingConvention.Cdecl)]
         private extern static int ReleaseMemory(IntPtr arr);
 
-        public static int[] ContinuedFraction(double gamma, int count)
+        public static int[] ContinuedFraction(double gamma, ref int count)
         {
-            IntPtr qs = _continuedFraction(gamma, count);
-            int arrayLength = Marshal.ReadInt32(qs);
-            // points to arr[1], which is first value
-            IntPtr start = IntPtr.Add(qs, 4);
-            int[] result = new int[arrayLength];
-            Marshal.Copy(start, result, 0, arrayLength);
+            IntPtr qs = _continuedFraction(gamma, ref count);
+            int[] result = new int[count];
+            Marshal.Copy(qs, result, 0, count);
             ReleaseMemory(qs);
             return result;
         }

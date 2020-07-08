@@ -11,8 +11,9 @@ namespace TestAPP
 
             Console.WriteLine("Approximating sqrt(2)");
             Console.WriteLine("Partial Quotients:");
-            int[] result = CPPMathLibTest.ContinuedFraction(num, 10);
-            for (int i = 0; i < result.Length; i++)
+            int count = 10;
+            int[] result = CPPMathLibTest.ContinuedFraction(num, ref count);
+            for (int i = 0; i < count; i++)
                 Console.WriteLine(result[i]);
             Console.WriteLine("Finished");
             Console.ReadLine();
