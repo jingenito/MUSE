@@ -62,9 +62,17 @@ extern "C" __declspec(dllexport) int CPPMathLibrary_ManagedPort_PrintConvergents
 	return 0;
 }
 
-extern "C" __declspec(dllexport) int CPPMathLibrary_ManagedPort_ReleaseMemory(int* pArray)
+extern "C" __declspec(dllexport) int CPPMathLibrary_ManagedPort_ReleaseMemoryIntArr(int* pArray)
 {
 	delete[] pArray;
+	return 0;
+}
+
+extern "C" __declspec(dllexport) int CPPMathLibrary_ManagedPort_ReleaseMemoryDoubleArr(double** arr, int n) {
+	for (size_t i = 0; i < n; i++) {
+		delete[] *(arr + i);
+	}
+	delete[] arr;
 	return 0;
 }
 

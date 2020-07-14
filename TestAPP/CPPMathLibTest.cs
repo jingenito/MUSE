@@ -20,7 +20,7 @@ namespace TestAPP
         [DllImport(CPPDLLPath, EntryPoint = "CPPMathLibrary_ManagedPort_ContinuedFraction", CallingConvention = CallingConvention.Cdecl)]
         private extern static IntPtr _continuedFraction(double gamma, ref int count);
 
-        [DllImport(CPPDLLPath, EntryPoint = "CPPMathLibrary_ManagedPort_ReleaseMemory", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CPPDLLPath, EntryPoint = "CPPMathLibrary_ManagedPort_ReleaseMemoryIntArr", CallingConvention = CallingConvention.Cdecl)]
         private extern static int ReleaseMemory(IntPtr arr);
 
         public static int[] ContinuedFraction(double gamma, ref int count)
@@ -38,6 +38,25 @@ namespace TestAPP
         public static void PrintConvergents(int[] qs, int count)
         {
             _printConvergents(qs, count);
+        }
+
+        [DllImport(CPPDLLPath, EntryPoint = "CPPMathLibrary_ManagedPort_GramSchmidt", CallingConvention = CallingConvention.Cdecl)]
+        private extern static double[][] _gramSchmidtOrthogonalization(double[][] matrix, int n);
+
+        public static double[][] GramSchmidtOrthogonalization(double[][] matrix, int n)
+        {
+            double[][] result = null;
+            try
+            {
+                result =  _gramSchmidtOrthogonalization(matrix, n);
+
+            }
+            catch
+            {
+                //there needs to be a catch without a specified exception to catch the unmanaged code exception
+            }
+
+            return result;
         }
     }
 }
