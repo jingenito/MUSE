@@ -9,32 +9,18 @@ namespace TestAPP
     {
         static void Main(string[] args)
         {
-            int n = 4;
+            double[] x = new double[4];
+            x[0] = 239.0 / 169;
+            x[1] = 265.0 / 153;
+            x[2] = 682.0 / 305;
+            x[3] = 590.0 / 223;
 
-            double[][] matrix = InitDoubleArr(n);
-            matrix[0][0] = -2;
-            matrix[0][1] = 7;
-            matrix[0][2] = 7;
-            matrix[0][3] = -5;
-            matrix[1][0] = 3;
-            matrix[1][1] = -2;
-            matrix[1][2] = 6;
-            matrix[1][3] = -1;
-            matrix[2][0] = 2;
-            matrix[2][1] = -8;
-            matrix[2][2] = -9;
-            matrix[2][3] = -7;
-            matrix[3][0] = 8;
-            matrix[3][1] = -9;
-            matrix[3][2] = 6;
-            matrix[3][3] = -4;
+            Console.WriteLine("Inital Vector:");
+            PrintArr(x);
 
-            Console.WriteLine("Initial Array:");
-            PrintArrArr(matrix);
-
-            double[][] result = CPPMathLibTest.ReduceBasisLLL(matrix, n, 0.75);
-            Console.WriteLine("LLL Output:");
-            PrintArrArr(result, true);
+            int[][] result = CPPMathLibTest.SimultaneousSameDivisor(x, 4, 0.75, 1.0 / 10);
+            Console.WriteLine("Same Divisor Matrix:");
+            PrintArrArr(result);
 
             Console.ReadLine();
         }
@@ -51,6 +37,16 @@ namespace TestAPP
                 }
             }
             return arr;
+        }
+
+        private static void PrintArr<T>(T[] arr)
+        {
+            var s = new StringBuilder();
+            for (int i = 0; i < arr.Length; i++)
+            {
+                s.AppendFormat("{0}\t", arr[i].ToString());
+            }
+            Console.WriteLine(s.ToString());
         }
 
         private static void PrintArrArr<T>(T[][] arr, bool isnumeric = false)
