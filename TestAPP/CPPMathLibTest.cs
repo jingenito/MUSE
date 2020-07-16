@@ -7,7 +7,7 @@ namespace TestAPP
     {
         private const string CPPDLLPath = @"c:/users/jinge/source/muse/cpplibrary/debug/cpplibrary.dll";
 
-        [DllImport(CPPDLLPath, EntryPoint = "CPPMathLibrary_GetGCD", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(CPPDLLPath, EntryPoint = "CPPMathLibrary_ManagedPort_GetGCD", CallingConvention = CallingConvention.Cdecl)]
         private extern static int _greatestCommonDivisor(int n1, int n2);
 
         public static int GreatestCommonDivisor(int n1, int n2)
