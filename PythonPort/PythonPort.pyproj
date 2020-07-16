@@ -12,7 +12,7 @@
     <Name>PythonPort</Name>
     <RootNamespace>PythonPort</RootNamespace>
     <IsWindowsApplication>False</IsWindowsApplication>
-    <InterpreterId>MSBuild|Python3.8|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>MSBuild|Python3.81|$(MSBuildProjectFullPath)</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,6 +26,15 @@
     <Compile Include="PythonPort.py" />
   </ItemGroup>
   <ItemGroup>
+    <Interpreter Include="..\..\..\Python3.8\">
+      <Id>Python3.81</Id>
+      <Version>3.8</Version>
+      <Description>Python3.8 (Python 3.8 (32-bit))</Description>
+      <InterpreterPath>Scripts\python.exe</InterpreterPath>
+      <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
+      <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>
+      <Architecture>X86</Architecture>
+    </Interpreter>
     <Interpreter Include="Python3.8\">
       <Id>Python3.8</Id>
       <Version>3.8</Version>
