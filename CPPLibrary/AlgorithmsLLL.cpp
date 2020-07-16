@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "AlgorithmsLLL.h"
 
-__declspec(dllexport) void CPPMathLibrary::_reduce(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<int>& C, const size_t& k, const size_t& l) throw (IncorrectDimensionException*) {
+__declspec(dllexport) void CPPMathLibrary::LLL::_reduce(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<int>& C, const size_t& k, const size_t& l) throw (IncorrectDimensionException*) {
 	if (mu.get_rows() != y.get_rows() || mu.get_cols() != y.get_cols()) { throw new IncorrectDimensionException("Matrices mu and y have different dimensions"); }
 	if (k >= mu.get_rows() || l >= mu.get_cols()) { throw new IncorrectDimensionException("Index out of range"); }
 
@@ -24,7 +24,7 @@ __declspec(dllexport) void CPPMathLibrary::_reduce(QSMatrix<double>& y, QSMatrix
 	}
 }
 
-__declspec(dllexport) void CPPMathLibrary::_exchange(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<int>& C, const size_t& k) {
+__declspec(dllexport) void CPPMathLibrary::LLL::_exchange(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<int>& C, const size_t& k) {
 	if (mu.get_rows() != y.get_rows() || mu.get_cols() != y.get_cols()) { throw new IncorrectDimensionException("Matrices mu and y have different dimensions"); }
 	if (k >= mu.get_rows()) { throw new IncorrectDimensionException("Index out of range"); }
 	size_t rows = mu.get_rows();

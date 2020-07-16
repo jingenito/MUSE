@@ -98,8 +98,8 @@ extern "C" __declspec(dllexport) double** CPPMathLibrary_ManagedPort_GramSchmidt
 		throw new IncorrectDimensionException(); // not including a message because the managed code will just get a generic excetion
 
 	QSMatrix<double> matrix = ConvertArrToQSMatrix(arr, (size_t)n);
-	auto result = CPPMathLibrary::GramSchmidtOrthogonalization(matrix);
-	QSMatrix<double> gso = std::get<CPPMathLibrary::GSOType::GSO>(result);
+	auto result = CPPMathLibrary::LLL::GramSchmidtOrthogonalization(matrix);
+	QSMatrix<double> gso = std::get<CPPMathLibrary::LLL::GSOType::GSO>(result);
 	return ConvertQSMatrixToArr(gso);
 }
 
@@ -108,8 +108,8 @@ extern "C" __declspec(dllexport) double** CPPMathLibrary_ManagedPort_ReduceBasis
 		throw new IncorrectDimensionException(); // not including a message because the managed code will just get a generic excetion
 
 	QSMatrix<double> matrix = ConvertArrToQSMatrix(arr, (size_t)n);
-	auto result = CPPMathLibrary::ReduceBasis_LLL(matrix, alpha);
-	QSMatrix<double> lll = std::get<CPPMathLibrary::LLLType::LLL>(result);
+	auto result = CPPMathLibrary::LLL::ReduceBasis_LLL(matrix, alpha);
+	QSMatrix<double> lll = std::get<CPPMathLibrary::LLL::LLLType::LLL>(result);
 	return ConvertQSMatrixToArr(lll);
 }
 
@@ -118,8 +118,8 @@ extern "C" __declspec(dllexport) double** CPPMathLibrary_ManagedPort_ReduceBasis
 		throw new IncorrectDimensionException(); // not including a message because the managed code will just get a generic excetion
 
 	QSMatrix<double> matrix = ConvertArrToQSMatrix(arr, (size_t)n);
-	auto result = CPPMathLibrary::ReduceBasis_LLL(matrix, alpha);
-	QSMatrix<double> c = std::get<CPPMathLibrary::LLLType::C>(result);
+	auto result = CPPMathLibrary::LLL::ReduceBasis_LLL(matrix, alpha);
+	QSMatrix<double> c = std::get<CPPMathLibrary::LLL::LLLType::C>(result);
 	return ConvertQSMatrixToArr(c);
 }
 
