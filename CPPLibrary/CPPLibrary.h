@@ -16,7 +16,7 @@
 #include "AlgorithmsLLL.h"
 #include "SimultaneousDiophantine.h"
 
-// private helper functions
+// helper functions
 
 template<typename T>
 std::vector<T> ConvertArrToVector(T* arr, size_t n) {
