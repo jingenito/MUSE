@@ -5,6 +5,12 @@
 #include <ctime>
 #include <cmath>
 
+const int CONT_FRAC = 1 << 0;
+const int GSO = 1 << 1;
+const int LLL = 1 << 2;
+const int SIMULT_DIOPH = 1 << 3;
+const int SIMULT_DIOPH_REALS = 1 << 4;
+
 void ContinuedFractionTest();
 void GramSchmidtTest();
 void LLLTest();
@@ -14,30 +20,18 @@ void SimultaneousDiophantineFromRealsTest();
 int main(int argc, char** argv) {
 	std::cout << "CPPLibrary Test Bench" << std::endl << std::endl;
 
-	bool _run_cont_frac_test_ = false, _run_gso_test_ = false, _run_lll_test_ = false, _run_simult_dioph_test_ = false, _run_simult_dioph_reals_test_ = false;
+	bool _run_cont_frac_test_ = true, _run_gso_test_ = true, _run_lll_test_ = true, _run_simult_dioph_test_ = true, _run_simult_dioph_reals_test_ = true;
 
-	if (argc > 5) {
-		_run_simult_dioph_reals_test_ = *argv[5] == '1';
-	}
-	if (argc > 4) {
-		_run_simult_dioph_test_ = *argv[4] == '1';
-	}
-	if (argc > 3) {
-		_run_lll_test_ = *argv[3] == '1';
-	}
-	if (argc > 2) {
-		_run_gso_test_ = *argv[2] == '1';
-	}
 	if (argc > 1) {
-		_run_cont_frac_test_ = *argv[1] == '1';
+		int input = std::stoi(argv[1], 0 , 2);
+		_run_cont_frac_test_ = (input & CONT_FRAC) == CONT_FRAC;
+		_run_gso_test_ = (input & GSO) == GSO;
+		_run_lll_test_ = (input & LLL) == LLL;
+		_run_simult_dioph_test_ = (input & SIMULT_DIOPH) == SIMULT_DIOPH;
+		_run_simult_dioph_reals_test_ = (input & SIMULT_DIOPH_REALS) == SIMULT_DIOPH_REALS;
 	}
 	if (argc == 1) {
 		std::cout << "No flags have been set... Running all tests..." << std::endl << std::endl;
-		_run_gso_test_ = true;
-		_run_lll_test_ = true;
-		_run_simult_dioph_test_ = true;
-		_run_simult_dioph_reals_test_ = true;
-		_run_cont_frac_test_ = true;
 	}
 
 	if (_run_cont_frac_test_) {
