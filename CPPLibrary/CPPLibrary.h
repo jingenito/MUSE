@@ -19,7 +19,7 @@
 // helper functions
 
 template<typename T>
-std::vector<T> ConvertArrToVector(T* arr, size_t n) {
+std::vector<T> ConvertArrToVector(const T*& arr, const size_t n) {
 	std::vector<T> v;
 	for (size_t i = 0; i < n; i++) {
 		v.push_back(*(arr + i));
@@ -28,18 +28,7 @@ std::vector<T> ConvertArrToVector(T* arr, size_t n) {
 }
 
 template<typename T>
-QSMatrix<T> ConvertArrToQSMatrix(T** arr, size_t n) {
-	QSMatrix<T> matrix(n, n, 0);
-	for (size_t i = 0; i < n; i++) {
-		for (size_t j = 0; j < n; j++) {
-			matrix(i, j) = *(*(arr + i) + j);
-		}
-	}
-	return matrix;
-}
-
-template<typename T>
-T** ConvertQSMatrixToArr(QSMatrix<T> matrix) {
+T** ConvertQSMatrixToArr(const QSMatrix<T>& matrix) {
 	size_t n = matrix.get_rows();
 	T** arr = new T * [n];
 	for (size_t i = 0; i < n; i++) {
@@ -93,37 +82,37 @@ extern "C" __declspec(dllexport) int CPPMathLibrary_ManagedPort_ReleaseMemoryDou
 	return 0;
 }
 
-extern "C" __declspec(dllexport) double** CPPMathLibrary_ManagedPort_GramSchmidt(double** arr, int n) throw (IncorrectDimensionException*) {
+extern "C" __declspec(dllexport) double** CPPMathLibrary_ManagedPort_GramSchmidt(const double** arr, int n) throw (IncorrectDimensionException*) {
 	if (n < 0)
 		throw new IncorrectDimensionException(); // not including a message because the managed code will just get a generic excetion
 
-	QSMatrix<double> matrix = ConvertArrToQSMatrix(arr, (size_t)n);
+	QSMatrix<double> matrix(arr, (size_t)n, (size_t)n);
 	auto result = CPPMathLibrary::LLL::GramSchmidtOrthogonalization(matrix);
 	QSMatrix<double> gso = std::get<CPPMathLibrary::LLL::GSOType::GSO>(result);
 	return ConvertQSMatrixToArr(gso);
 }
 
-extern "C" __declspec(dllexport) double** CPPMathLibrary_ManagedPort_ReduceBasis_LLL(double** arr, int n, double alpha) throw (IncorrectDimensionException*) {
+extern "C" __declspec(dllexport) double** CPPMathLibrary_ManagedPort_ReduceBasis_LLL(const double** arr, int n, double alpha) throw (IncorrectDimensionException*) {
 	if (n < 0)
 		throw new IncorrectDimensionException(); // not including a message because the managed code will just get a generic excetion
 
-	QSMatrix<double> matrix = ConvertArrToQSMatrix(arr, (size_t)n);
+	QSMatrix<double> matrix(arr, (size_t)n, (size_t)n);
 	auto result = CPPMathLibrary::LLL::ReduceBasis_LLL(matrix, alpha);
 	QSMatrix<double> lll = std::get<CPPMathLibrary::LLL::LLLType::LLL>(result);
 	return ConvertQSMatrixToArr(lll);
 }
 
-extern "C" __declspec(dllexport) double** CPPMathLibrary_ManagedPort_ReduceBasis_LLL_C(double** arr, int n, double alpha) throw (IncorrectDimensionException*) {
+extern "C" __declspec(dllexport) double** CPPMathLibrary_ManagedPort_ReduceBasis_LLL_C(const double** arr, int n, double alpha) throw (IncorrectDimensionException*) {
 	if (n < 0)
 		throw new IncorrectDimensionException(); // not including a message because the managed code will just get a generic excetion
 
-	QSMatrix<double> matrix = ConvertArrToQSMatrix(arr, (size_t)n);
+	QSMatrix<double> matrix(arr, (size_t)n, (size_t)n);
 	auto result = CPPMathLibrary::LLL::ReduceBasis_LLL(matrix, alpha);
 	QSMatrix<double> c = std::get<CPPMathLibrary::LLL::LLLType::C>(result);
 	return ConvertQSMatrixToArr(c);
 }
 
-extern "C" __declspec(dllexport) int** CPPMathLibrary_ManagedPort_Simultaneous_SameDivisor(double* arr, int n, double alpha, double epsilon) throw (IncorrectDimensionException*) {
+extern "C" __declspec(dllexport) int** CPPMathLibrary_ManagedPort_Simultaneous_SameDivisor(const double* arr, int n, double alpha, double epsilon) throw (IncorrectDimensionException*) {
 	if (n < 0)
 		throw new IncorrectDimensionException(); // not including a message because the managed code will just get a generic excetion
 

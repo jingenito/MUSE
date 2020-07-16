@@ -50,6 +50,18 @@ public:
 		cols = c;
 	}
 
+	QSMatrix(const T**& arr, size_t _rows, size_t _cols) {
+		rows = _rows;
+		cols = _cols;
+		mat.resize(rows);
+		for (size_t i = 0; i < rows; i++) {
+			mat[i].resize(cols);
+			for (size_t j = 0; j < cols; j++) {
+				mat[i][j] = arr[i][j];
+			}
+		}
+	}
+
 	virtual ~QSMatrix() {}
 
 	// Operator overloading, for "standard" mathematical matrix operations                                                                                                                                                          
