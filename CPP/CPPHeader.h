@@ -14,5 +14,5 @@ using json = nlohmann::json;
 
 const int MAXCOUNT = 100;
 
-json convertQSequenceToJSON(long*, size_t, size_t);
+json convertQSequenceToJSON(int*, size_t, size_t);
 
