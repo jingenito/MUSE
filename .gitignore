@@ -174,5 +174,9 @@ UpgradeLog*.htm
 *.bim.layout
 *.bim_*.settings
 
+# visual studio files
 .vs/
+
+#python files
 Python3.8/
+**/__pycache__/
