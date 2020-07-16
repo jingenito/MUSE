@@ -31,9 +31,9 @@ QSMatrix<int> CPPMathLibrary::SimultaneousDiophantine::SameDivisor(const std::ve
 	QSMatrix<double> Y(n1, n1, 0);
 	QSMatrix<int> C(n1, n1, 0);
 	try {
-		auto result = ReduceBasis_LLL<double>(X, alpha);
-		Y = std::get<LLLType::LLL>(result);
-		C = std::get<LLLType::C>(result);
+		auto result = LLL::ReduceBasis_LLL<double>(X, alpha);
+		Y = std::get<LLL::LLLType::LLL>(result);
+		C = std::get<LLL::LLLType::C>(result);
 	}
 	catch (IncorrectDimensionException* idEx) {
 		throw idEx;
@@ -47,8 +47,8 @@ QSMatrix<int> CPPMathLibrary::SimultaneousDiophantine::SameDivisorFromRealVector
 	int* qs; //initializing once 
 	std::vector<double> rats;
 	for (size_t i = 0; i < x.size(); i++) {
-		qs = ContinuedFractionExpansion(x[i], cuntCount, cuntOpCount);
-		RationalNumber r = FindConvergent(qs, quotientCount);
+		qs = ContinuedFraction::ContinuedFractionExpansion(x[i], cuntCount, cuntOpCount);
+		RationalNumber r = ContinuedFraction::FindConvergent(qs, quotientCount);
 		rats.push_back((double)r);
 	}
 	try {

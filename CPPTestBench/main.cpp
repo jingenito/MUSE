@@ -63,7 +63,7 @@ void ContinuedFractionTest() {
 	double duration;
 	double gamma = sqrt(2);
 	size_t count = 10, opcount = 0;
-	using namespace CPPMathLibrary;
+	using namespace CPPMathLibrary::ContinuedFraction;
 
 	std::cout << "Starting Continued Fraction Test..." << std::endl;
 	std::cout << "Gamma: " << gamma << std::endl;
@@ -81,7 +81,7 @@ void ContinuedFractionTest() {
 void GramSchmidtTest() {
 	clock_t start, end;
 	double duration;
-	using namespace CPPMathLibrary;
+	using namespace CPPMathLibrary::LLL;
 
 	QSMatrix<double> X(3, 3, 0);
 	X(0, 0) = 3;
@@ -127,7 +127,7 @@ void GramSchmidtTest() {
 void LLLTest() {
 	clock_t start, end;
 	double duration;
-	using namespace CPPMathLibrary;
+	using namespace CPPMathLibrary::LLL;
 
 	QSMatrix<double> X(4, 4, 0);
 	X(0, 0) = -2;

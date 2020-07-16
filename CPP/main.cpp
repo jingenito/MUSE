@@ -33,10 +33,10 @@ int main(int argc, char** argv)
 	}
 
 	std::string temp_num = *(argv + 1);
-	num = CPPMathLibrary::TryParseNumFromArgs(temp_num);
+	num = CPPMathLibrary::StringParsing::TryParseNumFromArgs(temp_num);
 	if (num == 0.0) {
-		num = CPPMathLibrary::TryParseMathFromArgs(temp_num);
-		if (num == 0.0 && CPPMathLibrary::IsNumeric(temp_num)) {
+		num = CPPMathLibrary::StringParsing::TryParseMathFromArgs(temp_num);
+		if (num == 0.0 && CPPMathLibrary::StringParsing::IsNumeric(temp_num)) {
 			num = stod(temp_num);
 		}
 	}
@@ -48,7 +48,7 @@ int main(int argc, char** argv)
 	}
 
 	temp_num = *(argv + 2);
-	if (!CPPMathLibrary::IsNumeric(temp_num)) {
+	if (!CPPMathLibrary::StringParsing::IsNumeric(temp_num)) {
 		std::cout << "Count is not a number." << std::endl;
 		return 0;
 	}
@@ -61,7 +61,7 @@ int main(int argc, char** argv)
 	filename = *(argv + 3);
 
 	size_t op_count = 0;
-	long* qs = CPPMathLibrary::ContinuedFractionExpansion(num, count, op_count);
+	int* qs = CPPMathLibrary::ContinuedFraction::ContinuedFractionExpansion(num, count, op_count);
 	if (!server_mode) {
 		std::cout << "Operation Count: " << op_count << std::endl;
 		/*ContinuedFraction::PrintArray(qs, count);
@@ -76,10 +76,10 @@ int main(int argc, char** argv)
 	return 0;
 }
 
-json convertQSequenceToJSON(long* qs, size_t count, size_t op_count) {
-	long arr[MAXCOUNT] = { 0 };
+json convertQSequenceToJSON(int* qs, size_t count, size_t op_count) {
+	int arr[MAXCOUNT] = { 0 };
 	for (size_t i = 0; i < count; ++i) {
-		long temp = *(qs + i);
+		int temp = *(qs + i);
 		if (temp > 0) {
 			arr[i] = temp;
 		}

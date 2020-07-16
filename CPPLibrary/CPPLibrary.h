@@ -16,7 +16,7 @@
 #include "AlgorithmsLLL.h"
 #include "SimultaneousDiophantine.h"
 
-// private helper functions
+// helper functions
 
 template<typename T>
 std::vector<T> ConvertArrToVector(T* arr, size_t n) {
@@ -61,13 +61,13 @@ extern "C" __declspec(dllexport) int* CPPMathLibrary_ManagedPort_ContinuedFracti
 	size_t theCount = (size_t)count;
 	size_t opcount = 0; //not important
 	// do NOT delete qs before returning, it is up to the caller using this API to call CPPMathLibrary_ManagedPort_ReleaseMemory
-	int* qs = CPPMathLibrary::ContinuedFractionExpansion(gamma, theCount, opcount);
+	int* qs = CPPMathLibrary::ContinuedFraction::ContinuedFractionExpansion(gamma, theCount, opcount);
 	count = (int)theCount;
-	return CPPMathLibrary::ContinuedFractionExpansion(gamma, theCount, opcount);
+	return CPPMathLibrary::ContinuedFraction::ContinuedFractionExpansion(gamma, theCount, opcount);
 }
 
 extern "C" __declspec(dllexport) int CPPMathLibrary_ManagedPort_PrintConvergents(int* qs, int count) {
-	CPPMathLibrary::PrintConvergents(qs, (size_t)count);
+	CPPMathLibrary::ContinuedFraction::PrintConvergents(qs, (size_t)count);
 	return 0;
 }
 
@@ -98,8 +98,8 @@ extern "C" __declspec(dllexport) double** CPPMathLibrary_ManagedPort_GramSchmidt
 		throw new IncorrectDimensionException(); // not including a message because the managed code will just get a generic excetion
 
 	QSMatrix<double> matrix = ConvertArrToQSMatrix(arr, (size_t)n);
-	auto result = CPPMathLibrary::GramSchmidtOrthogonalization(matrix);
-	QSMatrix<double> gso = std::get<CPPMathLibrary::GSOType::GSO>(result);
+	auto result = CPPMathLibrary::LLL::GramSchmidtOrthogonalization(matrix);
+	QSMatrix<double> gso = std::get<CPPMathLibrary::LLL::GSOType::GSO>(result);
 	return ConvertQSMatrixToArr(gso);
 }
 
@@ -108,8 +108,8 @@ extern "C" __declspec(dllexport) double** CPPMathLibrary_ManagedPort_ReduceBasis
 		throw new IncorrectDimensionException(); // not including a message because the managed code will just get a generic excetion
 
 	QSMatrix<double> matrix = ConvertArrToQSMatrix(arr, (size_t)n);
-	auto result = CPPMathLibrary::ReduceBasis_LLL(matrix, alpha);
-	QSMatrix<double> lll = std::get<CPPMathLibrary::LLLType::LLL>(result);
+	auto result = CPPMathLibrary::LLL::ReduceBasis_LLL(matrix, alpha);
+	QSMatrix<double> lll = std::get<CPPMathLibrary::LLL::LLLType::LLL>(result);
 	return ConvertQSMatrixToArr(lll);
 }
 
@@ -118,8 +118,8 @@ extern "C" __declspec(dllexport) double** CPPMathLibrary_ManagedPort_ReduceBasis
 		throw new IncorrectDimensionException(); // not including a message because the managed code will just get a generic excetion
 
 	QSMatrix<double> matrix = ConvertArrToQSMatrix(arr, (size_t)n);
-	auto result = CPPMathLibrary::ReduceBasis_LLL(matrix, alpha);
-	QSMatrix<double> c = std::get<CPPMathLibrary::LLLType::C>(result);
+	auto result = CPPMathLibrary::LLL::ReduceBasis_LLL(matrix, alpha);
+	QSMatrix<double> c = std::get<CPPMathLibrary::LLL::LLLType::C>(result);
 	return ConvertQSMatrixToArr(c);
 }
 
