@@ -61,13 +61,13 @@ extern "C" __declspec(dllexport) int* CPPMathLibrary_ManagedPort_ContinuedFracti
 	size_t theCount = (size_t)count;
 	size_t opcount = 0; //not important
 	// do NOT delete qs before returning, it is up to the caller using this API to call CPPMathLibrary_ManagedPort_ReleaseMemory
-	int* qs = CPPMathLibrary::ContinuedFractionExpansion(gamma, theCount, opcount);
+	int* qs = CPPMathLibrary::ContinuedFraction::ContinuedFractionExpansion(gamma, theCount, opcount);
 	count = (int)theCount;
-	return CPPMathLibrary::ContinuedFractionExpansion(gamma, theCount, opcount);
+	return CPPMathLibrary::ContinuedFraction::ContinuedFractionExpansion(gamma, theCount, opcount);
 }
 
 extern "C" __declspec(dllexport) int CPPMathLibrary_ManagedPort_PrintConvergents(int* qs, int count) {
-	CPPMathLibrary::PrintConvergents(qs, (size_t)count);
+	CPPMathLibrary::ContinuedFraction::PrintConvergents(qs, (size_t)count);
 	return 0;
 }
 

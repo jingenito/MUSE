@@ -2,7 +2,7 @@
 #include "ContinuedFraction.h"
 #include "Algorithms.h"
 
-__declspec(dllexport) int* CPPMathLibrary::ContinuedFractionExpansion(double gamma, size_t& count, size_t& op_count) {
+__declspec(dllexport) int* CPPMathLibrary::ContinuedFraction::ContinuedFractionExpansion(double gamma, size_t& count, size_t& op_count) {
 	op_count = 0; //clear the op count
 	int* arr = new int[count]; //needs to be a signed int because q_i can be negative
 	arr[0] = (int)floor(gamma);
@@ -20,7 +20,7 @@ __declspec(dllexport) int* CPPMathLibrary::ContinuedFractionExpansion(double gam
 	return arr;
 }
 
-__declspec(dllexport) CPPMathLibrary::RationalNumber CPPMathLibrary::FindConvergent(int* qs, size_t stop_index) {
+__declspec(dllexport) CPPMathLibrary::RationalNumber CPPMathLibrary::ContinuedFraction::FindConvergent(int* qs, size_t stop_index) {
 	if (stop_index < 0) { return RationalNumber(0, 0); /*this is treated as NaN*/ }
 	RationalNumber r(*(qs + stop_index));
 	if (stop_index == 0) { return r; }
@@ -32,7 +32,7 @@ __declspec(dllexport) CPPMathLibrary::RationalNumber CPPMathLibrary::FindConverg
 	return r;
 }
 
-__declspec(dllexport) void CPPMathLibrary::PrintConvergents(int* qs, size_t count) {
+__declspec(dllexport) void CPPMathLibrary::ContinuedFraction::PrintConvergents(int* qs, size_t count) {
 	std::cout << "Convergences:" << std::endl;
 	for (size_t i = 0; i < count; ++i) {
 		std::cout << i + 1 << ") " << FindConvergent(qs, i) << std::endl;

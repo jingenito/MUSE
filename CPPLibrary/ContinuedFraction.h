@@ -10,6 +10,8 @@
 
 namespace CPPMathLibrary {
 
+	namespace ContinuedFraction {
+
 	// Implements the ContinuedFractionExpansion algorithm, returns an array of partial quotients
 	__declspec(dllexport) int* ContinuedFractionExpansion(double gamma, size_t& count, size_t& op_count);
 
@@ -18,5 +20,9 @@ namespace CPPMathLibrary {
 
 	// Print all convergents calculated for the entire array of partial quotients
 	__declspec(dllexport) void PrintConvergents(int* qs, size_t count);
+
+
+	}
+
 
 }
