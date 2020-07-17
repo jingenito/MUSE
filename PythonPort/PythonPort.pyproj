@@ -24,6 +24,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CPPLibrary\ContinuedFraction.py" />
+    <Compile Include="CPPLibrary\LLL.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="CPPLibrary\__init__.py" />
     <Compile Include="PythonPort.py" />
   </ItemGroup>

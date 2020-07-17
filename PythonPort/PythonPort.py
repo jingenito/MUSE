@@ -1,13 +1,16 @@
 import sys
 import numpy
-from CPPLibrary import ContinuedFraction
+from CPPLibrary import LLL
 
-n = numpy.sqrt(2)
-print("Calculating Continued Fraction Expansion for ", n)
+x = numpy.array([[3.0, -1.0, 5.0], 
+                [-5.0, 2.0, -1.0], 
+                [-3.0, 9.0, 2.0]], 
+                dtype = numpy.double)
+gso = LLL.GramSchmidtOrthogonalization(x, 3)
 
-count = 10
-qs = ContinuedFraction.ContinuedFractionExpansion(n, count)
-print(qs)
+print("X:")
+print(x)
 print()
-ContinuedFraction.PrintConvergents(qs, count)
+print("GSO:")
+print(gso)
 
