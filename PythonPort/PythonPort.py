@@ -1,8 +1,8 @@
 import sys
-import numpy as np
+import numpy
 from CPPLibrary import ContinuedFraction
 
-n = np.sqrt(2)
+n = numpy.sqrt(2)
 print("Calculating Continued Fraction Expansion for ", n)
 
 count = 10

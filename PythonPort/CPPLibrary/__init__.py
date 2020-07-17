@@ -1,5 +1,5 @@
 import os, sys
-import numpy as np
+import numpy
 import ctypes
 
 app_path = os.path.dirname(os.path.realpath('PythonPort.py'))
