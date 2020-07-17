@@ -33,7 +33,7 @@ __declspec(dllexport) CPPMathLibrary::RationalNumber CPPMathLibrary::ContinuedFr
 }
 
 __declspec(dllexport) void CPPMathLibrary::ContinuedFraction::PrintConvergents(int* qs, size_t count) {
-	std::cout << "Convergences:" << std::endl;
+	std::cout << "Convergents:" << std::endl;
 	for (size_t i = 0; i < count; ++i) {
 		std::cout << i + 1 << ") " << FindConvergent(qs, i) << std::endl;
 	}
