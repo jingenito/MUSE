@@ -180,3 +180,4 @@ UpgradeLog*.htm
 #python files
 Python3.8/
 **/__pycache__/
+PythonPort/**/*.dll
