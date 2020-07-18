@@ -1,8 +1,12 @@
 from CPPLibrary import *
 
-def GramSchmidtOrthogonalization(matrix : numpy.array, count : int) -> numpy.array :
+def GramSchmidtOrthogonalization(matrix: numpy.array) -> numpy.array :
+    count = matrix.shape[0]
+    indata = HelperFunctions.NumpyArrArrToDblPtrPtr(matrix)
+
     func = CPPMathLibrary.CPPMathLibrary_ManagedPort_GramSchmidt
-    func.argtypes = [numpy.ctypeslib.ndpointer(dtype=ctypes.c_double, ndim=2, shape=(count,count), flags="C_CONTIGUOUS"), ctypes.c_int]
-    func.restype = numpy.ctypeslib.ndpointer(dtype=ctypes.c_double, ndim=2, shape=(count,count), flags="C_CONTIGUOUS")
-    result = func(matrix, count)
-    return result
+    func.argtypes = [ctypes.POINTER(ctypes.POINTER(ctypes.c_double)), ctypes.c_int32]
+    func.restype = ctypes.POINTER(ctypes.POINTER(ctypes.c_double))
+    result = func(indata, count)
+
+    return HelperFunctions.DblPtrPtrToNumpyArrArr(result, count)

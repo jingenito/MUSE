@@ -1,6 +1,7 @@
 import os, sys
 import numpy
 import ctypes
+from CPPLibrary import HelperFunctions
 
 app_path = os.path.dirname(os.path.realpath('PythonPort.py'))
 dll_path = os.path.join(app_path, 'CPPLibrary', 'CPPLibrary.dll')

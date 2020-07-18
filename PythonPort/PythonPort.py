@@ -6,7 +6,7 @@ x = numpy.array([[3.0, -1.0, 5.0],
                 [-5.0, 2.0, -1.0], 
                 [-3.0, 9.0, 2.0]], 
                 dtype = numpy.double)
-gso = LLL.GramSchmidtOrthogonalization(x, 3)
+gso = LLL.GramSchmidtOrthogonalization(x)
 
 print("X:")
 print(x)
