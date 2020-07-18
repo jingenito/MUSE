@@ -8,12 +8,12 @@ x = numpy.array([[-2, 7, 7, -5],
                 [2, -8, -9, -7],
                 [8, -9, 6, -4]], 
                 dtype = numpy.double)
-gso = LLL.ReduceBasis_LLL(x, alpha)
+gso = LLL.ReduceBasis_LLL_C(x, alpha)
 
 print("Alpha: ", alpha)
 print("X:")
 print(x)
 print()
-print("LLL:")
+print("LLL C:")
 print(gso)
 
