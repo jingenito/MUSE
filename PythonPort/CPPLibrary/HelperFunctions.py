@@ -20,3 +20,11 @@ def DblPtrPtrToNumpyArrArr(arr : ctypes.POINTER(ctypes.POINTER(ctypes.c_double))
         for j in range(count) :
             matrix[i][j] = arr[i][j]
     return matrix
+
+def IntPtrPtrToNumpyArrArr(arr : ctypes.POINTER(ctypes.POINTER(ctypes.c_int32)), count : int) -> numpy.array :
+    """ Convert a C/C++ double ** to a numpy.array """
+    matrix = numpy.zeros((count,count), dtype=numpy.int32)
+    for i in range(count) :
+        for j in range(count) :
+            matrix[i][j] = arr[i][j]
+    return matrix

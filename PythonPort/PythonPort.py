@@ -1,19 +1,18 @@
 import sys
 import numpy
-from CPPLibrary import LLL
+from CPPLibrary import SimultaneousDiophantine
 
 alpha = 0.75
-x = numpy.array([[-2, 7, 7, -5], 
-                [3, -2, 6 , -1], 
-                [2, -8, -9, -7],
-                [8, -9, 6, -4]], 
+epsilon = 1.0 / 10
+x = numpy.array([239.0 / 169.0, 265.0 / 153.0, 682.0 / 305.0, 590.0 / 223.0 ], 
                 dtype = numpy.double)
-gso = LLL.ReduceBasis_LLL_C(x, alpha)
+sd = SimultaneousDiophantine.SameDivisor(x, alpha, epsilon)
 
 print("Alpha: ", alpha)
+print("Epsilon: ", epsilon)
 print("X:")
 print(x)
 print()
 print("LLL C:")
-print(gso)
+print(sd)
 
