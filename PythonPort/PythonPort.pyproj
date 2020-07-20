@@ -35,9 +35,16 @@
     </Compile>
     <Compile Include="CPPLibrary\__init__.py" />
     <Compile Include="PythonPort.py" />
+    <Compile Include="Util\JSONSerializer.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\__init__.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CPPLibrary\" />
+    <Folder Include="Util\" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|PythonCore|3.8-32" />
