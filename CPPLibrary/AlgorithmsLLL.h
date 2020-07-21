@@ -57,11 +57,26 @@ namespace CPPMathLibrary {
 			return std::make_tuple(result, mu, gamma);
 		}
 
-		// This method should not be called outside of LLL since it has no meaning outside of LLL
-		__declspec(dllexport) void _reduce(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<int>& C, const size_t& k, const size_t& l) throw (IncorrectDimensionException*);
+		// This method's only intended use it expose the iterated portion of the GSO algorithm for animation purposes. Since it's only use is for animation it will not be called by the real GSO implementation for efficiency.
+		template<typename T>
+		void GramSchmidtOrthogonalization_State(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, const size_t& state_i) throw (IncorrectDimensionException*) {
+			std::vector<double> vec(y.get_cols(), 0);
+			for (size_t j = 0; j < state_i; j++) {
+				double u_ij = y.getRowVector<double>(state_i) / y.getRowVector<double>(j); //project vector i onto j - see VectorImports.h
+				mu(state_i, j) = u_ij;
+				vec = vec + (u_ij * y.getRowVector<double>(j));
+			}
+			mu(state_i, state_i) = 1; //the projection will always be 1 on the main diagonal - vector projected onto itself 
+			vec = y.getRowVector<double>(state_i) - vec;
+			y.setRowVector(vec, state_i);
+			gamma[state_i] = vec * vec;
+		}
 
 		// This method should not be called outside of LLL since it has no meaning outside of LLL
-		__declspec(dllexport) void _exchange(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<int>& C, const size_t& k);
+		void _reduce(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<int>& C, const size_t& k, const size_t& l) throw (IncorrectDimensionException*);
+
+		// This method should not be called outside of LLL since it has no meaning outside of LLL
+		void _exchange(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<int>& C, const size_t& k);
 
 		// Indeces for the tuple returned by LLL
 		enum LLLType { LLL = 0, C = 1 };
