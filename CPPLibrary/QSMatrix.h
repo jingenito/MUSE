@@ -141,9 +141,13 @@ public:
 		return *this;
 	}
 
-	QSMatrix<T> operator*(const QSMatrix<T>& rhs) {
+	QSMatrix<T> operator*(const QSMatrix<T>& rhs) throw (IncorrectDimensionException*) {
 		size_t rows = rhs.get_rows();
 		size_t cols = rhs.get_cols();
+
+		if (this->cols != rows)
+			throw new IncorrectDimensionException("The amount of columns on the left does not equal the amount of rows on the right.");
+
 		QSMatrix<T> result(rows, cols, 0.0);
 
 		for (size_t i = 0; i < rows; i++) {
@@ -151,6 +155,21 @@ public:
 				for (size_t k = 0; k < rows; k++) {
 					result(i, j) += this->mat[i][k] * rhs(k, j);
 				}
+			}
+		}
+
+		return result;
+	}
+
+	std::vector<T> operator*(const std::vector<T>& rhs) throw (IncorrectDimensionException*) {
+		if (this->cols != rhs.size())
+			throw new IncorrectDimensionException("The amount of columns on the left does not equal the amount of rows on the right.");
+
+		std::vector<T> result(rhs.size(), 0.0);
+
+		for (size_t i = 0; i < this->rows; i++) {
+			for (size_t j = 0; j < this->cols; j++) {
+				result[i] += this->mat[i][j] * rhs[j];
 			}
 		}
 
@@ -307,6 +326,22 @@ public:
 	inline void setRowVector(const std::vector<Tin>& vec, const size_t& i) throw (IncorrectDimensionException*) {
 		if (i >= this->mat.size()) { throw new IncorrectDimensionException("Index Out of Range"); }
 		for (size_t j = 0; j < vec.size(); j++)
+			this->mat[i][j] = vec[j];
+	}
+
+	template <typename TOut>
+	inline std::vector<TOut> getColumnVector(const size_t& i) throw (IncorrectDimensionException*) {
+		if (i >= this->mat[0].size()) { throw new IncorrectDimensionException("Index Out of Range"); }
+		std::vector<TOut> r(this->cols);
+		for (size_t j = 0; j < this->rows; j++)
+			r[j] = static_cast<TOut>(this->mat[i][j]);
+		return r;
+	}
+
+	template <typename Tin>
+	inline void setColumnVector(const std::vector<Tin>& vec, const size_t& j) throw (IncorrectDimensionException*) {
+		if (j >= this->mat[0].size()) { throw new IncorrectDimensionException("Index Out of Range"); }
+		for (size_t i = 0; i < vec.size(); i++)
 			this->mat[i][j] = vec[j];
 	}
 
