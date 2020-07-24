@@ -10,17 +10,19 @@ const int GSO = 1 << 1;
 const int LLL = 1 << 2;
 const int SIMULT_DIOPH = 1 << 3;
 const int SIMULT_DIOPH_REALS = 1 << 4;
+const int ITERATED_LLL = 1 << 5;
 
 void ContinuedFractionTest();
 void GramSchmidtTest();
 void LLLTest();
 void SimultaneousDiophantineTest();
 void SimultaneousDiophantineFromRealsTest();
+void IteratedLLLTest();
 
 int main(int argc, char** argv) {
 	std::cout << "CPPLibrary Test Bench" << std::endl << std::endl;
 
-	bool _run_cont_frac_test_ = true, _run_gso_test_ = true, _run_lll_test_ = true, _run_simult_dioph_test_ = true, _run_simult_dioph_reals_test_ = true;
+	bool _run_cont_frac_test_ = true, _run_gso_test_ = true, _run_lll_test_ = true, _run_simult_dioph_test_ = true, _run_simult_dioph_reals_test_ = true, _run_iterated_lll_ = true;
 
 	if (argc > 1) {
 		int input = std::stoi(argv[1], 0 , 2);
@@ -29,6 +31,7 @@ int main(int argc, char** argv) {
 		_run_lll_test_ = (input & LLL) == LLL;
 		_run_simult_dioph_test_ = (input & SIMULT_DIOPH) == SIMULT_DIOPH;
 		_run_simult_dioph_reals_test_ = (input & SIMULT_DIOPH_REALS) == SIMULT_DIOPH_REALS;
+		_run_iterated_lll_ = (input & ITERATED_LLL) == ITERATED_LLL;
 	}
 	if (argc == 1) {
 		std::cout << "No flags have been set... Running all tests..." << std::endl << std::endl;
@@ -52,6 +55,10 @@ int main(int argc, char** argv) {
 	}
 	if (_run_simult_dioph_reals_test_) {
 		SimultaneousDiophantineFromRealsTest();
+		std::cout << std::endl;
+	}
+	if (_run_iterated_lll_) {
+		IteratedLLLTest();
 		std::cout << std::endl;
 	}
 
@@ -251,4 +258,40 @@ void SimultaneousDiophantineFromRealsTest() {
 	}
 
 	std::cout << "Finished Simultaneous Diophantine From Real Vector Test." << std::endl;
+}
+
+void IteratedLLLTest() {
+	clock_t start, end;
+	double duration;
+	using namespace CPPMathLibrary;
+
+	QSMatrix<double> preValues(1, 4, 0);
+	preValues(0, 0) = (double)239 / 169;
+	preValues(0, 1) = (double)265 / 153;
+	preValues(0, 2) = (double)682 / 305;
+	preValues(0, 3) = (double)590 / 223;
+
+	std::cout << "Starting Iterated LLL Test..." << std::endl << std::endl;
+	std::cout << "Initial Matrix:" << std::endl << preValues << std::endl << std::endl;
+
+	try {
+		double epsilon = 1.0 / 10;
+		double alpha = 0.75;
+
+		std::cout << "Epsilon: " << epsilon << " Alpha: " << alpha << std::endl << std::endl;
+
+		start = clock();
+		QSMatrix<int> C = SimultaneousDiophantine::IteratedLLL(preValues, alpha, epsilon, 13000, 5);
+		end = clock();
+		duration = ((double)end - (double)start) / CLOCKS_PER_SEC;
+
+		std::cout << "Execution Time " << duration << " seconds" << std::endl << std::endl;
+		std::cout << "C:" << std::endl << C << std::endl << std::endl;
+	}
+	catch (IncorrectDimensionException* idEx) {
+		std::cout << idEx->getMessage() << std::endl;
+		return;
+	}
+
+	std::cout << "Finished Iterated LLL Test." << std::endl;
 }
