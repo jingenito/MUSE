@@ -8,6 +8,7 @@
 
 #include <vector>
 #include "IncorrectDimensionException.h"
+#include "QSMatrix.h"
 
 namespace CPPMathLibrary {
 
@@ -18,6 +19,9 @@ namespace CPPMathLibrary {
 
 		// Compute a Simultaneous Diophantine Approximation with a common divisor for all numerators. Will compute a continued fraction approximation on the vector x.
 		__declspec(dllexport) QSMatrix<int> SameDivisorFromRealVector(const std::vector<double>& x, const double& alpha, const double& epsilon, const size_t& quotientCount) throw (IncorrectDimensionException*);
+
+		// Run iterated LLL on the given matrix of real numbers with the specified upperbound qmax > 1.
+		__declspec(dllexport) QSMatrix<int> IteratedLLL(const QSMatrix<double>& matrix, const double& alpha, const double& epsilon, const size_t& qmax, const size_t& nmax);
 
 	}
 
