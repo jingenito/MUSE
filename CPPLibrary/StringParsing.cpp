@@ -62,3 +62,29 @@ __declspec(dllexport) double CPPMathLibrary::StringParsing::TryParseMathFromArgs
 
 	return 0.0;
 }
+
+double CPPMathLibrary::StringParsing::ReverseActualBits(size_t num) {
+	//algorithm was found here: https://www.geeksforgeeks.org/reverse-actual-bits-given-number/
+
+	size_t result = 0;
+
+	// traversing bits of 'n' from the right 
+	while (num > 0)
+	{
+		// bitwise left shift  
+		// 'rev' by 1 
+		result <<= 1;
+
+		// if current bit is '1' 
+		if ((num & 1) == 1)
+			result ^= 1;
+
+		// bitwise right shift  
+		// 'n' by 1 
+		num >>= 1;
+
+	}
+
+	// required number 
+	return result;
+}

@@ -5,12 +5,14 @@
 #include <ctime>
 #include <cmath>
 
-const int CONT_FRAC = 1 << 0;
-const int GSO = 1 << 1;
-const int LLL = 1 << 2;
-const int SIMULT_DIOPH = 1 << 3;
-const int SIMULT_DIOPH_REALS = 1 << 4;
-const int ITERATED_LLL = 1 << 5;
+// the order of bits in input string will be flipped to conform to human readability
+// since the bits will be flipped, the first test to run is the most signficant bit and the last test is the least significant bit
+const int ITERATED_LLL = 1;
+const int SIMULT_DIOPH_REALS = ITERATED_LLL << 1;
+const int SIMULT_DIOPH = SIMULT_DIOPH_REALS << 1;
+const int LLL = SIMULT_DIOPH << 1;
+const int GSO = LLL << 1;
+const int CONT_FRAC = GSO << 1;
 
 void ContinuedFractionTest();
 void GramSchmidtTest();
@@ -26,6 +28,7 @@ int main(int argc, char** argv) {
 
 	if (argc > 1) {
 		int input = std::stoi(argv[1], 0 , 2);
+		input = (int)CPPMathLibrary::StringParsing::ReverseActualBits((size_t)input);
 		_run_cont_frac_test_ = (input & CONT_FRAC) == CONT_FRAC;
 		_run_gso_test_ = (input & GSO) == GSO;
 		_run_lll_test_ = (input & LLL) == LLL;

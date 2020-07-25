@@ -25,8 +25,9 @@ namespace CPPMathLibrary {
 		// Attempts to parse the string to perform a recognized math function, or parse the string into a number.
 		__declspec(dllexport) double TryParseMathFromArgs(std::string s);
 
+		// Reverse the bits of an unsigned integer ignoring the leading 0's.
+		__declspec(dllexport) double ReverseActualBits(size_t num);
 
 	}
-
 
 }
