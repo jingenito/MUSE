@@ -43,7 +43,7 @@ QSMatrix<int> CPPMathLibrary::SimultaneousDiophantine::SameDivisor(const std::ve
 }
 
 QSMatrix<int> CPPMathLibrary::SimultaneousDiophantine::SameDivisorFromRealVector(const std::vector<double>& x, const double& alpha, const double& epsilon, const size_t& quotientCount) throw (IncorrectDimensionException*) {
-	size_t cuntCount = 10, cuntOpCount = 0; 
+	size_t cuntCount = 10, cuntOpCount = 0;
 	int* qs; //initializing once 
 	std::vector<double> rats;
 	for (size_t i = 0; i < x.size(); i++) {
@@ -59,7 +59,7 @@ QSMatrix<int> CPPMathLibrary::SimultaneousDiophantine::SameDivisorFromRealVector
 	}
 }
 
-QSMatrix<int> CPPMathLibrary::SimultaneousDiophantine::IteratedLLL(const QSMatrix<double>& matrix, const double& alpha, const double& epsilon, const size_t& qmax, const size_t& nmax) {
+std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLLL(const QSMatrix<double>& matrix, const double& alpha, const double& epsilon, const size_t& qmax) {
 	if (alpha < 0.25) {
 		throw new std::invalid_argument("alpha < 0.25");
 	}
@@ -105,32 +105,37 @@ QSMatrix<int> CPPMathLibrary::SimultaneousDiophantine::IteratedLLL(const QSMatri
 	}
 
 	QSMatrix<int> C(nm, nm, 0);
-	size_t j = nmax;
-	while (--j >= 0) {
+	double d = 1.0 / epsilon;
+	int k_prime = ceil(((-1.0 * (nm - 1) * nm) / (4.0 * n)) + (m * (log(qmax) / log(2)) / n));
+
+	double val = 1.0 / pow(d, (double)nm / m);
+	std::vector< QSMatrix<int> > outputVec;
+	for (size_t k = 0; k < k_prime; k++) {
 		try {
 			auto result = CPPMathLibrary::LLL::ReduceBasis_LLL<double>(B, alpha);
 			C = std::get<LLL::LLLType::C>(result);
 
-			double val = 1 / pow(beta, (double)nm / m);
+			QSMatrix<int> temp(m, nm, 0); //will store the approximation before being added to the output vector
 			for (size_t i = 0; i < m; i++) {
+				size_t j = m - i - 1; //need to flip the output matrix
+				temp.setRowVector<int>(C.getRowVector<int>(j), i); //set the ith row of temp with the jth row of C
+
 				// divide the first m columns by beta ^ (n + m) / m
 				std::vector<double> col = B.getColumnVector<double>(i);
 				col = col * val;
 				B.setColumnVector(col, i);
 			}
+			outputVec.push_back(temp);
 
-			// check the new max q guaranteed with the new value for c
-			c = B(0, 0);
-			double upper_bound = pow(beta, ((double)nm - 1) / 4) * pow(c, (-1.0 * n) / nm);
+			double upper_bound = abs(pow(beta, (((double)nm - 1) * nm) / (4 * (double)m)) * pow(d, ((double)(k + 1.0) * n) / m));
 			if (upper_bound > qmax) {
 				break;
 			}
-
 		}
 		catch (IncorrectDimensionException* idEx) {
 			throw idEx;
 		}
 	}
 
-	return C;
+	return outputVec;
 }

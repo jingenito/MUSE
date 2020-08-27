@@ -269,27 +269,33 @@ void IteratedLLLTest() {
 	using namespace CPPMathLibrary;
 
 	QSMatrix<double> preValues(1, 4, 0);
-	preValues(0, 0) = (double)239 / 169;
-	preValues(0, 1) = (double)265 / 153;
-	preValues(0, 2) = (double)682 / 305;
-	preValues(0, 3) = (double)590 / 223;
+	preValues(0, 0) = 239.0 / 169;
+	preValues(0, 1) = 265.0 / 153;
+	preValues(0, 2) = 682.0 / 305;
+	preValues(0, 3) = 590.0 / 223;
 
 	std::cout << "Starting Iterated LLL Test..." << std::endl << std::endl;
 	std::cout << "Initial Matrix:" << std::endl << preValues << std::endl << std::endl;
 
 	try {
-		double epsilon = 1.0 / 10;
+		double epsilon = 1.0 / 2;
 		double alpha = 0.75;
+		size_t qmax = 120000;
 
-		std::cout << "Epsilon: " << epsilon << " Alpha: " << alpha << std::endl << std::endl;
+		std::cout << "Epsilon: " << epsilon << " Alpha: " << alpha << " qmax: " << qmax << std::endl << std::endl;
 
 		start = clock();
-		QSMatrix<int> C = SimultaneousDiophantine::IteratedLLL(preValues, alpha, epsilon, 13000, 5);
+		std::vector< QSMatrix<int> > result = SimultaneousDiophantine::IteratedLLL(preValues, alpha, epsilon, qmax);
 		end = clock();
 		duration = ((double)end - (double)start) / CLOCKS_PER_SEC;
 
 		std::cout << "Execution Time " << duration << " seconds" << std::endl << std::endl;
-		std::cout << "C:" << std::endl << C << std::endl << std::endl;
+		
+		for (size_t i = 0; i < result.size(); i++) {
+			std::cout << "Approximation " << i + 1 << ":" << std::endl;
+			std::cout << result[i] << std::endl << std::endl;
+		}
+
 	}
 	catch (IncorrectDimensionException* idEx) {
 		std::cout << idEx->getMessage() << std::endl;
