@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
 	bool _run_cont_frac_test_ = true, _run_gso_test_ = true, _run_lll_test_ = true, _run_simult_dioph_test_ = true, _run_simult_dioph_reals_test_ = true, _run_iterated_lll_ = true;
 
 	if (argc > 1) {
-		int input = std::stoi(argv[1], 0 , 2);
+		int input = std::stoi(argv[1], 0, 2);
 		input = (int)CPPMathLibrary::StringParsing::ReverseActualBits((size_t)input);
 		_run_cont_frac_test_ = (input & CONT_FRAC) == CONT_FRAC;
 		_run_gso_test_ = (input & GSO) == GSO;
@@ -268,7 +268,9 @@ void IteratedLLLTest() {
 	double duration;
 	using namespace CPPMathLibrary;
 
-	QSMatrix<double> preValues(1, 4, 0);
+	size_t m = 1, n = 4;
+
+	QSMatrix<double> preValues(m, n, 0);
 	preValues(0, 0) = 239.0 / 169;
 	preValues(0, 1) = 265.0 / 153;
 	preValues(0, 2) = 682.0 / 305;
@@ -280,7 +282,7 @@ void IteratedLLLTest() {
 	try {
 		double epsilon = 1.0 / 2;
 		double alpha = 0.75;
-		size_t qmax = 120000;
+		size_t qmax = 20000;
 
 		std::cout << "Epsilon: " << epsilon << " Alpha: " << alpha << " qmax: " << qmax << std::endl << std::endl;
 
@@ -290,10 +292,35 @@ void IteratedLLLTest() {
 		duration = ((double)end - (double)start) / CLOCKS_PER_SEC;
 
 		std::cout << "Execution Time " << duration << " seconds" << std::endl << std::endl;
-		
+
 		for (size_t i = 0; i < result.size(); i++) {
+			double dir_coef = 0.0;
+			double q = 0.0;
+
 			std::cout << "Approximation " << i + 1 << ":" << std::endl;
 			std::cout << result[i] << std::endl << std::endl;
+
+			//calculate the dirichlet coefficient
+			for (size_t j = 0; j < result[i].get_rows(); j++) {
+				double temp_coef = 0.0;
+				double qi = abs(result[i](j, 0));
+				double maxDist = 0.0;
+				if (qi > q)
+					q = qi;
+
+				double tempDist = 0.0;
+				for (size_t k = 0; k < n; k++) {
+					double x = qi * preValues(j, k);
+					tempDist = abs(round(x) - x);
+					if (tempDist > maxDist)
+						maxDist = tempDist;
+				}
+
+				dir_coef += maxDist;
+			}
+			dir_coef *= pow(q, (double)m / n);
+
+			std::cout << "Dirichlet Coefficient: " << dir_coef << std::endl << std::endl;
 		}
 
 	}
