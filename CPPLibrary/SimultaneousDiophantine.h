@@ -23,6 +23,9 @@ namespace CPPMathLibrary {
 		// Run iterated LLL on the given matrix of real numbers with the specified upperbound qmax > 1.
 		__declspec(dllexport) std::vector< QSMatrix<int> > IteratedLLL(const QSMatrix<double>& matrix, const double& alpha, const double& epsilon, const size_t& qmax);
 
+		// Run a dyadic version of iterated LLL on the given matrix of real numbers with the specified upperbound qmax > 1.
+		__declspec(dllexport) std::vector< QSMatrix<int> > IteratedLLL_Dyadic(const QSMatrix<double>& matrix, const double& alpha, const double& epsilon, const size_t& qmax, const size_t& M);
+
 	}
 
 }
