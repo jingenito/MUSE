@@ -236,3 +236,32 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 
 	return outputVec;
 }
+
+double CPPMathLibrary::SimultaneousDiophantine::DirichletCoefficient(const QSMatrix<double>& matrix, const QSMatrix<double>& real_values) {
+	size_t m = real_values.get_rows();
+	size_t n = real_values.get_cols();
+
+	double dir_coef = 0.0;
+	double q = 0.0;
+
+	//calculate the dirichlet coefficient
+	for (size_t j = 0; j < matrix.get_rows(); j++) {
+		double temp_coef = 0.0;
+		double qi = abs(matrix(j, 0));
+		double maxDist = 0.0;
+		if (qi > q)
+			q = qi;
+
+		double tempDist = 0.0;
+		for (size_t k = 0; k < n; k++) {
+			double x = qi * real_values(j, k);
+			tempDist = abs(round(x) - x);
+			if (tempDist > maxDist)
+				maxDist = tempDist;
+		}
+
+		dir_coef += maxDist;
+	}
+
+	return dir_coef * pow(q, (double)m / n);
+}

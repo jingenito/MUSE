@@ -26,6 +26,9 @@ namespace CPPMathLibrary {
 		// Run a dyadic version of iterated LLL on the given matrix of real numbers with the specified upperbound qmax > 1.
 		__declspec(dllexport) std::vector< QSMatrix<int> > IteratedLLL_Dyadic(const QSMatrix<double>& matrix, const double& alpha, const double& epsilon, const size_t& qmax, const size_t& M);
 
+		// Calculate the Dirichlet Coefficient of the approximation matrix compared to the real vaues
+		__declspec(dllexport) double DirichletCoefficient(const QSMatrix<double>& matrix, const QSMatrix<double>& real_values);
+
 	}
 
 }
