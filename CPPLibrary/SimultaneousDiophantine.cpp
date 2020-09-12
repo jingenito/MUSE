@@ -162,7 +162,7 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 	double e = epsilon;
 	double beta = 4 / ((4 * alpha) - 1);
 	double c = pow(pow(beta, -1 * ((double)nm - 1) / 4) * e, (double)nm / m);
-	double threshold = (pow(nm, 2) / m) - (double)nm / m * (log(e) / log(CPPMathLibrary::StringParsing::e));
+	double threshold = (pow(nm, 2) / m) - ((double)nm / m * log(e));
 
 	double divisor = pow(2, M);
 	if (M <= threshold) {
@@ -173,6 +173,13 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 	}
 	//passed threshold test, rationalize c
 	c = ceil(divisor * c) / divisor;
+
+	QSMatrix<double> newMatrix(n, m, 0);
+	for (size_t i = 0; i < m; i++) {
+		for (size_t j = 0; j < n; j++) {
+			newMatrix(i, j) = ceil(matrix(i, j) * divisor) / divisor;
+		}
+	}
 
 	QSMatrix<double> B(nm, nm, 0); //initialize an (n+m)x(n+m) matrix to all 0s
 	// initialize the rest of the matrix
@@ -189,7 +196,7 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 			}
 			else if (i < m && j >= m && j <= n) {
 				size_t k = m - i - 1; // need to fill bottom up
-				B(k, j) = matrix(i, j - m);
+				B(k, j) = newMatrix(i, j - m);
 			}
 			else {
 				B(i, j) = 0;
