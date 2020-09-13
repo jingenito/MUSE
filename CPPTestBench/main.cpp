@@ -7,7 +7,8 @@
 
 // the order of bits in input string will be flipped to conform to human readability
 // since the bits will be flipped, the first test to run is the most signficant bit and the last test is the least significant bit
-const int ITERATED_LLL = 1;
+const int ITERATED_LLL_STRESS = 1;
+const int ITERATED_LLL = ITERATED_LLL_STRESS << 1;
 const int SIMULT_DIOPH_REALS = ITERATED_LLL << 1;
 const int SIMULT_DIOPH = SIMULT_DIOPH_REALS << 1;
 const int LLL = SIMULT_DIOPH << 1;
@@ -20,11 +21,12 @@ void LLLTest();
 void SimultaneousDiophantineTest();
 void SimultaneousDiophantineFromRealsTest();
 void IteratedLLLTest();
+void IteratedILLLStressTest();
 
 int main(int argc, char** argv) {
 	std::cout << "CPPLibrary Test Bench" << std::endl << std::endl;
 
-	bool _run_cont_frac_test_ = true, _run_gso_test_ = true, _run_lll_test_ = true, _run_simult_dioph_test_ = true, _run_simult_dioph_reals_test_ = true, _run_iterated_lll_ = true;
+	bool _run_cont_frac_test_ = true, _run_gso_test_ = true, _run_lll_test_ = true, _run_simult_dioph_test_ = true, _run_simult_dioph_reals_test_ = true, _run_iterated_lll_ = true, _run_iterated_lll_stress_ = false;
 
 	if (argc > 1) {
 		int input = std::stoi(argv[1], 0, 2);
@@ -35,6 +37,7 @@ int main(int argc, char** argv) {
 		_run_simult_dioph_test_ = (input & SIMULT_DIOPH) == SIMULT_DIOPH;
 		_run_simult_dioph_reals_test_ = (input & SIMULT_DIOPH_REALS) == SIMULT_DIOPH_REALS;
 		_run_iterated_lll_ = (input & ITERATED_LLL) == ITERATED_LLL;
+		_run_iterated_lll_stress_ = (input & ITERATED_LLL_STRESS) == ITERATED_LLL_STRESS;
 	}
 	if (argc == 1) {
 		std::cout << "No flags have been set... Running all tests..." << std::endl << std::endl;
@@ -62,6 +65,10 @@ int main(int argc, char** argv) {
 	}
 	if (_run_iterated_lll_) {
 		IteratedLLLTest();
+		std::cout << std::endl;
+	}
+	if (_run_iterated_lll_stress_) {
+		IteratedILLLStressTest();
 		std::cout << std::endl;
 	}
 
@@ -330,4 +337,40 @@ void IteratedLLLTest() {
 	}
 
 	std::cout << "Finished Iterated LLL Test." << std::endl;
+}
+
+void IteratedILLLStressTest() {
+	using namespace CPPMathLibrary;
+
+	clock_t start, end;
+	double duration;
+	size_t m = 1, n = 1, N = 1000;
+	size_t nm = n + m;
+	QSMatrix<double> preValues(m, n, 0);
+
+	double epsilon = 1.0 / 2;
+	double alpha = 0.75;
+	size_t M = 0;
+	double val = (pow(nm, 2) / m) - ((double)nm / m * log(epsilon));
+	M = (size_t)ceil(val) + 1;
+	size_t qmax = pow(2, M) - 1;
+	size_t k_prime = (size_t)ceil((-1.0 * (nm - 1) * nm) / (4.0 * n) + (m * log(qmax) / (log(2) * n)));
+
+	std::srand(std::time(nullptr)); // use current time as seed for random generator
+	std::cout << "Starting ILLL stress test..." << std::endl;
+
+	try {
+		for (size_t i = 0; i < N; i++) {
+			std::cout << (double)i / N << "%" << std::endl;
+
+			preValues(0, 0) = ((double)rand() / (RAND_MAX)); //random number between 0 and 1
+			std::vector< QSMatrix<int> > result = SimultaneousDiophantine::IteratedLLL_Dyadic(preValues, alpha, epsilon, qmax, M);
+		}
+	}
+	catch (IncorrectDimensionException* idEx) {
+		std::cout << "Errors occured during the ILLL approximations." << std::endl;
+		std::cout << idEx->getMessage() << std::endl;
+	}
+
+	std::cout << "Finished test." << std::endl;
 }
