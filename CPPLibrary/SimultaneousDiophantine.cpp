@@ -160,12 +160,14 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 	size_t nm = n + m;
 
 	double e = epsilon;
+	double Q = qmax;
+	size_t localM = M;
 	double beta = 4 / ((4 * alpha) - 1);
 	double c = pow(pow(beta, -1 * ((double)nm - 1) / 4) * e, (double)nm / m);
 	double threshold = (pow(nm, 2) / m) - ((double)nm / m * log(e));
 
-	double divisor = pow(2, M);
-	if (M <= threshold) {
+	double divisor = pow(2, localM);
+	if (localM <= threshold) {
 		throw new std::invalid_argument("M <= threshold");
 	}
 	if (qmax >= divisor) {
@@ -205,10 +207,9 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 	}
 
 	QSMatrix<int> C(nm, nm, 0);
-	double d = 1.0 / epsilon;
+	double d = 1.0 / e;
 	int k_prime = ceil(((-1.0 * (nm - 1) * nm) / (4.0 * n)) + (m * (log(qmax) / log(2)) / n));
 
-	double val = pow(2, (double)M - ((double)nm / m));
 	std::vector< QSMatrix<int> > outputVec;
 	for (size_t k = 0; k < k_prime; k++) {
 		try {
@@ -220,19 +221,25 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 				size_t j = m - i - 1; //need to flip the output matrix
 				temp.setRowVector<int>(C.getRowVector<int>(j), i); //set the ith row of temp with the jth row of C
 
+				double val = pow(2, (double)localM - ((double)nm / m));
 				// divide the first m columns by beta ^ (n + m) / m
 				std::vector<double> col = B.getColumnVector<double>(i);
-				col = col * val;
 				//take the ceiling of the col
 				for (size_t l = 0; l < col.size(); l++)
-					col[l] = 1 / ceil(col[l] * val) * pow(2, M);
+					col[l] = col[l] / ceil(col[l] * val) * pow(2, localM);
 
 				B.setColumnVector(col, i);
+
+				//update epsilon, M, Q
+				e /= d;
+				threshold = (pow(nm, 2) / m) - ((double)nm / m * log(e));
+				localM = (size_t)ceil(threshold);
+				Q = pow(2, localM) - 1;
 			}
 			outputVec.push_back(temp);
 
 			double upper_bound = abs(pow(beta, (((double)nm - 1) * nm) / (4 * (double)m)) * pow(d, ((double)(k + 1.0) * n) / m));
-			if (upper_bound > qmax) {
+			if (upper_bound > Q) {
 				break;
 			}
 		}
