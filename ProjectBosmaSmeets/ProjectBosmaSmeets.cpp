@@ -17,7 +17,7 @@ double SearchVectorDist(QSMatrix<double> vec, double value);
 double F(double z);
 json convertJSONData(std::vector<double> z_vector, std::vector<double> vec);
 
-const int ITERATIONS = 100;
+const int ITERATIONS = 200;
 
 int main(int argc, char** argv)
 {
@@ -129,16 +129,19 @@ std::vector<double> DiscritizeInterval(double start, double end, double delta) {
 // Search the sorted vector for the distribution of elements up to the specified value
 double SearchVectorDist(QSMatrix<double> vec, double value) {
 	size_t M = vec.get_rows();
-	size_t N = vec.get_cols();
 	size_t count = 0;
+	double divisor = 0.0;
 	for (size_t i = 0; i < M; i++) {
-		for (size_t j = 0; j < N; j++) {
-			if (vec(i, j) < value && vec(i, j) != 0) {
-				count++;
+		for (size_t j = 0; j < vec.get_cols(); j++) {
+			if (vec(i, j) != 0) {
+				if (vec(i, j) <= value) {
+					count++;
+				}
+				divisor++;
 			}
 		}
 	}
-	return (double)count / (N * M);
+	return (double)count / divisor;
 }
 
 // Evaluate F(z) in Bosma and Smeets
