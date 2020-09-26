@@ -23,6 +23,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CPPTestBench", "CPPTestBenc
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PythonPort", "PythonPort\PythonPort.pyproj", "{428A0494-8008-4021-B1C3-3CF73BC102D4}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProjectBosmaSmeets", "ProjectBosmaSmeets\ProjectBosmaSmeets.vcxproj", "{B2E14540-136F-4BBC-878D-6BCC12CE119C}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ProjectBSPlots", "ProjectBSPlots\ProjectBSPlots.pyproj", "{2B3FA4A6-FC57-4227-B05D-06E4D57C5281}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -227,6 +231,30 @@ Global
 		{428A0494-8008-4021-B1C3-3CF73BC102D4}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{428A0494-8008-4021-B1C3-3CF73BC102D4}.Release|x64.ActiveCfg = Release|Any CPU
 		{428A0494-8008-4021-B1C3-3CF73BC102D4}.Release|x86.ActiveCfg = Release|Any CPU
+		{B2E14540-136F-4BBC-878D-6BCC12CE119C}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{B2E14540-136F-4BBC-878D-6BCC12CE119C}.Debug|iPhone.ActiveCfg = Debug|Win32
+		{B2E14540-136F-4BBC-878D-6BCC12CE119C}.Debug|iPhoneSimulator.ActiveCfg = Debug|Win32
+		{B2E14540-136F-4BBC-878D-6BCC12CE119C}.Debug|x64.ActiveCfg = Debug|x64
+		{B2E14540-136F-4BBC-878D-6BCC12CE119C}.Debug|x64.Build.0 = Debug|x64
+		{B2E14540-136F-4BBC-878D-6BCC12CE119C}.Debug|x86.ActiveCfg = Debug|Win32
+		{B2E14540-136F-4BBC-878D-6BCC12CE119C}.Debug|x86.Build.0 = Debug|Win32
+		{B2E14540-136F-4BBC-878D-6BCC12CE119C}.Release|Any CPU.ActiveCfg = Release|Win32
+		{B2E14540-136F-4BBC-878D-6BCC12CE119C}.Release|iPhone.ActiveCfg = Release|Win32
+		{B2E14540-136F-4BBC-878D-6BCC12CE119C}.Release|iPhoneSimulator.ActiveCfg = Release|Win32
+		{B2E14540-136F-4BBC-878D-6BCC12CE119C}.Release|x64.ActiveCfg = Release|x64
+		{B2E14540-136F-4BBC-878D-6BCC12CE119C}.Release|x64.Build.0 = Release|x64
+		{B2E14540-136F-4BBC-878D-6BCC12CE119C}.Release|x86.ActiveCfg = Release|Win32
+		{B2E14540-136F-4BBC-878D-6BCC12CE119C}.Release|x86.Build.0 = Release|Win32
+		{2B3FA4A6-FC57-4227-B05D-06E4D57C5281}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B3FA4A6-FC57-4227-B05D-06E4D57C5281}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{2B3FA4A6-FC57-4227-B05D-06E4D57C5281}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{2B3FA4A6-FC57-4227-B05D-06E4D57C5281}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2B3FA4A6-FC57-4227-B05D-06E4D57C5281}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2B3FA4A6-FC57-4227-B05D-06E4D57C5281}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B3FA4A6-FC57-4227-B05D-06E4D57C5281}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{2B3FA4A6-FC57-4227-B05D-06E4D57C5281}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{2B3FA4A6-FC57-4227-B05D-06E4D57C5281}.Release|x64.ActiveCfg = Release|Any CPU
+		{2B3FA4A6-FC57-4227-B05D-06E4D57C5281}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

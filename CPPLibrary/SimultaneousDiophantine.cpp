@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "SimultaneousDiophantine.h"
+#include "StringParsing.h"
 #include <cmath>
 #include <stdexcept>
 #include <tuple>
@@ -138,4 +139,143 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 	}
 
 	return outputVec;
+}
+
+std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLLL_Dyadic(const QSMatrix<double>& matrix, const double& alpha, const double& epsilon, const size_t& qmax, const size_t& M) {
+	if (alpha < 0.25) {
+		throw new std::invalid_argument("alpha < 0.25");
+	}
+	if (alpha > 1) {
+		throw new std::invalid_argument("alpha > 1");
+	}
+	if (epsilon <= 0) {
+		throw new std::invalid_argument("epsilon <= 0");
+	}
+	if (epsilon >= 1) {
+		throw new std::invalid_argument("epsilon >= 1");
+	}
+
+	size_t m = matrix.get_rows();
+	size_t n = matrix.get_cols();
+	size_t nm = n + m;
+
+	double e = epsilon;
+	double Q = qmax;
+	size_t localM = M;
+	double beta = 4 / ((4 * alpha) - 1);
+	double c = pow(pow(beta, -1 * ((double)nm - 1) / 4) * e, (double)nm / m);
+	double threshold = (pow(nm, 2) / m) - ((double)nm / m * log(e));
+
+	double divisor = pow(2, localM);
+	if (localM <= threshold) {
+		throw new std::invalid_argument("M <= threshold");
+	}
+	if (qmax >= divisor) {
+		throw new std::invalid_argument("qmax >= divisor");
+	}
+	//passed threshold test, rationalize c
+	c = ceil(divisor * c) / divisor;
+
+	QSMatrix<double> newMatrix(n, m, 0);
+	for (size_t i = 0; i < m; i++) {
+		for (size_t j = 0; j < n; j++) {
+			newMatrix(i, j) = ceil(matrix(i, j) * divisor) / divisor;
+		}
+	}
+
+	QSMatrix<double> B(nm, nm, 0); //initialize an (n+m)x(n+m) matrix to all 0s
+	// initialize the rest of the matrix
+	for (size_t i = 0; i < nm; i++) {
+		for (size_t j = 0; j < nm; j++) {
+			if (i == j) {
+				// main diagonal
+				if (i < m) {
+					B(i, j) = c;
+				}
+				else {
+					B(i, j) = 1;
+				}
+			}
+			else if (i < m && j >= m && j <= n) {
+				size_t k = m - i - 1; // need to fill bottom up
+				B(k, j) = newMatrix(i, j - m);
+			}
+			else {
+				B(i, j) = 0;
+			}
+		}
+	}
+
+	QSMatrix<int> C(nm, nm, 0);
+	double d = 1.0 / e;
+	int k_prime = ceil(((-1.0 * (nm - 1) * nm) / (4.0 * n)) + (m * (log(qmax) / log(2)) / n));
+
+	std::vector< QSMatrix<int> > outputVec;
+	for (size_t k = 0; k < k_prime; k++) {
+		try {
+			auto result = CPPMathLibrary::LLL::ReduceBasis_LLL<double>(B, alpha);
+			C = std::get<LLL::LLLType::C>(result);
+
+			QSMatrix<int> temp(m, nm, 0); //will store the approximation before being added to the output vector
+			for (size_t i = 0; i < m; i++) {
+				size_t j = m - i - 1; //need to flip the output matrix
+				temp.setRowVector<int>(C.getRowVector<int>(j), i); //set the ith row of temp with the jth row of C
+
+				double val = pow(2, (double)localM - ((double)nm / m));
+				// divide the first m columns by beta ^ (n + m) / m
+				std::vector<double> col = B.getColumnVector<double>(i);
+				//take the ceiling of the col
+				for (size_t l = 0; l < col.size(); l++)
+					col[l] = col[l] / ceil(col[l] * val) * pow(2, localM);
+
+				B.setColumnVector(col, i);
+
+				//update epsilon, M, Q
+				e /= d;
+				threshold = (pow(nm, 2) / m) - ((double)nm / m * log(e));
+				localM = (size_t)ceil(threshold);
+				Q = pow(2, localM) - 1;
+			}
+			outputVec.push_back(temp);
+
+			double upper_bound = abs(pow(beta, (((double)nm - 1) * nm) / (4 * (double)m)) * pow(d, ((double)(k + 1.0) * n) / m));
+			if (upper_bound > Q) {
+				break;
+			}
+		}
+		catch (IncorrectDimensionException* idEx) {
+			throw idEx;
+		}
+	}
+
+	return outputVec;
+}
+
+double CPPMathLibrary::SimultaneousDiophantine::DirichletCoefficient(const QSMatrix<double>& matrix, const QSMatrix<double>& real_values) {
+	size_t m = real_values.get_rows();
+	size_t n = real_values.get_cols();
+
+	double dir_coef = 0.0;
+	double q = 0.0;
+
+	//calculate the dirichlet coefficient
+	for (size_t j = 0; j < matrix.get_rows(); j++) {
+		double temp_coef = 0.0;
+		double qi = abs(matrix(j, 0));
+		double maxDist = 0.0;
+		if (qi > q)
+			q = qi;
+
+		double tempDist = 0.0;
+		for (size_t k = 0; k < n; k++) {
+			double x = qi * real_values(j, k);
+			tempDist = abs(round(x) - x);
+			if (tempDist > maxDist)
+				maxDist = tempDist;
+		}
+
+		dir_coef += maxDist;
+	}
+
+	return dir_coef * pow(q, (double)m / n);
 }

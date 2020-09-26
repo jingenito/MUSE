@@ -72,6 +72,7 @@ int main(int argc, char** argv)
 	json j = convertQSequenceToJSON(qs, count, op_count);
 	std::ofstream out(filename);
 	out << j << std::endl;
+	out.close();
 
 	return 0;
 }
