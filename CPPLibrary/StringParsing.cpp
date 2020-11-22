@@ -88,3 +88,14 @@ double CPPMathLibrary::StringParsing::ReverseActualBits(size_t num) {
 	// required number 
 	return result;
 }
+
+double CPPMathLibrary::StringParsing::TryParseExpression(std::string s) {
+	double num = CPPMathLibrary::StringParsing::TryParseNumFromArgs(s);
+	if (num == 0.0) {
+		num = CPPMathLibrary::StringParsing::TryParseMathFromArgs(s);
+		if (num == 0.0 && CPPMathLibrary::StringParsing::IsNumeric(s)) {
+			num = stod(s);
+		}
+	}
+	return num;
+}
