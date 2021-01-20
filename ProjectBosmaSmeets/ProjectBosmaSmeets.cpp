@@ -16,8 +16,9 @@ std::vector<double> DiscritizeInterval(double start, double end, double delta);
 double SearchVectorDist(QSMatrix<double> vec, double value);
 double F(double z);
 json convertJSONData(std::vector<double> z_vector, std::vector<double> vec);
+double GetILLLRandomNumber();
 
-const int ITERATIONS = 200;
+const int ITERATIONS = 2000;
 
 int main(int argc, char** argv)
 {
@@ -35,7 +36,7 @@ int main(int argc, char** argv)
 
 	size_t M = 0;
 	double val = (pow(nm, 2) / m) - ((double)nm / m * log(epsilon));
-	M = (size_t)ceil(val) + 1;
+	M = (size_t)ceil(val) + 5;
 	size_t qmax = pow(2, M) - 1;
 	size_t k_prime = (size_t)ceil((-1.0 * (nm - 1) * nm) / (4.0 * n) + (m * log(qmax) / (log(2) * n)));
 
@@ -46,7 +47,7 @@ int main(int argc, char** argv)
 
 	try {
 		for (size_t i = 0; i < N; i++) {
-			preValues(0, 0) = ((double)rand() / (RAND_MAX)); //random number between 0 and 1
+			preValues(0, 0) = GetILLLRandomNumber();
 
 			std::vector< QSMatrix<int> > result = SimultaneousDiophantine::IteratedLLL_Dyadic(preValues, alpha, epsilon, qmax, M);
 			std::vector<double> all_values;
@@ -179,4 +180,12 @@ json convertJSONData(std::vector<double> z_vector, std::vector<double> vec) {
 	j["z"] = z;
 	j["v"] = v;
 	return j;
+}
+
+double GetILLLRandomNumber() {
+	double x = ((double)std::rand() / (RAND_MAX)); //random number between 0 and 1
+	while (x <= 0.01 || x >= 0.99) {
+		x = ((double)std::rand() / (RAND_MAX));
+	}
+	return x;
 }
