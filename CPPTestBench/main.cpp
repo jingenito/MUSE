@@ -22,6 +22,7 @@ void SimultaneousDiophantineTest();
 void SimultaneousDiophantineFromRealsTest();
 void IteratedLLLTest();
 void IteratedILLLStressTest();
+double GetILLLRandomNumber();
 
 int main(int argc, char** argv) {
 	std::cout << "CPPLibrary Test Bench" << std::endl << std::endl;
@@ -301,31 +302,11 @@ void IteratedLLLTest() {
 		std::cout << "Execution Time " << duration << " seconds" << std::endl << std::endl;
 
 		for (size_t i = 0; i < result.size(); i++) {
-			double dir_coef = 0.0;
-			double q = 0.0;
-
 			std::cout << "Approximation " << i + 1 << ":" << std::endl;
 			std::cout << result[i] << std::endl << std::endl;
 
 			//calculate the dirichlet coefficient
-			for (size_t j = 0; j < result[i].get_rows(); j++) {
-				double temp_coef = 0.0;
-				double qi = abs(result[i](j, 0));
-				double maxDist = 0.0;
-				if (qi > q)
-					q = qi;
-
-				double tempDist = 0.0;
-				for (size_t k = 0; k < n; k++) {
-					double x = qi * preValues(j, k);
-					tempDist = abs(round(x) - x);
-					if (tempDist > maxDist)
-						maxDist = tempDist;
-				}
-
-				dir_coef += maxDist;
-			}
-			dir_coef *= pow(q, (double)m / n);
+			double dir_coef = SimultaneousDiophantine::DirichletCoefficient(result[i], preValues);
 
 			std::cout << "Dirichlet Coefficient: " << dir_coef << std::endl << std::endl;
 		}
@@ -344,7 +325,7 @@ void IteratedILLLStressTest() {
 
 	clock_t start, end;
 	double duration;
-	size_t m = 1, n = 1, N = 1000;
+	size_t m = 1, n = 1, N = 500;
 	size_t nm = n + m;
 	QSMatrix<double> preValues(m, n, 0);
 
@@ -363,7 +344,7 @@ void IteratedILLLStressTest() {
 		for (size_t i = 0; i < N; i++) {
 			std::cout << (double)i / N << "%" << std::endl;
 
-			preValues(0, 0) = ((double)rand() / (RAND_MAX)); //random number between 0 and 1
+			preValues(0, 0) = GetILLLRandomNumber();
 			std::vector< QSMatrix<int> > result = SimultaneousDiophantine::IteratedLLL_Dyadic(preValues, alpha, epsilon, qmax, M);
 		}
 	}
@@ -373,4 +354,12 @@ void IteratedILLLStressTest() {
 	}
 
 	std::cout << "Finished test." << std::endl;
+}
+
+double GetILLLRandomNumber() {
+	double x = ((double)std::rand() / (RAND_MAX)); //random number between 0 and 1
+	while (x <= 0.01 || x >= 0.99) {
+		x = ((double)std::rand() / (RAND_MAX));
+	}
+	return x;
 }
