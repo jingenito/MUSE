@@ -44,11 +44,11 @@ QSMatrix<int> CPPMathLibrary::SimultaneousDiophantine::SameDivisor(const std::ve
 }
 
 QSMatrix<int> CPPMathLibrary::SimultaneousDiophantine::SameDivisorFromRealVector(const std::vector<double>& x, const double& alpha, const double& epsilon, const size_t& quotientCount) throw (IncorrectDimensionException*) {
-	size_t cuntCount = 10, cuntOpCount = 0;
+	size_t count = 10, opcount = 0;
 	int* qs; //initializing once 
 	std::vector<double> rats;
 	for (size_t i = 0; i < x.size(); i++) {
-		qs = ContinuedFraction::ContinuedFractionExpansion(x[i], cuntCount, cuntOpCount);
+		qs = ContinuedFraction::ContinuedFractionExpansion(x[i], count, opcount);
 		RationalNumber r = ContinuedFraction::FindConvergent(qs, quotientCount);
 		rats.push_back((double)r);
 	}
