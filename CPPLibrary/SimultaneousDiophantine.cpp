@@ -159,15 +159,12 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 	size_t n = matrix.get_cols();
 	size_t nm = n + m;
 
-	double e = epsilon;
-	double Q = qmax;
-	size_t localM = M;
 	double beta = 4 / ((4 * alpha) - 1);
-	double c = pow(pow(beta, -1 * ((double)nm - 1) / 4) * e, (double)nm / m);
-	double threshold = (pow(nm, 2) / m) - ((double)nm / m * log(e));
+	double c = pow(pow(beta, -1 * ((double)nm - 1) / 4) * epsilon, (double)nm / m);
+	double threshold = (pow(nm, 2) / m) - ((double)nm / m * log(epsilon));
 
-	double divisor = pow(2, localM);
-	if (localM <= threshold) {
+	double divisor = pow(2, M);
+	if (M <= threshold) {
 		throw new std::invalid_argument("M <= threshold");
 	}
 	if (qmax >= divisor) {
@@ -175,6 +172,8 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 	}
 	//passed threshold test, rationalize c
 	c = ceil(divisor * c) / divisor;
+	std::vector<double> cHats; // need to keep track of cHat at every iteration since they will not be saved in the matrix with this version
+	cHats.push_back(c);
 
 	QSMatrix<double> newMatrix(n, m, 0);
 	for (size_t i = 0; i < m; i++) {
@@ -198,7 +197,13 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 			}
 			else if (i < m && j >= m && j <= n) {
 				size_t k = m - i - 1; // need to fill bottom up
-				B(k, j) = newMatrix(i, j - m);
+				double x = newMatrix(i, j - m);
+				if (x > 0 && x < 1) {
+					B(k, j) = x;
+				}
+				else {
+					throw new std::invalid_argument("One of the values in the input matrix was not between 0 and 1");
+				}
 			}
 			else {
 				B(i, j) = 0;
@@ -207,12 +212,23 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 	}
 
 	QSMatrix<int> C(nm, nm, 0);
-	double d = 1.0 / e;
+	double d = 1.0 / epsilon;
 	int k_prime = ceil(((-1.0 * (nm - 1) * nm) / (4.0 * n)) + (m * (log(qmax) / log(2)) / n));
+	double tempVal = pow(2, (double)M - ((double)nm / m));
 
 	std::vector< QSMatrix<int> > outputVec;
 	for (size_t k = 0; k < k_prime; k++) {
 		try {
+			double theRealVal = 0.0;
+			if (k >= 1) {
+				double cHat = ceil(tempVal * cHats[k - 1]) / pow(2, M);
+				cHats.push_back(cHat);
+				theRealVal = cHats[k - 1] / cHat;
+			}
+			else {
+				theRealVal = cHats[0];
+			}
+
 			auto result = CPPMathLibrary::LLL::ReduceBasis_LLL<double>(B, alpha);
 			C = std::get<LLL::LLLType::C>(result);
 
@@ -221,25 +237,15 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 				size_t j = m - i - 1; //need to flip the output matrix
 				temp.setRowVector<int>(C.getRowVector<int>(j), i); //set the ith row of temp with the jth row of C
 
-				double val = pow(2, (double)localM - ((double)nm / m));
-				// divide the first m columns by beta ^ (n + m) / m
+				// multiply the first m columns by cHat[k - 1] / cHat[k]
 				std::vector<double> col = B.getColumnVector<double>(i);
-				//take the ceiling of the col
-				for (size_t l = 0; l < col.size(); l++)
-					col[l] = col[l] / ceil(col[l] * val) * pow(2, localM);
-
+				col = col * theRealVal;
 				B.setColumnVector(col, i);
-
-				//update epsilon, M, Q
-				e /= d;
-				threshold = (pow(nm, 2) / m) - ((double)nm / m * log(e));
-				localM = (size_t)ceil(threshold);
-				Q = pow(2, localM) - 1;
 			}
 			outputVec.push_back(temp);
 
 			double upper_bound = abs(pow(beta, (((double)nm - 1) * nm) / (4 * (double)m)) * pow(d, ((double)(k + 1.0) * n) / m));
-			if (upper_bound > Q) {
+			if (upper_bound > qmax) {
 				break;
 			}
 		}
