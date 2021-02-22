@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 	size_t N = ITERATIONS;
 	size_t m = 1, n = 1;
 	size_t nm = n + m;
-	double deltaX = 1.0 / 100;
+	double deltaX = 1.0 / 1000;
 
 	QSMatrix<double> preValues(m, n, 0);
 
@@ -36,7 +36,7 @@ int main(int argc, char** argv)
 
 	size_t M = 0;
 	double val = (pow(nm, 2) / m) - ((double)nm / m * log(epsilon));
-	M = (size_t)ceil(val) + 5;
+	M = (size_t)ceil(val) + 30;
 	size_t qmax = pow(2, M) - 1;
 	size_t k_prime = (size_t)ceil((-1.0 * (nm - 1) * nm) / (4.0 * n) + (m * log(qmax) / (log(2) * n)));
 
@@ -58,6 +58,9 @@ int main(int argc, char** argv)
 				if (std::find(all_values.begin(), all_values.end(), q) == all_values.end()) {
 					dir_coefs_nonrepeated(i, k) = dir_coef;
 				}
+				else {
+					dir_coefs_nonrepeated(i, k) = 0;
+				}
 				dir_coefs(i, k) = dir_coef;
 				all_values.push_back(q);
 			}
@@ -72,7 +75,7 @@ int main(int argc, char** argv)
 	double delta = 0.0125;
 	std::cout << "Finished ILLL approximations." << std::endl;
 	std::cout << "Discritizing the interval [0,1] by delta = " << delta << std::endl;
-	std::vector<double> z_vector = DiscritizeInterval(0, 1, delta);
+	std::vector<double> z_vector = DiscritizeInterval(0, 0.5, delta);
 	std::cout << "Processing dirichlet coefficients..." << std::endl;
 
 	std::vector<double> freqs;
@@ -149,15 +152,12 @@ double SearchVectorDist(QSMatrix<double> vec, double value) {
 double F(double z) {
 	double a = 1.0 / sqrt(5);
 
-	if (z > 1) {
-		return 1; //continuing the end point
-	}
-	else if (z >= 0.5) {
+	if (z >= 0.5) {
 		return 1;
 	}
 	else if (z >= a) {
 		double s = sqrt(1.0 - (4.0 * z * z));
-		return 1.0 / log(StringParsing::phi) * (s + log(StringParsing::phi * ((1.0 - s) / (2.0 * z))));
+		return (1.0 / log(StringParsing::phi)) * (s + log(StringParsing::phi * ((1.0 - s) / (2.0 * z))));
 	}
 	else if (z >= 0) {
 		return z / log(StringParsing::phi);
