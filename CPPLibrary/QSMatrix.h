@@ -287,7 +287,7 @@ public:
 
 		for (size_t i = 0; i < rows; i++) {
 			for (size_t j = 0; j < cols; j++) {
-				os << std::setw(8) << std::setprecision(5) << rhs(i, j) << " ";
+				os << std::setw(13) << std::setprecision(10) << rhs(i, j) << " ";
 			}
 			os << std::endl;
 		}
