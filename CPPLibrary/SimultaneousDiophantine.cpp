@@ -92,7 +92,7 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 					B(i, j) = c;
 				}
 				else {
-					B(i, j) = 1;
+					B(i, j) = -1.0;
 				}
 			}
 			else if (i < m && j >= m && j <= n) {
@@ -113,6 +113,11 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 	std::vector< QSMatrix<int> > outputVec;
 	for (size_t k = 0; k < k_prime; k++) {
 		try {
+			double upper_bound = abs(pow(2, (((double)nm - 1.0) * nm) / (4.0 * (double)m)) * pow(d, ((double)(k + 1.0) * n) / m));
+			if (upper_bound > qmax) {
+				break;
+			}
+
 			auto result = CPPMathLibrary::LLL::ReduceBasis_LLL<double>(B, alpha);
 			C = std::get<LLL::LLLType::C>(result);
 
@@ -127,11 +132,6 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 				B.setColumnVector(col, i);
 			}
 			outputVec.push_back(temp);
-
-			double upper_bound = abs(pow(beta, (((double)nm - 1) * nm) / (4 * (double)m)) * pow(d, ((double)(k + 1.0) * n) / m));
-			if (upper_bound > qmax) {
-				break;
-			}
 		}
 		catch (IncorrectDimensionException* idEx) {
 			throw idEx;
@@ -160,8 +160,8 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 	size_t nm = n + m;
 
 	double beta = 4 / ((4 * alpha) - 1);
-	double c = pow(pow(beta, -1 * ((double)nm - 1) / 4) * epsilon, (double)nm / m);
-	double threshold = (pow(nm, 2) / m) - ((double)nm / m * log(epsilon));
+	double c = pow(pow(beta, -1.0 * ((double)nm - 1.0) / 4.0) * epsilon, (double)nm / m);
+	double threshold = (pow(nm, 2.0) / m) - ((double)nm / m * log(epsilon));
 
 	double divisor = pow(2, M);
 	if (M <= threshold) {
@@ -192,7 +192,7 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 					B(i, j) = c;
 				}
 				else {
-					B(i, j) = 1;
+					B(i, j) = -1.0;
 				}
 			}
 			else if (i < m && j >= m && j <= n) {
@@ -214,24 +214,30 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 	QSMatrix<int> C(nm, nm, 0);
 	double d = 1.0 / epsilon;
 	int k_prime = ceil(((-1.0 * (nm - 1) * nm) / (4.0 * n)) + (m * (log(qmax) / log(2)) / n));
-	double tempVal = pow(2, (double)M - ((double)nm / m));
+	double tempVal = divisor * pow(d, -1.0 * (double)nm / m);
 
 	std::vector< QSMatrix<int> > outputVec;
 	for (size_t k = 0; k < k_prime; k++) {
 		try {
+			double upper_bound = abs(pow(2, (((double)nm - 1.0) * nm) / (4.0 * (double)m)) * pow(d, ((double)(k + 1.0) * n) / m));
+			if (upper_bound > qmax) {
+				break;
+			}
+
 			double theRealVal = 0.0;
 			if (k >= 1) {
-				double cHat = ceil(tempVal * cHats[k - 1]) / pow(2, M);
+				double cHat = (double)ceil(tempVal * cHats[k - 1]) / divisor;
 				cHats.push_back(cHat);
-				theRealVal = cHats[k - 1] / cHat;
+				theRealVal = cHat / cHats[k - 1];
 			}
 			else {
 				theRealVal = cHats[0];
 			}
+			//std::cout << "cHat[k-1] / cHat[k] : " << theRealVal << std::endl;
 
 			auto result = CPPMathLibrary::LLL::ReduceBasis_LLL<double>(B, alpha);
 			C = std::get<LLL::LLLType::C>(result);
-
+			
 			QSMatrix<int> temp(m, nm, 0); //will store the approximation before being added to the output vector
 			for (size_t i = 0; i < m; i++) {
 				size_t j = m - i - 1; //need to flip the output matrix
@@ -243,11 +249,6 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 				B.setColumnVector(col, i);
 			}
 			outputVec.push_back(temp);
-
-			double upper_bound = abs(pow(beta, (((double)nm - 1) * nm) / (4 * (double)m)) * pow(d, ((double)(k + 1.0) * n) / m));
-			if (upper_bound > qmax) {
-				break;
-			}
 		}
 		catch (IncorrectDimensionException* idEx) {
 			throw idEx;
