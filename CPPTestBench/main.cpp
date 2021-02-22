@@ -325,27 +325,33 @@ void IteratedILLLStressTest() {
 
 	clock_t start, end;
 	double duration;
-	size_t m = 1, n = 1, N = 500;
+	size_t m = 1, n = 1, N = 1;
 	size_t nm = n + m;
 	QSMatrix<double> preValues(m, n, 0);
 
 	double epsilon = 1.0 / 2;
 	double alpha = 0.75;
 	size_t M = 0;
-	double val = (pow(nm, 2) / m) - ((double)nm / m * log(epsilon));
-	M = (size_t)ceil(val) + 1;
+	double val = ((nm * nm) / m) - ((double)nm / m * log(epsilon));
+	M = (size_t)ceil(val) + 30;
 	size_t qmax = pow(2, M) - 1;
 	size_t k_prime = (size_t)ceil((-1.0 * (nm - 1) * nm) / (4.0 * n) + (m * log(qmax) / (log(2) * n)));
 
 	std::srand(std::time(nullptr)); // use current time as seed for random generator
-	std::cout << "Starting ILLL stress test..." << std::endl;
+	std::cout << "Starting ILLL Dyadic stress test..." << std::endl;
+	std::cout << "M: " << M << "\tqmax: " << qmax << "\tk': " << k_prime << std::endl;
 
 	try {
 		for (size_t i = 0; i < N; i++) {
-			std::cout << (double)i / N << "%" << std::endl;
+			preValues(0, 0) = sqrt(2) - 1;
+			std::cout << "Value: " << std::setprecision(10) << preValues(0, 0) << std::endl;
 
-			preValues(0, 0) = GetILLLRandomNumber();
 			std::vector< QSMatrix<int> > result = SimultaneousDiophantine::IteratedLLL_Dyadic(preValues, alpha, epsilon, qmax, M);
+			for (size_t k = 0; k < result.size(); k++) {
+				size_t q = (size_t)abs(result[k](0, 0));
+				std::cout << "\tq: " << q << "\tp: " << (size_t)abs(result[k](0, 1)) << std::endl;
+			}
+			std::cout << std::endl;
 		}
 	}
 	catch (IncorrectDimensionException* idEx) {
