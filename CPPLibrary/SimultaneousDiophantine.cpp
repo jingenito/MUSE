@@ -60,87 +60,6 @@ QSMatrix<int> CPPMathLibrary::SimultaneousDiophantine::SameDivisorFromRealVector
 	}
 }
 
-std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLLL(const QSMatrix<double>& matrix, const double& alpha, const double& epsilon, const size_t& qmax) {
-	if (alpha < 0.25) {
-		throw new std::invalid_argument("alpha < 0.25");
-	}
-	if (alpha > 1) {
-		throw new std::invalid_argument("alpha > 1");
-	}
-	if (epsilon <= 0) {
-		throw new std::invalid_argument("epsilon <= 0");
-	}
-	if (epsilon >= 1) {
-		throw new std::invalid_argument("epsilon >= 1");
-	}
-
-	size_t m = matrix.get_rows();
-	size_t n = matrix.get_cols();
-	size_t nm = n + m;
-
-	double e = epsilon;
-	double beta = 4 / ((4 * alpha) - 1);
-	double c = pow(pow(beta, -1 * ((double)nm - 1) / 4) * e, (double)nm / m);
-
-	QSMatrix<double> B(nm, nm, 0); //initialize an (n+m)x(n+m) matrix to all 0s
-	// initialize the rest of the matrix
-	for (size_t i = 0; i < nm; i++) {
-		for (size_t j = 0; j < nm; j++) {
-			if (i == j) {
-				// main diagonal
-				if (i < m) {
-					B(i, j) = c;
-				}
-				else {
-					B(i, j) = -1.0;
-				}
-			}
-			else if (i < m && j >= m && j <= n) {
-				size_t k = m - i - 1; // need to fill bottom up
-				B(k, j) = matrix(i, j - m);
-			}
-			else {
-				B(i, j) = 0;
-			}
-		}
-	}
-
-	QSMatrix<int> C(nm, nm, 0);
-	double d = 1.0 / epsilon;
-	int k_prime = ceil(((-1.0 * (nm - 1) * nm) / (4.0 * n)) + (m * (log(qmax) / log(2)) / n));
-
-	double val = 1.0 / pow(d, (double)nm / m);
-	std::vector< QSMatrix<int> > outputVec;
-	for (size_t k = 0; k < k_prime; k++) {
-		try {
-			double upper_bound = abs(pow(2, (((double)nm - 1.0) * nm) / (4.0 * (double)m)) * pow(d, ((double)(k + 1.0) * n) / m));
-			if (upper_bound > qmax) {
-				break;
-			}
-
-			auto result = CPPMathLibrary::LLL::ReduceBasis_LLL<double>(B, alpha);
-			C = std::get<LLL::LLLType::C>(result);
-
-			QSMatrix<int> temp(m, nm, 0); //will store the approximation before being added to the output vector
-			for (size_t i = 0; i < m; i++) {
-				size_t j = m - i - 1; //need to flip the output matrix
-				temp.setRowVector<int>(C.getRowVector<int>(j), i); //set the ith row of temp with the jth row of C
-
-				// divide the first m columns by beta ^ (n + m) / m
-				std::vector<double> col = B.getColumnVector<double>(i);
-				col = col * val;
-				B.setColumnVector(col, i);
-			}
-			outputVec.push_back(temp);
-		}
-		catch (IncorrectDimensionException* idEx) {
-			throw idEx;
-		}
-	}
-
-	return outputVec;
-}
-
 std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLLL_Dyadic(const QSMatrix<double>& matrix, const double& alpha, const double& epsilon, const size_t& qmax, const size_t& M) {
 	if (alpha < 0.25) {
 		throw new std::invalid_argument("alpha < 0.25");
@@ -249,9 +168,9 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 				temp.setRowVector<int>(C.getRowVector<int>(j), i); //set the ith row of temp with the jth row of C
 
 				// multiply the first m columns by cHat[k - 1] / cHat[k]
-				std::vector<double> col = B.getColumnVector<double>(i);
+				std::vector<double> col = B.getColumnVectorAsRow<double>(i);
 				col = col * theRealVal;
-				B.setColumnVector(col, i);
+				B.setColumnVectorFromRow(col, i);
 			}
 			outputVec.push_back(temp);
 		}

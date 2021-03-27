@@ -330,7 +330,7 @@ public:
 	}
 
 	template <typename TOut>
-	inline std::vector<TOut> getColumnVector(const size_t& i) throw (IncorrectDimensionException*) {
+	inline std::vector<TOut> getColumnVectorAsRow(const size_t& i) throw (IncorrectDimensionException*) {
 		if (i >= this->mat[0].size()) { throw new IncorrectDimensionException("Index Out of Range"); }
 		std::vector<TOut> r(this->cols);
 		for (size_t j = 0; j < this->rows; j++)
@@ -339,7 +339,7 @@ public:
 	}
 
 	template <typename Tin>
-	inline void setColumnVector(const std::vector<Tin>& vec, const size_t& j) throw (IncorrectDimensionException*) {
+	inline void setColumnVectorFromRow(const std::vector<Tin>& vec, const size_t& j) throw (IncorrectDimensionException*) {
 		if (j >= this->mat[0].size()) { throw new IncorrectDimensionException("Index Out of Range"); }
 		for (size_t i = 0; i < vec.size(); i++)
 			this->mat[i][j] = vec[j];

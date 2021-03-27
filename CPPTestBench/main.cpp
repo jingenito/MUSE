@@ -7,8 +7,7 @@
 
 // the order of bits in input string will be flipped to conform to human readability
 // since the bits will be flipped, the first test to run is the most signficant bit and the last test is the least significant bit
-const int ITERATED_LLL_STRESS = 1;
-const int ITERATED_LLL = ITERATED_LLL_STRESS << 1;
+const int ITERATED_LLL = 1;
 const int SIMULT_DIOPH_REALS = ITERATED_LLL << 1;
 const int SIMULT_DIOPH = SIMULT_DIOPH_REALS << 1;
 const int LLL = SIMULT_DIOPH << 1;
@@ -21,14 +20,13 @@ void LLLTest();
 void SimultaneousDiophantineTest();
 void SimultaneousDiophantineFromRealsTest();
 void IteratedLLLTest();
-void IteratedILLLStressTest();
 double GetILLLRandomNumber();
 QSMatrix<double> GetILLLRandomizedMatrix(const size_t, const size_t);
 
 int main(int argc, char** argv) {
 	std::cout << "CPPLibrary Test Bench" << std::endl << std::endl;
 
-	bool _run_cont_frac_test_ = true, _run_gso_test_ = true, _run_lll_test_ = true, _run_simult_dioph_test_ = true, _run_simult_dioph_reals_test_ = true, _run_iterated_lll_ = true, _run_iterated_lll_stress_ = false;
+	bool _run_cont_frac_test_ = true, _run_gso_test_ = true, _run_lll_test_ = true, _run_simult_dioph_test_ = true, _run_simult_dioph_reals_test_ = true, _run_iterated_lll_ = true;
 
 	if (argc > 1) {
 		int input = std::stoi(argv[1], 0, 2);
@@ -39,7 +37,6 @@ int main(int argc, char** argv) {
 		_run_simult_dioph_test_ = (input & SIMULT_DIOPH) == SIMULT_DIOPH;
 		_run_simult_dioph_reals_test_ = (input & SIMULT_DIOPH_REALS) == SIMULT_DIOPH_REALS;
 		_run_iterated_lll_ = (input & ITERATED_LLL) == ITERATED_LLL;
-		_run_iterated_lll_stress_ = (input & ITERATED_LLL_STRESS) == ITERATED_LLL_STRESS;
 	}
 	if (argc == 1) {
 		std::cout << "No flags have been set... Running all tests..." << std::endl << std::endl;
@@ -67,10 +64,6 @@ int main(int argc, char** argv) {
 	}
 	if (_run_iterated_lll_) {
 		IteratedLLLTest();
-		std::cout << std::endl;
-	}
-	if (_run_iterated_lll_stress_) {
-		IteratedILLLStressTest();
 		std::cout << std::endl;
 	}
 
@@ -273,55 +266,6 @@ void SimultaneousDiophantineFromRealsTest() {
 }
 
 void IteratedLLLTest() {
-	clock_t start, end;
-	double duration;
-	using namespace CPPMathLibrary;
-
-	size_t m = 1, n = 4;
-
-	QSMatrix<double> preValues(m, n, 0);
-	preValues(0, 0) = 239.0 / 169;
-	preValues(0, 1) = 265.0 / 153;
-	preValues(0, 2) = 682.0 / 305;
-	preValues(0, 3) = 590.0 / 223;
-
-	std::cout << "Starting Iterated LLL Test..." << std::endl << std::endl;
-	std::cout << "Initial Matrix:" << std::endl << preValues << std::endl << std::endl;
-
-	try {
-		double epsilon = 1.0 / 2;
-		double alpha = 0.75;
-		size_t qmax = 20000;
-
-		std::cout << "Epsilon: " << epsilon << " Alpha: " << alpha << " qmax: " << qmax << std::endl << std::endl;
-
-		start = clock();
-		std::vector< QSMatrix<int> > result = SimultaneousDiophantine::IteratedLLL(preValues, alpha, epsilon, qmax);
-		end = clock();
-		duration = ((double)end - (double)start) / CLOCKS_PER_SEC;
-
-		std::cout << "Execution Time " << duration << " seconds" << std::endl << std::endl;
-
-		for (size_t i = 0; i < result.size(); i++) {
-			std::cout << "Approximation " << i + 1 << ":" << std::endl;
-			std::cout << result[i] << std::endl << std::endl;
-
-			//calculate the dirichlet coefficient
-			double dir_coef = SimultaneousDiophantine::DirichletCoefficient(result[i], preValues);
-
-			std::cout << "Dirichlet Coefficient: " << dir_coef << std::endl << std::endl;
-		}
-
-	}
-	catch (IncorrectDimensionException* idEx) {
-		std::cout << idEx->getMessage() << std::endl;
-		return;
-	}
-
-	std::cout << "Finished Iterated LLL Test." << std::endl;
-}
-
-void IteratedILLLStressTest() {
 	using namespace CPPMathLibrary::SimultaneousDiophantine;
 
 	clock_t start, end;
@@ -339,7 +283,7 @@ void IteratedILLLStressTest() {
 	size_t k_prime = (size_t)ceil(((-1.0 * (nm - 1) * nm) / (4.0 * n)) + (((double)m / n) * (log(qmax) / log(2))));
 
 	std::srand(std::time(nullptr)); // use current time as seed for random generator
-	std::cout << "Starting ILLL Dyadic stress test...\n\n M = " << M << "\tQ = " << qmax << "\t k' = " << k_prime << std::endl;
+	std::cout << "Starting ILLL Dyadic test...\n\n M = " << M << "\tQ = " << qmax << "\t k' = " << k_prime << std::endl;
 
 	try {
 		preValues = GetILLLRandomizedMatrix(m, n);
