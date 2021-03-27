@@ -23,6 +23,7 @@ void SimultaneousDiophantineFromRealsTest();
 void IteratedLLLTest();
 void IteratedILLLStressTest();
 double GetILLLRandomNumber();
+QSMatrix<double> GetILLLRandomizedMatrix(const size_t, const size_t);
 
 int main(int argc, char** argv) {
 	std::cout << "CPPLibrary Test Bench" << std::endl << std::endl;
@@ -321,11 +322,11 @@ void IteratedLLLTest() {
 }
 
 void IteratedILLLStressTest() {
-	using namespace CPPMathLibrary;
+	using namespace CPPMathLibrary::SimultaneousDiophantine;
 
 	clock_t start, end;
 	double duration;
-	size_t m = 1, n = 1, N = 1;
+	size_t m = 2, n = 2;
 	size_t nm = n + m;
 	QSMatrix<double> preValues(m, n, 0);
 
@@ -335,23 +336,18 @@ void IteratedILLLStressTest() {
 	double val = ((nm * nm) / m) - ((double)nm / m * log(epsilon));
 	M = (size_t)ceil(val) + 30;
 	size_t qmax = pow(2, M) - 1;
-	size_t k_prime = (size_t)ceil((-1.0 * (nm - 1) * nm) / (4.0 * n) + (m * log(qmax) / (log(2) * n)));
+	size_t k_prime = (size_t)ceil(((-1.0 * (nm - 1) * nm) / (4.0 * n)) + (((double)m / n) * (log(qmax) / log(2))));
 
 	std::srand(std::time(nullptr)); // use current time as seed for random generator
-	std::cout << "Starting ILLL Dyadic stress test..." << std::endl;
-	std::cout << "M: " << M << "\tqmax: " << qmax << "\tk': " << k_prime << std::endl;
+	std::cout << "Starting ILLL Dyadic stress test...\n\n M = " << M << "\tQ = " << qmax << "\t k' = " << k_prime << std::endl;
 
 	try {
-		for (size_t i = 0; i < N; i++) {
-			preValues(0, 0) = sqrt(2) - 1;
-			std::cout << "Value: " << std::setprecision(10) << preValues(0, 0) << std::endl;
+		preValues = GetILLLRandomizedMatrix(m, n);
+		std::cout << "Input Matrix:\n" << preValues << std::endl;
 
-			std::vector< QSMatrix<int> > result = SimultaneousDiophantine::IteratedLLL_Dyadic(preValues, alpha, epsilon, qmax, M);
-			for (size_t k = 0; k < result.size(); k++) {
-				size_t q = (size_t)abs(result[k](0, 0));
-				std::cout << "\tq: " << q << "\tp: " << (size_t)abs(result[k](0, 1)) << std::endl;
-			}
-			std::cout << std::endl;
+		std::vector< QSMatrix<int> > result = IteratedLLL_Dyadic(preValues, alpha, epsilon, qmax, M);
+		for (size_t k = 0; k < result.size(); k++) {
+			std::cout << "Result " << k + 1 << ":\n" << result[k] << std::endl;
 		}
 	}
 	catch (IncorrectDimensionException* idEx) {
@@ -368,4 +364,14 @@ double GetILLLRandomNumber() {
 		x = ((double)std::rand() / (RAND_MAX));
 	}
 	return x;
+}
+
+QSMatrix<double> GetILLLRandomizedMatrix(const size_t m, const size_t n) {
+	QSMatrix<double> result = QSMatrix<double>(m, n, 0);
+	for (size_t i = 0; i < m; i++) {
+		for (size_t j = 0; j < n; j++) {
+			result(i, j) = GetILLLRandomNumber();
+		}
+	}
+	return result;
 }

@@ -175,7 +175,7 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 	std::vector<double> cHats; // need to keep track of cHat at every iteration since they will not be saved in the matrix with this version
 	cHats.push_back(c);
 
-	QSMatrix<double> newMatrix(n, m, 0);
+	QSMatrix<double> newMatrix(m, n, 0);
 	for (size_t i = 0; i < m; i++) {
 		for (size_t j = 0; j < n; j++) {
 			newMatrix(i, j) = ceil(matrix(i, j) * divisor) / divisor;
@@ -183,38 +183,43 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 	}
 
 	QSMatrix<double> B(nm, nm, 0); //initialize an (n+m)x(n+m) matrix to all 0s
-	// initialize the rest of the matrix
-	for (size_t i = 0; i < nm; i++) {
-		for (size_t j = 0; j < nm; j++) {
+	// c block
+	for (size_t i = 0; i < m; i++) {
+		for (size_t j = 0; j < m; j++) {
 			if (i == j) {
-				// main diagonal
-				if (i < m) {
-					B(i, j) = c;
-				}
-				else {
-					B(i, j) = -1.0;
-				}
+				B(i, j) = c;
 			}
-			else if (i < m && j >= m && j <= n) {
-				size_t k = m - i - 1; // need to fill bottom up
-				double x = newMatrix(i, j - m);
-				if (x > 0 && x < 1) {
-					B(k, j) = x;
-				}
-				else {
-					throw new std::invalid_argument("One of the values in the input matrix was not between 0 and 1");
-				}
+		}
+	}
+
+	// input block
+	for (size_t i = 0; i < m; i++) {
+		for (size_t j = m; j < nm; j++) {
+			size_t k = m - i - 1; // need to fill bottom up
+			double x = newMatrix(k, j - m);
+			if (x > 0 && x < 1) {
+				B(i, j) = x;
 			}
 			else {
-				B(i, j) = 0;
+				throw new std::invalid_argument("One of the values in the input matrix was not between 0 and 1");
+			}
+		}
+	}
+
+	// -1 block
+	for (size_t i = m; i < nm; i++) {
+		for (size_t j = m; j < nm; j++) {
+			if (i == j) {
+				B(i, j) = -1.0;
 			}
 		}
 	}
 
 	QSMatrix<int> C(nm, nm, 0);
 	double d = 1.0 / epsilon;
-	int k_prime = ceil(((-1.0 * (nm - 1) * nm) / (4.0 * n)) + (m * (log(qmax) / log(2)) / n));
+	int k_prime = (size_t)ceil(((-1.0 * (nm - 1) * nm) / (4.0 * n)) + (((double)m / n) * (log(qmax) / log(2))));
 	double tempVal = divisor * pow(d, -1.0 * (double)nm / m);
+	//std::cout << "K_prime: " << k_prime << std::endl;
 
 	std::vector< QSMatrix<int> > outputVec;
 	for (size_t k = 0; k < k_prime; k++) {
@@ -237,7 +242,7 @@ std::vector< QSMatrix<int> > CPPMathLibrary::SimultaneousDiophantine::IteratedLL
 
 			auto result = CPPMathLibrary::LLL::ReduceBasis_LLL<double>(B, alpha);
 			C = std::get<LLL::LLLType::C>(result);
-			
+
 			QSMatrix<int> temp(m, nm, 0); //will store the approximation before being added to the output vector
 			for (size_t i = 0; i < m; i++) {
 				size_t j = m - i - 1; //need to flip the output matrix

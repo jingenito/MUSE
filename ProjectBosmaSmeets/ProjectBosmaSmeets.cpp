@@ -17,15 +17,16 @@ double SearchVectorDist(QSMatrix<double> vec, double value);
 double F(double z);
 json convertJSONData(std::vector<double> z_vector, std::vector<double> vec);
 double GetILLLRandomNumber();
+QSMatrix<double> GetILLLRandomizedMatrix(const size_t, const size_t);
 
-const int ITERATIONS = 2000;
+const int ITERATIONS = 1;
 
 int main(int argc, char** argv)
 {
 	std::srand(std::time(nullptr)); // use current time as seed for random generator
 
 	size_t N = ITERATIONS;
-	size_t m = 1, n = 1;
+	size_t m = 3, n = 2;
 	size_t nm = n + m;
 	double deltaX = 1.0 / 1000;
 
@@ -46,23 +47,31 @@ int main(int argc, char** argv)
 	std::cout << "Starting " << N << " ILLL approximations..." << std::endl;
 
 	try {
-		for (size_t i = 0; i < N; i++) {
-			preValues(0, 0) = GetILLLRandomNumber();
+		std::vector<int> current_row;
 
+		for (size_t i = 0; i < N; i++) {
+			preValues = GetILLLRandomizedMatrix(m, n);
+			
 			std::vector< QSMatrix<int> > result = SimultaneousDiophantine::IteratedLLL_Dyadic(preValues, alpha, epsilon, qmax, M);
-			std::vector<double> all_values;
+			QSMatrix<double> all_values(m, result.size(), 0);
 
 			for (size_t k = 0; k < result.size(); k++) {
-				size_t q = (size_t)abs(result[k](0, 0));
-				double dir_coef = SimultaneousDiophantine::DirichletCoefficient(result[k], preValues);
-				if (std::find(all_values.begin(), all_values.end(), q) == all_values.end()) {
-					dir_coefs_nonrepeated(i, k) = dir_coef;
+				std::cout << "Result " << k + 1 << ":\n" << result[k] << std::endl;
+
+				for (size_t j = 0; j < result[k].get_rows(); j++) {
+					all_values(j, k) = result[k](j, 0);
+					current_row = result[k].getRowVector<int>(j);
+
+					double dir_coef = SimultaneousDiophantine::DirichletCoefficient(result[k], preValues);
+					if (std::find(current_row.begin(), current_row.end(), all_values(j, k)) == current_row.end()) {
+						dir_coefs_nonrepeated(i, k) = dir_coef;
+					}
+					else {
+						dir_coefs_nonrepeated(i, k) = 0;
+					}
+					dir_coefs(i, k) = dir_coef;
 				}
-				else {
-					dir_coefs_nonrepeated(i, k) = 0;
-				}
-				dir_coefs(i, k) = dir_coef;
-				all_values.push_back(q);
+
 			}
 		}
 	}
@@ -188,4 +197,14 @@ double GetILLLRandomNumber() {
 		x = ((double)std::rand() / (RAND_MAX));
 	}
 	return x;
+}
+
+QSMatrix<double> GetILLLRandomizedMatrix(const size_t m, const size_t n) {
+	QSMatrix<double> result = QSMatrix<double>(m, n, 0);
+	for (size_t i = 0; i < m; i++) {
+		for (size_t j = 0; j < n; j++) {
+			result(i, j) = GetILLLRandomNumber();
+		}
+	}
+	return result;
 }
