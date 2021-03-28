@@ -1,11 +1,15 @@
+import os, sys
 import numpy as np
 from matplotlib import pyplot as plt
 
 from Util import JSONSerializer
 
-file1 = "C:\\Users\\jinge\\Downloads\\freqs.json"
-file2 = "C:\\Users\\jinge\\Downloads\\freqs_nonrepeated.json"
-file3 = "C:\\Users\\jinge\\Downloads\\z.json"
+app_path = os.path.dirname(os.path.realpath('ProjectBSPlots.py'))
+path_to_data = os.path.join(app_path, '..', 'ProjectBosmaSmeets', 'debug')
+
+file1 = os.path.join(path_to_data, 'freqs.json')
+file2 = os.path.join(path_to_data, 'freqs_nonrepeated.json')
+file3 = os.path.join(path_to_data, 'F.json')
 
 print('Deserializing ' + file1)
 json1 = JSONSerializer.DeserializeJSON(file1)
@@ -21,7 +25,7 @@ fvec = json3['v']
 
 print('Plotting data...')
 
-ms = 3
+ms = 1
 plt.plot(zvec,freqs,'go', markersize=ms)
 plt.plot(zvec,freqs_nonrepeated,'bo', markersize=ms)
 plt.plot(zvec,fvec,'ro', markersize=ms)
