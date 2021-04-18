@@ -76,7 +76,7 @@ int main(int argc, char** argv)
 		return EXIT_FAILURE;
 	}
 	catch (IncorrectDimensionException* idEx) {
-		std::cout << "Errors occured while running LLL - " << idEx->getMessage() << " - Exit failure." << std::endl;
+		std::cout << "Errors occured while running ILLL - " << idEx->getMessage() << " - Exit failure." << std::endl;
 		return EXIT_FAILURE;
 	}
 

@@ -8,7 +8,7 @@ namespace BSPlotDirichletData {
 	std::vector<double> DiscritizeInterval(const double& start, const double& end, const size_t& N);
 
 	// Get a vector that represents the Dirichlet distribution for Optimal CF over a given sequence of z values.
-	std::vector<double> GetOptimalCFData(std::vector<double> Z_seq);
+	std::vector<double> GetOptimalCFData(const std::vector<double>& Z_seq);
 
 	// Get the Dirichlet data for fixed m, n, and d. Returns a matrix where Row 0 is the nonfiltered data, and Row 1 filters duplicates. Can throw invalid_argument or incorrectdimensionexception.
 	QSMatrix<double> GetSinglePlotDirichletData(const size_t& m, const size_t& n, const double& d, const size_t& iterations);

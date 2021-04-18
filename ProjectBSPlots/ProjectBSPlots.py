@@ -39,11 +39,12 @@ if show_optimalCF :
     legend_arr.append('Optimal CF')
 
 for i in range(1, len(nondup_data)) :
-    legend_arr.append('m = %d, n = %d, d = %d' % (M[i - 1], N[i - 1], D[i - 1]))
-    plt.plot(nondup_data[0], nondup_data[i], 'go', markersize=ms, marker= i - 1)
+    k = i - 1
+    legend_arr.append('m = %d, n = %d, d = %d' % (M[k], N[k], D[k]))
+    plt.plot(nondup_data[0], nondup_data[i], 'go', markersize=ms, marker=k)
 
     if allow_dups :
-        plt.plot(dup_data[0], dup_data[i], 'bo', markersize=ms, marker= i - 1)
+        plt.plot(dup_data[0], dup_data[i], 'bo', markersize=ms, marker=k)
 
 
 plt.legend(legend_arr)

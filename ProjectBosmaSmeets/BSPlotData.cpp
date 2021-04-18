@@ -12,17 +12,20 @@ std::vector<double> BSPlotDirichletData::DiscritizeInterval(const double& start,
 	return x;
 }
 
-double SearchVectorDist(std::vector<double> vec, double value) {
-	size_t count = 0;
+double SearchVectorDist(const std::vector<double>& vec, const double& value) {
+	size_t total_dir = 0, non_zero_count = 0;
 	for (size_t i = 0; i < vec.size(); i++) {
-		if (vec[i] <= value) {
-			count++;
+		if (vec[i] != 0) {
+			if (vec[i] <= value) {
+				total_dir++;
+			}
+			non_zero_count++;
 		}
 	}
-	return (double)count / vec.size();
+	return (double)total_dir / non_zero_count;
 }
 
-double F(double z) {
+double F(const double& z) {
 	double a = 1.0 / sqrt(5);
 
 	if (z >= 0.5) {
@@ -41,8 +44,8 @@ double F(double z) {
 
 }
 
-std::vector<double> BSPlotDirichletData::GetOptimalCFData(std::vector<double> Z_seq) {
-	std::vector<double> f_vector(Z_seq.size(), 0);
+std::vector<double> BSPlotDirichletData::GetOptimalCFData(const std::vector<double>& Z_seq) {
+	std::vector<double> f_vector(Z_seq.size());
 	for (size_t k = 0; k < Z_seq.size(); k++) {
 		f_vector[k] = F(Z_seq[k]);
 	}
@@ -59,7 +62,7 @@ double GetILLLRandomNumber() {
 }
 
 //assumes the seed has already been set for the rng
-QSMatrix<double> GetILLLRandomizedMatrix(const size_t m, const size_t n) {
+QSMatrix<double> GetILLLRandomizedMatrix(const size_t& m, const size_t& n) {
 	QSMatrix<double> result = QSMatrix<double>(m, n, 0);
 	for (size_t i = 0; i < m; i++) {
 		for (size_t j = 0; j < n; j++) {
@@ -69,7 +72,7 @@ QSMatrix<double> GetILLLRandomizedMatrix(const size_t m, const size_t n) {
 	return result;
 }
 
-QSMatrix<double> BSPlotDirichletData::GetSinglePlotDirichletData(const size_t& m, const size_t& n, const double& d, const size_t& iterations) throw (IncorrectDimensionException*) {
+QSMatrix<double> BSPlotDirichletData::GetSinglePlotDirichletData(const size_t& m, const size_t& n, const double& d, const size_t& iterations) {
 	std::srand(std::time(nullptr)); // use current time as seed for random generator
 
 	size_t N = iterations;
