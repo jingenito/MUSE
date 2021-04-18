@@ -51,6 +51,9 @@
     <ClInclude Include="SimultaneousDiophantine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ManagedCodePort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -72,6 +75,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SimultaneousDiophantine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ManagedCodePort.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
