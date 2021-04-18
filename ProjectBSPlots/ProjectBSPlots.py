@@ -1,4 +1,5 @@
-import os, sys
+import os
+import sys
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -7,40 +8,43 @@ from Util import JSONSerializer
 app_path = os.path.dirname(os.path.realpath('ProjectBSPlots.py'))
 path_to_data = os.path.join(app_path, '..', 'ProjectBosmaSmeets', 'debug')
 
-file1 = os.path.join(path_to_data, 'freqs.json')
-file2 = os.path.join(path_to_data, 'freqs_nonrepeated.json')
-file3 = os.path.join(path_to_data, 'F.json')
+config_filename = os.path.join(path_to_data, 'bsplotsconfig.json')
+data_filename = os.path.join(path_to_data, 'bsplotsdata.json')
 
-print('Deserializing ' + file1)
-json1 = JSONSerializer.DeserializeJSON(file1)
-print('Deserializing ' + file2)
-json2 = JSONSerializer.DeserializeJSON(file2)
-print('Deserializing ' + file3)
-json3 = JSONSerializer.DeserializeJSON(file3)
+print('Reading saved configuration and data...')
 
-zvec = json1['z']
-freqs = json1['v']
-freqs_nonrepeated = json2['v']
-fvec = json3['v']
+config = JSONSerializer.DeserializeJSON(config_filename)
+all_data = JSONSerializer.DeserializeJSON(data_filename)
+
+M = config['M']
+N = config['N']
+D = config['D']
+show_optimalCF = config['show_optimalCF']
+allow_dups = config['allow_duplicates']
+
+if len(D) == 1 :
+    D = [D[0]] * (len(M))
+
+optimal_cf_data = all_data['Optimal_CF'] if show_optimalCF else []
+dup_data = all_data['Dup_Data'] if allow_dups else []
+nondup_data = all_data['Nondup_Data']
 
 print('Plotting data...')
 
-ms = 1
-plt.plot(zvec,freqs,'go', markersize=ms)
-plt.plot(zvec,freqs_nonrepeated,'bo', markersize=ms)
-plt.plot(zvec,fvec,'ro', markersize=ms)
-plt.legend(['theta with duplicates','theta without duplicates','optimal CF'])
+legend_arr = []
+z_vector = nondup_data[0]
+ms = 3
+if show_optimalCF :
+    plt.plot(optimal_cf_data[0], optimal_cf_data[1], 'ro', markersize=ms)
+    legend_arr.append('Optimal CF')
+
+for i in range(1, len(nondup_data)) :
+    legend_arr.append('m = %d, n = %d, d = %d' % (M[i - 1], N[i - 1], D[i - 1]))
+    plt.plot(nondup_data[0], nondup_data[i], 'go', markersize=ms, marker= i - 1)
+
+    if allow_dups :
+        plt.plot(dup_data[0], dup_data[i], 'bo', markersize=ms, marker= i - 1)
+
+
+plt.legend(legend_arr)
 plt.show()
-
-#file_data = []
-#for i in range(len(zvec)) :
-#    if zvec[i] != 0 :
-#        file_data.append(str(zvec[i]) + ' ' + str(fvec[i]) + ' ' + str(freqs[i]) + ' ' + str(freqs_nonrepeated[i]) + '\n')
-
-#new_filename = 'C:\\Users\\jinge\\Downloads\\data.txt'
-#print('Saving data to ' + new_filename)
-
-#new_file = open(new_filename, 'w') 
-#new_file.writelines(file_data)
-
-#print('Done.')
