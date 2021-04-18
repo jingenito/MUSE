@@ -1,10 +1,23 @@
 #include "pch.h"
 #include "StringParsing.h"
+#include <sstream>
 
 inline bool CPPMathLibrary::StringParsing::IsNumeric(const std::string& s)
 {
 	return !s.empty() && find_if(s.begin(),
 		s.end(), [](unsigned char c) { return !isdigit(c); }) == s.end();
+}
+
+std::vector<int> CPPMathLibrary::StringParsing::SplitNumericString(const std::string& s) {
+	std::vector<int> vect;
+	std::stringstream ss(s);
+
+	for (int i; ss >> i;) {
+		vect.push_back(i);
+		if (ss.peek() == ',')
+			ss.ignore();
+	}
+	return vect;
 }
 
 double CPPMathLibrary::StringParsing::TryParseNumFromArgs(std::string s) {

@@ -7,6 +7,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace CPPMathLibrary {
 
@@ -18,6 +19,9 @@ namespace CPPMathLibrary {
 
 		// Returns a boolean indicating whether or not the string contains only numeric characters
 		__declspec(dllexport) inline bool IsNumeric(const std::string& s);
+
+		// Split a string of integer values into a vector of integers
+		__declspec(dllexport) std::vector<int> SplitNumericString(const std::string& s);
 
 		// Attempts to parse the string into either a number, or a recognized constant.
 		__declspec(dllexport) double TryParseNumFromArgs(std::string s);
