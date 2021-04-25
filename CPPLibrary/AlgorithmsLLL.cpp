@@ -6,8 +6,8 @@ void CPPMathLibrary::LLL::_reduce(QSMatrix<double>& y, QSMatrix<double>& mu, std
 	if (k >= mu.get_rows() || l >= mu.get_cols()) { throw new IncorrectDimensionException("Index out of range"); }
 
 	try {
-		if (abs(mu(k, l)) > 0.5) {
-			double nearestInt = int(round(mu(k, l)));
+		if (std::abs(mu(k, l)) > 0.5) {
+			double nearestInt = int(std::round(mu(k, l)));
 
 			y.setRowVector<double>(y.getRowVector<double>(k) - (nearestInt * y.getRowVector<double>(l)), k);
 			C.setRowVector<int>(C.getRowVector<int>(k) - ((int)nearestInt * C.getRowVector<int>(l)), k);

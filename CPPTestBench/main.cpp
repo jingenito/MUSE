@@ -289,7 +289,7 @@ void IteratedLLLTest() {
 		preValues = GetILLLRandomizedMatrix(m, n);
 		std::cout << "Input Matrix:\n" << preValues << std::endl;
 
-		std::vector< QSMatrix<int> > result = IteratedLLL_Dyadic(preValues, alpha, epsilon, qmax, M);
+		std::vector< QSMatrix<double> > result = IteratedLLL_Dyadic(preValues, alpha, epsilon, qmax, M);
 		for (size_t k = 0; k < result.size(); k++) {
 			std::cout << "Result " << k + 1 << ":\n" << result[k] << std::endl;
 		}

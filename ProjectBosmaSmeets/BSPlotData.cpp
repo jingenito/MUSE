@@ -3,7 +3,7 @@
 #include <nlohmann/json.hpp>
 
 std::vector<double> BSPlotDirichletData::DiscritizeInterval(const double& start, const double& end, const size_t& N) {
-	double delta = abs(start - end) / (N - 1);
+	double delta = std::abs(start - end) / (N - 1);
 	std::vector<double> x(N, start);
 	for (size_t i = 1; i < N - 1; i++) {
 		x[i] = x[i - 1] + delta;
@@ -26,17 +26,17 @@ double SearchVectorDist(const std::vector<double>& vec, const double& value) {
 }
 
 double F(const double& z) {
-	double a = 1.0 / sqrt(5);
+	double a = 1.0 / std::sqrt(5);
 
 	if (z >= 0.5) {
 		return 1;
 	}
 	else if (z >= a) {
-		double s = sqrt(1.0 - (4.0 * z * z));
-		return (1.0 / log(CPPMathLibrary::StringParsing::phi)) * (s + log(CPPMathLibrary::StringParsing::phi * ((1.0 - s) / (2.0 * z))));
+		double s = std::sqrt(1.0 - (4.0 * z * z));
+		return (1.0 / std::log(CPPMathLibrary::StringParsing::phi)) * (s + std::log(CPPMathLibrary::StringParsing::phi * ((1.0 - s) / (2.0 * z))));
 	}
 	else if (z >= 0) {
-		return z / log(CPPMathLibrary::StringParsing::phi);
+		return z / std::log(CPPMathLibrary::StringParsing::phi);
 	}
 	else {
 		return 0; //continuing the end point
@@ -62,8 +62,8 @@ double GetILLLRandomNumber() {
 }
 
 //assumes the seed has already been set for the rng
-QSMatrix<double> GetILLLRandomizedMatrix(const size_t& m, const size_t& n) {
-	QSMatrix<double> result = QSMatrix<double>(m, n, 0);
+QSMatrix<double> GetILLLRandomizedMatrix(const size_t& m, const size_t& n, const size_t& format_precision) {
+	QSMatrix<double> result(m, n, format_precision, 0.0);
 	for (size_t i = 0; i < m; i++) {
 		for (size_t j = 0; j < n; j++) {
 			result(i, j) = GetILLLRandomNumber();
@@ -84,23 +84,27 @@ QSMatrix<double> BSPlotDirichletData::GetSinglePlotDirichletData(const size_t& m
 
 	//values taken from constraints in the Bosma Smeets paper
 	size_t M = 0;
-	double val = (pow(nm, 2) / m) - ((double)nm / m * log(epsilon));
-	M = (size_t)ceil(val) + 30;
-	size_t qmax = pow(2, M) - 1;
-	size_t k_prime = (size_t)ceil((-1.0 * (nm - 1) * nm) / (4.0 * n) + (m * log(qmax) / (log(2) * n)));
+	double val = (std::pow(nm, 2) / m) - ((double)nm / m * std::log(epsilon));
+	M = (size_t)std::ceil(val) + 30;
+	size_t qmax = std::pow(2, M) - 1;
+	size_t k_prime = (size_t)std::ceil((-1.0 * (nm - 1) * nm) / (4.0 * n) + (m * std::log(qmax) / (std::log(2) * n)));
 
 	std::vector<double> dir_coefs; //all dirichlet coefficients
 	std::vector<double> dir_coefs_nonrepeated; //this name is misleading as it refers to only non repeated dir coeffs for a fixed i
+	std::vector<double> current_dir_coeffs; //holds the dir coeffs for the current approximation matrix
 
 	for (size_t i = 0; i < N; i++) {
-		preValues = GetILLLRandomizedMatrix(m, n);
+		preValues = GetILLLRandomizedMatrix(m, n, 10);
+		std::cout << "Approx Matrix:\n" << preValues << std::endl;
 
-		std::vector< QSMatrix<int> > result = CPPMathLibrary::SimultaneousDiophantine::IteratedLLL_Dyadic(preValues, alpha, epsilon, qmax, M);
-		std::vector<double> current_dir_coeffs(result.size(), 0);
+		std::vector< QSMatrix<double> > result = CPPMathLibrary::SimultaneousDiophantine::IteratedLLL_Dyadic(preValues, alpha, epsilon, qmax, M);
+		current_dir_coeffs.clear(); current_dir_coeffs.resize(k_prime, 0.0);
 
 		for (size_t k = 0; k < result.size(); k++) {
+			std::cout << "LLL Matrix " << k + 1 << ":\n" << result[k] << std::endl;
 			double dir_coef = CPPMathLibrary::SimultaneousDiophantine::DirichletCoefficient(result[k], preValues);
 			current_dir_coeffs[k] = dir_coef;
+			std::cout << std::fixed << std::setprecision(16) << "Dirichlet Coeff " << k + 1 << ": " << dir_coef << std::endl << std::endl;
 		}
 
 		dir_coefs.insert(
@@ -122,7 +126,7 @@ QSMatrix<double> BSPlotDirichletData::GetSinglePlotDirichletData(const size_t& m
 	}
 
 	//return a matrix representation of the data
-	QSMatrix<double> Q(2, dir_coefs.size(), 0);
+	QSMatrix<double> Q(2, k_prime * N, 0);
 	Q.setRowVector(dir_coefs, 0);
 	Q.setRowVector(dir_coefs_nonrepeated, 1);
 	return Q;

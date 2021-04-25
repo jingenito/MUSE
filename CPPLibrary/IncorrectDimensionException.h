@@ -14,9 +14,7 @@ private:
 	std::string _message;
 	std::exception _inner;
 public:
-	IncorrectDimensionException() {
-
-	}
+	IncorrectDimensionException() {}
 
 	IncorrectDimensionException(std::string message) {
 		this->_message = message;
@@ -27,7 +25,9 @@ public:
 		this->_inner = inner;
 	}
 
+	inline void setMessage(std::string message) { this->_message = message; }
 	inline std::string getMessage() { return this->_message; }
 
 	inline std::exception getInnerException() { return this->_inner; }
+	inline void setInnerException(std::exception inner) { this->_inner = inner; }
 };

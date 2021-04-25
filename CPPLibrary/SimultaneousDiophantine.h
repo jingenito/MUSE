@@ -21,10 +21,10 @@ namespace CPPMathLibrary {
 		__declspec(dllexport) QSMatrix<int> SameDivisorFromRealVector(const std::vector<double>& x, const double& alpha, const double& epsilon, const size_t& quotientCount) throw (IncorrectDimensionException*);
 
 		// Run a dyadic version of iterated LLL on the given matrix of real numbers with the specified upperbound qmax > 1, will automatically rationalize the matrix values.
-		__declspec(dllexport) std::vector< QSMatrix<int> > IteratedLLL_Dyadic(const QSMatrix<double>& matrix, const double& alpha, const double& epsilon, const size_t& qmax, const size_t& M);
+		__declspec(dllexport) std::vector< QSMatrix<double> > IteratedLLL_Dyadic(const QSMatrix<double>& matrix, const double& alpha, const double& epsilon, const size_t& qmax, const size_t& M);
 
 		// Calculate the Dirichlet Coefficient of the approximation matrix compared to the real vaues
-		__declspec(dllexport) double DirichletCoefficient(const QSMatrix<double>& matrix, const QSMatrix<double>& real_values);
+		__declspec(dllexport) double DirichletCoefficient(const QSMatrix<double>& matrix_LLL, const QSMatrix<double>& real_values);
 
 	}
 

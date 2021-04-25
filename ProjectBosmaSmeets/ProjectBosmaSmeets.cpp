@@ -48,7 +48,6 @@ int main(int argc, char** argv)
 		std::cin >> include_optimalCF;
 		std::cout << "Allow duplicates (0 or 1): ";
 		std::cin >> allow_duplicates;
-
 		try {
 			config = JSONHelpers::WriteBSPlotsConfig(M, N, D, iterations, Z_length, include_optimalCF == 1, allow_duplicates == 1);
 		}
@@ -76,7 +75,7 @@ int main(int argc, char** argv)
 		return EXIT_FAILURE;
 	}
 	catch (IncorrectDimensionException* idEx) {
-		std::cout << "Errors occured while running ILLL - " << idEx->getMessage() << " - Exit failure." << std::endl;
+		std::cout << "Errors occured while while obtaining Dirichlet data - " << idEx->getMessage() << " - Exit failure." << std::endl;
 		return EXIT_FAILURE;
 	}
 
