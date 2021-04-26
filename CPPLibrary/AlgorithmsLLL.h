@@ -31,8 +31,8 @@ namespace CPPMathLibrary {
 
 			QSMatrix<double> result(matrix);
 			//skipping over the first row so the intialization has to happen before the loop
-			QSMatrix<double> mu(rows, cols, 0);
-			std::vector<double> gamma(rows, 0);
+			QSMatrix<double> mu(rows, cols, 0.0);
+			std::vector<double> gamma(rows, 0.0);
 			mu(0, 0) = 1;
 			gamma[0] = result.getRowVector<double>(0) * result.getRowVector<double>(0);
 
@@ -46,7 +46,7 @@ namespace CPPMathLibrary {
 					}
 					mu(i, i) = 1; //the projection will always be 1 on the main diagonal - vector projected onto itself 
 					vec = result.getRowVector<double>(i) - vec;
-					result.setRowVector(vec, i);
+					result.setRowVector<double>(vec, i);
 					gamma[i] = vec * vec;
 				}
 			}
@@ -58,24 +58,24 @@ namespace CPPMathLibrary {
 		}
 
 		// This method should not be called outside of LLL since it has no meaning outside of LLL
-		__declspec(dllexport) void _reduce(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<int>& C, const size_t& k, const size_t& l) throw (IncorrectDimensionException*);
+		void _reduce(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<double>& C, const size_t& k, const size_t& l) throw (IncorrectDimensionException*);
 
 		// This method should not be called outside of LLL since it has no meaning outside of LLL
-		__declspec(dllexport) void _exchange(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<int>& C, const size_t& k);
+		void _exchange(QSMatrix<double>& y, QSMatrix<double>& mu, std::vector<double>& gamma, QSMatrix<double>& C, const size_t& k);
 
 		// Indeces for the tuple returned by LLL
 		enum LLLType { LLL = 0, C = 1 };
 
 		// Implements the LLL algorithm to find an alpha reduced basis. Input matrix must be square.
 		template <typename T>
-		__declspec(dllexport) std::tuple< QSMatrix<double>, QSMatrix<int> > ReduceBasis_LLL(const QSMatrix<T>& matrix, const double& alpha) throw (IncorrectDimensionException*) {
+		__declspec(dllexport) std::tuple< QSMatrix<double>, QSMatrix<double> > ReduceBasis_LLL(const QSMatrix<T>& matrix, const double& alpha) throw (IncorrectDimensionException*) {
 			size_t rows = matrix.get_rows();
 			size_t cols = matrix.get_cols();
 			if (rows != cols) { throw new IncorrectDimensionException("Matrix is not a square matrix"); }
 
 			try {
 				QSMatrix<double> y(matrix);
-				QSMatrix<int> C(QSMatrix<int>::GetIdentityMatrix(rows, cols));
+				QSMatrix<double> C(QSMatrix<double>::GetIdentityMatrix(rows, cols));
 				auto gso = GramSchmidtOrthogonalization<T>(y);
 				QSMatrix<double> y_star = std::get<GSOType::GSO>(gso);
 				QSMatrix<double> mu = std::get<GSOType::Mu>(gso);
