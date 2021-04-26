@@ -51,7 +51,7 @@ public:
 		for (size_t i = 0; i < r; i++) {
 			mat[i].resize(c);
 			for (size_t j = 0; j < c; j++) {
-				mat[i][j] = rhs(i, j);
+				mat[i][j] = static_cast<T>(rhs(i, j));
 			}
 		}
 		rows = r;
@@ -59,7 +59,7 @@ public:
 		precision = rhs.get_precision();
 	}
 
-	// Modified by Joe I
+	// Constructor that enforces the type of T using static_cast<T>. TIn must be castable to T.
 	template <typename TIn>
 	QSMatrix(const QSMatrix<TIn>& rhs) {
 		size_t r = rhs.get_rows();
@@ -68,7 +68,7 @@ public:
 		for (size_t i = 0; i < r; i++) {
 			mat[i].resize(c);
 			for (size_t j = 0; j < c; j++) {
-				mat[i][j] = rhs(i, j);
+				mat[i][j] = static_cast<T>(rhs(i, j));
 			}
 		}
 		rows = r;
@@ -76,7 +76,6 @@ public:
 		precision = rhs.get_precision();
 	}
 
-	// Added by Joe I
 	QSMatrix(const T**& arr, const size_t& _rows, const size_t& _cols) {
 		precision = QSMATRIX_DEFAULT_PRECISION;
 		rows = _rows;
@@ -113,6 +112,29 @@ public:
 		cols = _cols;
 	}
 
+	QSMatrix(const std::vector<T>& vec) {
+		size_t c = vec.size();
+		mat.resize(1);
+		mat[0].resize(c);
+		for (size_t i = 0; i < c; i++) {
+			mat[0][i] = vec[i];
+		}
+		precision = QSMATRIX_DEFAULT_PRECISION;
+		rows = 1;
+		cols = c;
+	}
+
+	QSMatrix(const std::vector<T>& vec, size_t _precision) {
+		size_t c = vec.size();
+		mat.resize(1);
+		mat[0].resize(c);
+		for (size_t i = 0; i < c; i++) {
+			mat[0][i] = vec[i];
+		}
+		precision = _precision;
+		rows = 1;
+		cols = c;
+	}
 
 	// Get/Set methods ========================================================================================================
 
@@ -158,6 +180,25 @@ public:
 			this->mat[i][j] = vec[j];
 	}
 
+	// Get Column Vector at specified index
+	template <typename TOut>
+	inline QSMatrix<TOut> getColumnVector(const size_t& i) const {
+		if (i >= this->cols) { throw new IncorrectDimensionException("Index Out of Range"); }
+		QSMatrix<TOut> r(this->rows, 1, this->precision, 0.0);
+		for (size_t j = 0; j < this->rows; j++)
+			r(j, 0) = static_cast<TOut>(this->mat[j][i]);
+		return r;
+	}
+
+	// Set Column Vector at specified index.
+	template <typename Tin>
+	inline void setColumnVector(const QSMatrix<Tin>& vec, const size_t& i) {
+		if (vec.get_rows() > this->rows) { throw new IncorrectDimensionException("Vector length must be less than or equal to the amound of rows."); }
+		if (i >= this->cols) { throw new IncorrectDimensionException("Index Out of Range"); }
+		for (size_t j = 0; j < vec.get_rows(); j++)
+			this->mat[j][i] = vec(j, 0);
+	}
+
 	// Get the Column Vector at the specified index as a Row Vector.
 	template <typename TOut>
 	inline std::vector<TOut> getColumnVectorAsRow(const size_t& j) const {
@@ -177,11 +218,11 @@ public:
 			this->mat[i][j] = vec[i];
 	}
 
-	inline static QSMatrix<int> GetIdentityMatrix(const size_t& m, const size_t& n) {
-		QSMatrix<int> I(m, n, 0);
+	inline static QSMatrix<T> GetIdentityMatrix(const size_t& m, const size_t& n) {
+		QSMatrix<T> I(m, n, 0.0);
 		for (size_t k = 0; k < m; k++)
 			for (size_t l = 0; l < n; l++)
-				I(k, l) = k == l ? 1 : 0;
+				I(k, l) = k == l ? 1.0 : 0.0;
 		return I;
 	}
 	// ==========================================================================================================================
@@ -310,8 +351,13 @@ public:
 		return *this;
 	}
 
+	// Converts the current instance into its Transpose.
+	void Transpose() {
+		(*this) = (*this).get_transpose();
+	}
+
 	// Computes the transpose of the current instance.
-	QSMatrix<T> transpose() const {
+	QSMatrix<T> get_transpose() const {
 		QSMatrix<T> result(cols, rows, precision, 0.0);
 
 		for (size_t i = 0; i < cols; i++) {
@@ -325,7 +371,7 @@ public:
 
 	// Matrix/scalar operations                                                                                                                                                                                                     
 	QSMatrix<T> operator+(const T& rhs) const {
-		QSMatrix<T> result(rows, cols, precision > rhs.get_precision() ? precision : rhs.get_precision(), 0.0);
+		QSMatrix<T> result(rows, cols, precision, 0.0);
 
 		for (size_t i = 0; i < rows; i++) {
 			for (size_t j = 0; j < cols; j++) {
@@ -337,7 +383,7 @@ public:
 	}
 
 	QSMatrix<T> operator-(const T& rhs) const {
-		QSMatrix<T> result(rows, cols, precision > rhs.get_precision() ? precision : rhs.get_precision(), 0.0);
+		QSMatrix<T> result(rows, cols, precision, 0.0);
 
 		for (size_t i = 0; i < rows; i++) {
 			for (size_t j = 0; j < cols; j++) {
@@ -349,7 +395,7 @@ public:
 	}
 
 	QSMatrix<T> operator*(const T& rhs) const {
-		QSMatrix<T> result(rows, cols, precision > rhs.get_precision() ? precision : rhs.get_precision(), 0.0);
+		QSMatrix<T> result(rows, cols, precision, 0.0);
 
 		for (size_t i = 0; i < rows; i++) {
 			for (size_t j = 0; j < cols; j++) {
@@ -361,7 +407,7 @@ public:
 	}
 
 	QSMatrix<T> operator/(const T& rhs) const {
-		QSMatrix<T> result(rows, cols, precision > rhs.get_precision() ? precision : rhs.get_precision(), 0.0);
+		QSMatrix<T> result(rows, cols, precision, 0.0);
 
 		for (size_t i = 0; i < rows; i++) {
 			for (size_t j = 0; j < cols; j++) {
@@ -377,7 +423,7 @@ public:
 	// planning on adding column vector support soon - JI 4/24/21
 
 	// Returns the main diagonal as a row vector
-	std::vector<T> diag_vec() const {
+	std::vector<T> get_MainDiag() const {
 		std::vector<T> result(this->rows, 0.0);
 
 		for (size_t i = 0; i < this->rows; i++) {
@@ -408,11 +454,11 @@ public:
 		size_t rows = rhs.get_rows();
 		size_t cols = rhs.get_cols();
 		if (lhs.size() != rows) { throw new IncorrectDimensionException("Dimension of the left side must equal the number of rows"); }
-		std::vector<T> result(cols, 0);
+		std::vector<T> result(cols, 0.0);
 
 		for (size_t j = 0; j < cols; j++) {
 			for (size_t i = 0; i < rows; i++) {
-				result[j] += lhs[i] * rhs(i, j);
+				result[j] += static_cast<T>(lhs[i]) * static_cast<T>(rhs(i, j));
 			}
 		}
 

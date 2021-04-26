@@ -26,21 +26,23 @@ QSMatrix<double> ABS(const QSMatrix<double>& M) {
 	return Y;
 }
 
-std::vector<double> ROUND(const std::vector<double>& V) {
-	std::vector<double> Y(V.size());
-	for (size_t i = 0; i < V.size(); i++) {
-		Y[i] = std::round(V[i]);
+QSMatrix<double> ROUND(const QSMatrix<double>& M) {
+	QSMatrix<double> Y(M);
+	for (size_t i = 0; i < M.get_rows(); i++) {
+		for (size_t j = 0; j < M.get_cols(); j++) {
+			Y(i, j) = std::round(M(i, j));
+		}
 	}
 	return Y;
 }
 
-QSMatrix<int> CPPMathLibrary::SimultaneousDiophantine::SameDivisor(const std::vector<double>& x, const double& alpha, const double& epsilon) throw (IncorrectDimensionException*) {
+QSMatrix<double> CPPMathLibrary::SimultaneousDiophantine::SameDivisor(const std::vector<double>& x, const double& alpha, const double& epsilon) throw (IncorrectDimensionException*) {
 	size_t n = x.size();
 	size_t n1 = n + 1;
 
 	double e = epsilon;
 	double beta = 4 / ((4 * alpha) - 1);
-	double beta_e = pow(beta, -1 * (double)n * n1 / 4) * pow(e, n1);
+	double beta_e = std::pow(beta, -1 * (double)n * n1 / 4) * std::pow(e, n1);
 
 	QSMatrix<double> X(n1, n1, 0); //initialize an (n+1)x(n+1) matrix to all 0s
 	// initialize the rest of the matrix
@@ -56,8 +58,8 @@ QSMatrix<int> CPPMathLibrary::SimultaneousDiophantine::SameDivisor(const std::ve
 		}
 	}
 
-	QSMatrix<double> Y(n1, n1, 0);
-	QSMatrix<int> C(n1, n1, 0);
+	QSMatrix<double> Y(n1, n1, 0.0);
+	QSMatrix<double> C(n1, n1, 0.0);
 	try {
 		auto result = LLL::ReduceBasis_LLL<double>(X, alpha);
 		Y = std::get<LLL::LLLType::LLL>(result);
@@ -70,7 +72,7 @@ QSMatrix<int> CPPMathLibrary::SimultaneousDiophantine::SameDivisor(const std::ve
 	return C;
 }
 
-QSMatrix<int> CPPMathLibrary::SimultaneousDiophantine::SameDivisorFromRealVector(const std::vector<double>& x, const double& alpha, const double& epsilon, const size_t& quotientCount) throw (IncorrectDimensionException*) {
+QSMatrix<double> CPPMathLibrary::SimultaneousDiophantine::SameDivisorFromRealVector(const std::vector<double>& x, const double& alpha, const double& epsilon, const size_t& quotientCount) throw (IncorrectDimensionException*) {
 	size_t count = 10, opcount = 0;
 	int* qs; //initializing once 
 	std::vector<double> rats;
@@ -121,14 +123,14 @@ std::vector< QSMatrix<double> > CPPMathLibrary::SimultaneousDiophantine::Iterate
 	std::vector<double> cHats; // need to keep track of cHat at every iteration since they will not be saved in the matrix with this version
 	cHats.push_back(c);
 
-	QSMatrix<double> newMatrix(m, n, 0);
+	QSMatrix<double> newMatrix(m, n, 0.0);
 	for (size_t i = 0; i < m; i++) {
 		for (size_t j = 0; j < n; j++) {
 			newMatrix(i, j) = std::ceil(matrix(i, j) * divisor) / divisor;
 		}
 	}
 
-	QSMatrix<double> B(nm, nm, 0); //initialize an (n+m)x(n+m) matrix to all 0s
+	QSMatrix<double> B(nm, nm, 0.0); //initialize an (n+m)x(n+m) matrix to all 0s
 	// c block
 	for (size_t i = 0; i < m; i++) {
 		for (size_t j = 0; j < m; j++) {
@@ -161,17 +163,17 @@ std::vector< QSMatrix<double> > CPPMathLibrary::SimultaneousDiophantine::Iterate
 		}
 	}
 
-	QSMatrix<int> C(nm, nm, 0);
+	QSMatrix<double> C(nm, nm, 0.0);
 	double d = 1.0 / epsilon;
 	int k_prime = (int)std::ceil(((-1.0 * (nm - 1) * nm) / (4.0 * n)) + (((double)m / n) * (std::log(qmax) / std::log(2))));
 	double tempVal = divisor * std::pow(d, -1.0 * (double)nm / m);
 
 	std::vector< QSMatrix<double> > outputVec;
-	std::vector<int> C_diag;
+	std::vector<double> C_diag;
 	std::vector<double> current_row;
-	QSMatrix<double> tempMat(m, n + 1, 0, 10); // will store the approximation before being added to the output vector
-	std::vector<double> q_vec(m, 0); // will store the current q vector to be inserted into tempMat
-	std::vector<double> temp_row(n + 1, 0); // will store the current row being processed for tempMat
+	QSMatrix<double> tempMat(m, n + 1, matrix.get_precision(), 0.0); // will store the approximation before being added to the output vector
+	std::vector<double> q_vec(m, 0.0); // will store the current q vector to be inserted into tempMat
+	std::vector<double> temp_row(n + 1, 0.0); // will store the current row being processed for tempMat
 
 	for (int k = 0; k < k_prime; k++) {
 		try {
@@ -203,13 +205,13 @@ std::vector< QSMatrix<double> > CPPMathLibrary::SimultaneousDiophantine::Iterate
 				tempMat.setRowVector<double>(temp_row, j);
 
 				// multiply the first m columns of B by cHat[k] / cHat[k - 1]
-				std::vector<double> col = B.getColumnVectorAsRow<double>(i);
+				QSMatrix<double> col = B.getColumnVector<double>(i);
 				col = col * theRealVal;
-				B.setColumnVectorFromRow(col, i);
+				B.setColumnVector(col, i);
 			}
 
 			// extract the q values from the main diagonal of C - doing this after the loop so they dont get overwritten in tempMat when the row vectors get assigned
-			C_diag = C.diag_vec(); // the q values live in the main diagonal
+			C_diag = C.get_MainDiag(); // the q values live in the main diagonal
 			std::copy(C_diag.begin(), C_diag.end() - n, q_vec.begin());
 			tempMat.setColumnVectorFromRow(q_vec, 0); // insert the q values into the first column of the output matrix
 
@@ -233,14 +235,16 @@ double CPPMathLibrary::SimultaneousDiophantine::DirichletCoefficient(const QSMat
 	QSMatrix<double> LLL = ABS(matrix_LLL);
 	QSMatrix<double> A = ABS(real_values);
 
-	std::vector<double> q_vec = LLL.getColumnVectorAsRow<double>(0);
+	std::vector<double> q_vec = LLL.getColumnVectorAsRow<double>(0); // need an std vector to find max
 	double max_q = *std::max_element(q_vec.begin(), q_vec.end());
+	QSMatrix<double> q_dbls(q_vec);
 	
-	std::vector<double> result = q_vec * A;
+	QSMatrix<double> result = q_dbls * A;
 	std::cout << "Result Vec 1:\n" << result << std::endl;
-
 	result = ABS(result - ROUND(result)); // computes the distance to the nearest integer
-	double max_value = *std::max_element(result.begin(), result.end());
+
+	std::vector<double> lin_combs = result.getRowVector<double>(0);
+	double max_value = *std::max_element(lin_combs.begin(), lin_combs.end());
 
 	std::cout << "Result Vec 2:\n" << result << std::endl;
 
