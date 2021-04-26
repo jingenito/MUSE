@@ -81,8 +81,8 @@ __declspec(dllexport) inline T operator/(const std::vector<T>& lhs, const std::v
 
 // Magnitude of Vector - Using Euclidean Distance
 template <typename T>
-__declspec(dllexport) inline std::vector<T> get_magnitude(const std::vector<T>& vec) {
-	return sqrt(vec * vec);
+__declspec(dllexport) inline double get_magnitude(const std::vector<T>& vec) {
+	return std::sqrt(static_cast<double>(vec * vec));
 }
 
 // Print the Vector
