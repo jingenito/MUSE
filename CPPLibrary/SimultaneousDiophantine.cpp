@@ -240,13 +240,10 @@ double CPPMathLibrary::SimultaneousDiophantine::DirichletCoefficient(const QSMat
 	QSMatrix<double> q_dbls(q_vec);
 	
 	QSMatrix<double> result = q_dbls * A;
-	std::cout << "Result Vec 1:\n" << result << std::endl;
 	result = ABS(result - ROUND(result)); // computes the distance to the nearest integer
 
 	std::vector<double> lin_combs = result.getRowVector<double>(0);
 	double max_value = *std::max_element(lin_combs.begin(), lin_combs.end());
-
-	std::cout << "Result Vec 2:\n" << result << std::endl;
 
 	return std::pow(max_q, (double)m / n) * max_value;
 }
