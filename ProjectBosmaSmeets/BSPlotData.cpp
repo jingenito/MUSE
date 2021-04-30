@@ -1,6 +1,7 @@
 #include "BSPlotData.h"
 #include <algorithm>
 #include <nlohmann/json.hpp>
+#include <random>
 
 std::vector<double> BSPlotDirichletData::DiscritizeInterval(const double& start, const double& end, const size_t& N) {
 	double delta = std::abs(start - end) / (N - 1);
@@ -54,10 +55,20 @@ std::vector<double> BSPlotDirichletData::GetOptimalCFData(const std::vector<doub
 
 //assumes the seed has already been set for the rng
 double GetILLLRandomNumber() {
-	double x = ((double)std::rand() / (RAND_MAX)); //random number between 0 and 1
-	while (x <= 0.01 || x >= 0.99) {
-		x = ((double)std::rand() / (RAND_MAX));
-	}
+	// Use random_device to generate a seed for Mersenne twister engine.
+	std::random_device rd{};
+
+	// Use Mersenne twister engine to generate pseudo-random numbers.
+	std::mt19937 engine{ rd() };
+
+	// "Filter" MT engine's output to generate pseudo-random double values,
+	// **uniformly distributed** on the closed interval [0, 1].
+	// (Note that the range is [inclusive, inclusive].)
+	std::uniform_real_distribution<double> dist{ 0, 1 };
+
+	double x;
+	{ x = dist(engine);  }while (x == 0 || x == 1);
+
 	return x;
 }
 
@@ -73,8 +84,6 @@ QSMatrix<double> GetILLLRandomizedMatrix(const size_t& m, const size_t& n, const
 }
 
 QSMatrix<double> BSPlotDirichletData::GetSinglePlotDirichletData(const size_t& m, const size_t& n, const double& d, const size_t& iterations) {
-	std::srand(std::time(nullptr)); // use current time as seed for random generator
-
 	size_t N = iterations;
 	size_t nm = n + m; //for convenience
 	QSMatrix<double> preValues(m, n, 0);
@@ -83,9 +92,8 @@ QSMatrix<double> BSPlotDirichletData::GetSinglePlotDirichletData(const size_t& m
 	double alpha = 0.75;
 
 	//values taken from constraints in the Bosma Smeets paper
-	size_t M = 0;
 	double val = (std::pow(nm, 2) / m) - ((double)nm / m * std::log(epsilon));
-	M = (size_t)std::ceil(val) + 30;
+	size_t M = (size_t)std::ceil(val) + 30;
 	size_t qmax = std::pow(2, M) - 1;
 	size_t k_prime = (size_t)std::ceil((-1.0 * (nm - 1) * nm) / (4.0 * n) + (m * std::log(qmax) / (std::log(2) * n)));
 
@@ -95,16 +103,13 @@ QSMatrix<double> BSPlotDirichletData::GetSinglePlotDirichletData(const size_t& m
 
 	for (size_t i = 0; i < N; i++) {
 		preValues = GetILLLRandomizedMatrix(m, n, 10);
-		std::cout << "Approx Matrix:\n" << preValues << std::endl;
 
 		std::vector< QSMatrix<double> > result = CPPMathLibrary::SimultaneousDiophantine::IteratedLLL_Dyadic(preValues, alpha, epsilon, qmax, M);
 		current_dir_coeffs.clear(); current_dir_coeffs.resize(k_prime, 0.0);
 
 		for (size_t k = 0; k < result.size(); k++) {
-			std::cout << "LLL Matrix " << k + 1 << ":\n" << result[k] << std::endl;
 			double dir_coef = CPPMathLibrary::SimultaneousDiophantine::DirichletCoefficient(result[k], preValues);
 			current_dir_coeffs[k] = dir_coef;
-			std::cout << std::fixed << std::setprecision(16) << "Dirichlet Coeff " << k + 1 << ": " << dir_coef << std::endl << std::endl;
 		}
 
 		dir_coefs.insert(
