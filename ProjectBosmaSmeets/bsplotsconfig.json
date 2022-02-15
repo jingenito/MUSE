@@ -1,0 +1,15 @@
+{
+	"D": [
+		64
+	],
+	"M": [
+		1
+	],
+	"N": [
+		2
+	],
+	"Z_length": 100,
+	"allow_duplicates": true,
+	"iterations": 1,
+	"show_optimalCF": true
+}
