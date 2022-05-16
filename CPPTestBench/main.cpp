@@ -7,7 +7,8 @@
 
 // the order of bits in input string will be flipped to conform to human readability
 // since the bits will be flipped, the first test to run is the most signficant bit and the last test is the least significant bit
-const int ITERATED_LLL = 1;
+const int RANDOM_TEST = 1;
+const int ITERATED_LLL = RANDOM_TEST << 1;
 const int SIMULT_DIOPH_REALS = ITERATED_LLL << 1;
 const int SIMULT_DIOPH = SIMULT_DIOPH_REALS << 1;
 const int LLL = SIMULT_DIOPH << 1;
@@ -20,13 +21,15 @@ void LLLTest();
 void SimultaneousDiophantineTest();
 void SimultaneousDiophantineFromRealsTest();
 void IteratedLLLTest();
+void RandomTest();
 double GetILLLRandomNumber();
 QSMatrix<double> GetILLLRandomizedMatrix(const size_t, const size_t);
 
 int main(int argc, char** argv) {
 	std::cout << "CPPLibrary Test Bench" << std::endl << std::endl;
 
-	bool _run_cont_frac_test_ = true, _run_gso_test_ = true, _run_lll_test_ = true, _run_simult_dioph_test_ = true, _run_simult_dioph_reals_test_ = true, _run_iterated_lll_ = true;
+	bool _run_cont_frac_test_ = false, _run_gso_test_ = false, _run_lll_test_ = false, _run_simult_dioph_test_ = false,
+		_run_simult_dioph_reals_test_ = false, _run_iterated_lll_ = false, _run_random_test_ = true;
 
 	if (argc > 1) {
 		int input = std::stoi(argv[1], 0, 2);
@@ -37,9 +40,10 @@ int main(int argc, char** argv) {
 		_run_simult_dioph_test_ = (input & SIMULT_DIOPH) == SIMULT_DIOPH;
 		_run_simult_dioph_reals_test_ = (input & SIMULT_DIOPH_REALS) == SIMULT_DIOPH_REALS;
 		_run_iterated_lll_ = (input & ITERATED_LLL) == ITERATED_LLL;
+		_run_random_test_ = (input & RANDOM_TEST) == RANDOM_TEST;
 	}
 	if (argc == 1) {
-		std::cout << "No flags have been set... Running all tests..." << std::endl << std::endl;
+		std::cout << "No flags have been set... Running the random test..." << std::endl << std::endl;
 	}
 
 	if (_run_cont_frac_test_) {
@@ -64,6 +68,10 @@ int main(int argc, char** argv) {
 	}
 	if (_run_iterated_lll_) {
 		IteratedLLLTest();
+		std::cout << std::endl;
+	}
+	if (_run_random_test_) {
+		RandomTest();
 		std::cout << std::endl;
 	}
 
@@ -137,7 +145,7 @@ void GramSchmidtTest() {
 }
 
 void LLLTest() {
-	clock_t start, end;
+	/*clock_t start, end;
 	double duration;
 	using namespace CPPMathLibrary::LLL;
 
@@ -183,7 +191,7 @@ void LLLTest() {
 	std::cout << "Y:" << std::endl << Y << std::endl;
 	std::cout << "C:" << std::endl << C << std::endl;
 
-	std::cout << "Finished LLL Test." << std::endl;
+	std::cout << "Finished LLL Test." << std::endl;*/
 }
 
 void SimultaneousDiophantineTest() {
@@ -266,7 +274,7 @@ void SimultaneousDiophantineFromRealsTest() {
 }
 
 void IteratedLLLTest() {
-	using namespace CPPMathLibrary::SimultaneousDiophantine;
+	using namespace CPPMathLibrary;
 
 	clock_t start, end;
 	double duration;
@@ -289,7 +297,7 @@ void IteratedLLLTest() {
 		preValues = GetILLLRandomizedMatrix(m, n);
 		std::cout << "Input Matrix:\n" << preValues << std::endl;
 
-		std::vector< QSMatrix<double> > result = IteratedLLL_Dyadic(preValues, alpha, epsilon, qmax, M);
+		std::vector< QSMatrix<double> > result = SimultaneousDiophantine::IteratedLLL_Dyadic(preValues, alpha, epsilon, qmax, M);
 		for (size_t k = 0; k < result.size(); k++) {
 			std::cout << "Result " << k + 1 << ":\n" << result[k] << std::endl;
 		}
@@ -300,6 +308,27 @@ void IteratedLLLTest() {
 	}
 
 	std::cout << "Finished test." << std::endl;
+}
+
+void RandomTest() {
+	std::cout << "Starting Random Test!" << std::endl;
+	std::cout << "Testing the Prefix Evaluator" << std::endl;
+
+	std::cout << "Enter the prefix expression: " << std::endl;
+	std::string prefix_exp;
+	std::getline(std::cin, prefix_exp);
+	std::cout << "Entered Expression: " << prefix_exp << std::endl;
+
+	clock_t start, end;
+	double duration;
+
+	start = clock();
+	double answer = CPPMathLibrary::StringParsing::EvaluatePrefix(prefix_exp);
+	end = clock();
+	duration = ((double)end - (double)start) / (CLOCKS_PER_SEC / 1000);
+
+	std::cout << "Result: " << answer << std::endl;
+	std::cout << "Run Time: " << duration << " ms." << std::endl;
 }
 
 double GetILLLRandomNumber() {

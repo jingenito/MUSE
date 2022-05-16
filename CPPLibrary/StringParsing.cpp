@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "StringParsing.h"
 #include <sstream>
+#include <stack>
 
 inline bool CPPMathLibrary::StringParsing::IsNumeric(const std::string& s)
 {
@@ -106,9 +107,96 @@ double CPPMathLibrary::StringParsing::TryParseExpression(std::string s) {
 	double num = CPPMathLibrary::StringParsing::TryParseNumFromArgs(s);
 	if (num == 0.0) {
 		num = CPPMathLibrary::StringParsing::TryParseMathFromArgs(s);
-		if (num == 0.0 && CPPMathLibrary::StringParsing::IsNumeric(s)) {
+		if (num == 0.0) {
 			num = stod(s);
 		}
 	}
 	return num;
+}
+
+bool CPPMathLibrary::StringParsing::IsOperation(char c) {
+	return c == '+' || c == '-' || c == '*' || c == '/';
+}
+
+std::vector<std::string> CPPMathLibrary::StringParsing::SplitString(std::string s, std::string delimiter) {
+	std::vector<std::string> answer;
+	size_t pos = 0;
+	std::string token;
+	while ((pos = s.find(delimiter)) != std::string::npos) {
+		token = s.substr(0, pos);
+		answer.push_back(token);
+		s.erase(0, pos + delimiter.length());
+	}
+	answer.push_back(s); //need to add the last string
+	return answer;
+}
+
+double CPPMathLibrary::StringParsing::EvaluatePrefix(std::string exprsn)
+{
+	//implementation for Prefix Evaluation is found at geeksforgeeks.com
+	//https://www.geeksforgeeks.org/evaluation-prefix-expressions/
+	std::stack<double> Stack;
+
+	for (int j = exprsn.size() - 1; j >= 0; j--) {
+
+		// if jth character is the delimiter ( which is
+		// space in this case) then skip it
+		if (exprsn[j] == ' ')
+			continue;
+
+		// Push operand to Stack
+		// To convert exprsn[j] to digit subtract
+		// '0' from exprsn[j].
+		// edited by JI: checking for !IsOperation to add support for arbitrary 
+		// mathematical stored functions
+		if (!IsOperation(exprsn[j])) {
+
+			// there may be more than
+			// one digits in a number
+			double num = 0, i = j;
+			while (j < exprsn.size() && !IsOperation(exprsn[j]))
+				j--;
+			j++;
+
+			// from [j, i] exprsn contains a number
+			// process the substring in the range [j,i]
+			std::vector<std::string> strings = CPPMathLibrary::StringParsing::SplitString(exprsn.substr(j, i - j + 1), " ");
+			for (std::string s : strings) {
+				if (s.find_first_not_of(' ') != std::string::npos)
+				{
+					// There's a non-space. (Only want to process non-white spaces)
+					num = TryParseExpression(s);
+					Stack.push(num);
+				}
+			}
+		}
+		else {
+
+			// Operator encountered
+			// Pop two elements from Stack
+			double o1 = Stack.top();
+			Stack.pop();
+			double o2 = Stack.top();
+			Stack.pop();
+
+			// Use switch case to operate on o1
+			// and o2 and perform o1 O o2.
+			switch (exprsn[j]) {
+			case '+':
+				Stack.push(o1 + o2);
+				break;
+			case '-':
+				Stack.push(o1 - o2);
+				break;
+			case '*':
+				Stack.push(o1 * o2);
+				break;
+			case '/':
+				Stack.push(o1 / o2);
+				break;
+			}
+		}
+	}
+
+	return Stack.top();
 }

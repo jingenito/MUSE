@@ -32,8 +32,17 @@ namespace CPPMathLibrary {
 		// Reverse the bits of an unsigned integer ignoring the leading 0's.
 		__declspec(dllexport) double ReverseActualBits(size_t num);
 
-		// Attempts to parse the string of an entire expression
+		// Attempts to parse the string of an entire expression.
 		__declspec(dllexport) double TryParseExpression(std::string s);
+
+		// Checks whether the specified character is an arithmetic operation.
+		__declspec(dllexport) bool IsOperation(char c);
+
+		// Split a string by the specified delimiter and store the result in the specified vector.
+		__declspec(dllexport) std::vector<std::string> SplitString(std::string s, std::string delimiter);
+
+		// Evaluates the specified expression in prefix notation.
+		__declspec(dllexport) double EvaluatePrefix(std::string exprsn);
 
 	}
 
